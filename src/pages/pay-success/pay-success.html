@@ -1,0 +1,51 @@
+<!--
+  Generated template for the ProductInfoPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-toolbar>
+    <ion-title>购买成功</ion-title>
+  </ion-toolbar>
+
+</ion-header>
+
+<ion-content>
+  <div class="imed-product-info">
+    <div class="imed-product-info-thumbnails" text-center>
+      <img src="assets/imgs/{{item['cover']}}">
+    </div>
+    <div class="imed-product-info-detail">
+      <div class="imed-list-item-title">{{item['name']}}</div>
+      <div class="imed-list-item-label">
+        <div>
+          <span><span class="imed-red">{{item['price']}}</span>阅点</span>
+          <span><s>{{item['originPrice']}}</s>阅点</span>
+        </div>
+        <div>作者：{{item['author']}}</div>
+        <div class="imed-list-item-label-last">
+          <span>图书类型：{{item['type']}}</span>
+          <span>大小：{{item['size']}}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="separator"></div>
+
+  <div text-end class="imed-item-block">
+    本次购买共消费：{{paySuccess['consumePoint']}} 阅点
+  </div>
+  <div class="separator"></div>
+  <div text-end class="imed-item-block">
+    账户余额：{{paySuccess['balance']}} 阅点
+  </div>
+  <div class="separator"></div>
+</ion-content>
+
+<ion-footer>
+  <button ion-button block color="imed-red" (click)="learn()">马上去学习</button>
+</ion-footer>
+

@@ -1,0 +1,105 @@
+page-home {
+
+  $refresher-height: 2rem;
+
+  .imed-title-button {
+    margin: auto 1rem;
+  }
+
+  .imed-title-button-content {
+    color: #9da1a4;
+    background-color: #e9e9e9;
+    padding: .5rem 1rem;
+    border-radius: 2rem;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    font-size: 1.5rem;
+  }
+
+  .imed-slide {
+    //height: 8rem;
+  }
+
+  .top-menu {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+
+    $top-menu-icon-width: 4.5rem;
+    $top-menu-icon: (
+        ("5p3", "chinese", "free", "year"),
+        ("database", "disease", "learn"),
+        ("magazine", "operation", "west"),
+    );
+
+    .top-menu-item {
+      //max-width: 20%;
+      .top-menu-icon {
+        margin: 1rem 0;
+        background: url(../assets/imgs/sprite-1.png) no-repeat {
+          size: $top-menu-icon-width*4 $top-menu-icon-width*3;;
+        }
+        width: $top-menu-icon-width;
+        height: $top-menu-icon-width;
+      }
+
+      @for $i from 0 to length($top-menu-icon) {
+        $row: nth($top-menu-icon, $i+1);
+        @for $j from 0 to length($row) {
+          $item: nth($row, $j+1);
+          .top-menu-icon.top-menu-icon-#{$item} {
+            background-position: (-$j*$top-menu-icon-width) (-$i*$top-menu-icon-width);
+          }
+        }
+      }
+    }
+  }
+
+  .slide-bag {
+    display: flex;
+    //width: 100%;
+    //white-space: nowrap; //控制inline元素不换行
+    //overflow-x: scroll; //水平方向，超出部分添加滚动机制
+    //div {
+    //  display: inline-block; //既可以水平排列，又可以设置宽高和边距
+    //  width: 15rem;
+    //}
+  }
+
+  .home-card {
+    .home-card-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #EEEFF0;
+
+      .home-card-title-text {
+        margin-left: 1rem;
+        font-size: 1.8rem;
+      }
+    }
+
+    .home-card-row {
+      .home-card-row-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .operation-item {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        color: #4d4d4d;
+      }
+    }
+
+  }
+
+  .button-clear-ios-light, .button-clear-md-light {
+    color: #999999;
+  }
+
+}

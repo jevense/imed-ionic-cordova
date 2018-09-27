@@ -1,0 +1,76 @@
+page-order {
+  .imed-product-fee {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 1rem 2rem;
+    font-size: large;
+  }
+
+  .imed-product-info {
+    padding: 1rem;
+    display: flex;
+    flex-direction: row;
+
+    .imed-product-info-thumbnails {
+      width: 40%;
+    }
+
+    .imed-product-info-detail {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      margin: 0 1rem;
+
+      .imed-list-item-title {
+        font-size: 2rem;
+      }
+      .imed-list-item-label {
+        color: $imed-nav-color;
+        .imed-list-item-label-last {
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+        }
+      }
+    }
+  }
+
+  .imed-footer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    div {
+      flex-grow: 1;
+      color: white;
+      background-color: $imed-red;
+      border-radius: .2rem;
+      height: 100%;
+      padding: 1rem;
+      margin: .1rem;
+      text-align: center;
+    }
+  }
+
+  ion-icon {
+    color: #D7D7D7;
+  }
+
+  .pay-icon {
+    img {
+      width: 3rem;
+    }
+  }
+
+  .pay-tips {
+    padding: 1rem;
+    font-size: 1.8rem;
+    text-align: justify;
+  }
+
+  button[block] {
+    margin: 0;
+  }
+
+}

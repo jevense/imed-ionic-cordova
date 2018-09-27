@@ -1,0 +1,22 @@
+page-product-list {
+
+  .justify-content-around {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+    padding: 1rem 0;
+  }
+  .imed-list-item {
+    .imed-list-item-label {
+      color: $imed-nav-color;
+      font-size: small;
+      .imed-list-item-label-last {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+      }
+    }
+  }
+
+}

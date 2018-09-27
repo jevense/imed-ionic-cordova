@@ -1,0 +1,180 @@
+<!--
+  Generated template for the HomePage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+  <ion-navbar>
+    <ion-buttons start>
+      <button ion-button icon-only color="imed-red" (click)="goToCategoryPage()">
+        <ion-icon name="ios-menu-outline"></ion-icon>
+      </button>
+    </ion-buttons>
+
+    <ion-title>
+      <div>首页1</div>
+    </ion-title>
+
+    <!--<ion-toolbar color="light">-->
+    <!--<div class="imed-title-button" start>-->
+    <!--<button class="imed-title-button-content">-->
+    <!--<ion-icon name="ios-search"></ion-icon>-->
+    <!--&nbsp;请输入关键词-->
+    <!--</button>-->
+    <!--</div>-->
+    <!--</ion-toolbar>-->
+
+    <ion-buttons end>
+      <button ion-button icon-only color="imed-red">
+        <ion-icon name="ios-search-outline"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+<ion-content>
+  <ion-refresher (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content
+      pullingIcon="arrow-dropdown"
+      pullingText="下拉刷新"
+      refreshingSpinner="circles"
+      refreshingText="正在请求数据"
+    >
+    </ion-refresher-content>
+  </ion-refresher>
+  <!--轮播图-->
+  <div class="imed-slide">
+    <ion-slides pager>
+      <ion-slide>
+        <div (click)="locate('url',{name:'执医通关包',url:'https://mall.imed.org.cn/ui/phone/activities.html#/activity/20180901'})">
+          <img src="assets/imgs/carousel.png">
+        </div>
+      </ion-slide>
+      <ion-slide>
+        <div (click)="locate('list',{name:'执医通关包'})">
+          <img src="assets/imgs/carousel.png">
+        </div>
+      </ion-slide>
+      <ion-slide>
+        <div (click)="locate('info',{name:'执医通关包'})">
+          <img src="assets/imgs/carousel.png">
+        </div>
+      </ion-slide>
+    </ion-slides>
+  </div>
+
+  <!--顶部菜单-->
+  <div>
+    <ion-grid>
+      <ion-row>
+        <ion-col col-12 class="top-menu">
+          <div *ngFor="let item of topMenus[0]" class="top-menu-item" (click)="locate('list',item)">
+            <div class="top-menu-icon top-menu-icon-{{item['icon-name']}}"></div>
+            <div>{{item['name']}}</div>
+          </div>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col col-12 class="top-menu">
+          <div *ngFor="let item of topMenus[1]" class="top-menu-item" (click)="locate('list',item)">
+            <div class="top-menu-icon top-menu-icon-{{item['icon-name']}}"></div>
+            <div>{{item['name']}}</div>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+    <!--轮播菜单-->
+    <div class="slide-bag" (pan)="panEvent($event)">
+      <div *ngFor="let item of slideBags" (click)="locate('info',item)">
+        <img src="assets/imgs/{{item['cover']}}">
+      </div>
+    </div>
+  </div>
+  <div class="separator"></div>
+  <!--住陪通关包-->
+  <div>
+    <div class="home-card">
+      <div class="home-card-title">
+        <span class="home-card-title-text">住陪通关包</span>
+        <button ion-button icon-only clear color="nav" (click)="locate('list',{name: '住陪通关包',key:'exam-rst'})">
+          <ion-icon name="arrow-forward"></ion-icon>
+        </button>
+      </div>
+      <div class="home-card-row">
+        <ion-grid>
+          <ion-row>
+            <ion-col *ngFor="let item of topBags" col-4 class="home-card-row-item">
+              <img src="assets/imgs/{{item['cover']}}">
+              <!--<span>{{item['name']}}</span>-->
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </div>
+    </div>
+  </div>
+
+  <div class="separator"></div>
+  <!--手术视频-->
+  <div>
+    <div class="home-card">
+      <div class="home-card-title">
+        <span class="home-card-title-text">手术视频</span>
+        <button ion-button icon-only clear color="nav">
+          <ion-icon name="arrow-forward"></ion-icon>
+        </button>
+      </div>
+      <div class="home-card-row">
+        <ion-grid>
+          <ion-row *ngFor="let item of topOperations">
+            <ion-col col-5 text-center>
+              <img src="assets/imgs/{{item['cover']}}">
+            </ion-col>
+            <ion-col col-7 class="operation-item">
+              <div style="font-size: larger;">{{item['name']}}</div>
+              <div>
+                <div>
+                  <span>{{item['author']}}</span>
+                  <span>{{item['subject']}}</span>
+                </div>
+                <div>
+                  <span>
+                    <span class="imed-red">{{item['price']}}</span>阅点
+                  </span>
+                  <span><s>{{item['originPrice']}}</s>阅点</span>
+                </div>
+              </div>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </div>
+    </div>
+  </div>
+
+  <div class="separator"></div>
+  <!--执医通关包-->
+  <div>
+    <div class="home-card">
+      <div class="home-card-title">
+        <span class="home-card-title-text">执医通关包</span>
+        <button ion-button icon-only clear color="nav"
+                (click)="locate('url',{name:'执医通关包',url:'https://mall.imed.org.cn/ui/phone/activities.html#/exam'})"
+        >
+          <ion-icon name="arrow-forward"></ion-icon>
+        </button>
+      </div>
+      <div class="home-card-row">
+        <ion-grid>
+          <ion-row *ngFor="let item of topDocs">
+            <ion-col col-12 text-center>
+              <img src="assets/imgs/{{item['topTitle']}}">
+            </ion-col>
+            <ion-col col-6 *ngFor="let it of item['list']" text-center
+                     (click)="locate('url',it)">
+              <img src="assets/imgs/{{it['cover']}}">
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </div>
+    </div>
+  </div>
+</ion-content>

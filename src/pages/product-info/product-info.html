@@ -1,0 +1,69 @@
+<!--
+  Generated template for the ProductInfoPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>图书详情</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+<ion-content>
+  <div class="imed-product-info">
+    <div class="imed-product-info-thumbnails" text-center>
+      <img src="assets/imgs/{{item['cover']}}">
+    </div>
+    <div class="imed-product-info-detail">
+      <div class="imed-list-item-title">{{item['name']}}</div>
+      <div class="imed-list-item-label">
+        <div>
+          <span><span class="imed-red">{{item['price']}}</span>阅点</span>
+          <span><s>{{item['originPrice']}}</s>阅点</span>
+        </div>
+        <div>作者：{{item['author']}}</div>
+        <div class="imed-list-item-label-last">
+          <span>图书类型：{{item['type']}}</span>
+          <span>大小：{{item['size']}}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div *ngIf="item['brief']">
+    <div class="separator"></div>
+    <div class="imed-product-brief">
+      <div class="imed-product-brief-title">简介</div>
+      <div [innerHTML]="item['brief']|html"></div>
+    </div>
+  </div>
+
+  <div *ngIf="item['catalog']">
+    <div class="separator"></div>
+    <div class="imed-product-brief">
+      <div class="imed-product-brief-title">目录</div>
+      <div [innerHTML]="item['catalog']|html"></div>
+    </div>
+  </div>
+
+</ion-content>
+
+<ion-footer>
+  <div class="imed-footer">
+    <div color="danger" *ngIf="!item['owner']; else elseBlock" (click)="buy()">
+      立即购买
+    </div>
+    <ng-template #elseBlock>
+      <div color="danger" (click)="buy()">
+        立即下载
+      </div>
+      <div color="danger" *ngIf="item['online']" (click)="open(item)">
+        在线阅读
+      </div>
+    </ng-template>
+  </div>
+</ion-footer>

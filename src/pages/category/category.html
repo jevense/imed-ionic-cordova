@@ -1,0 +1,58 @@
+<!--
+  Generated template for the CategoryPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons start>
+      <button ion-button icon-only color="imed-red" (click)="goBack()">
+        <ion-icon name="arrow-back"></ion-icon>
+      </button>
+    </ion-buttons>
+    <ion-title>分类</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only color="imed-red">
+        <ion-icon name="ios-search-outline"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content>
+  <div class="category-content">
+    <div class="menu-main">
+      <div *ngFor="let item of menus;let ind = index" class="menu-main-item">
+        <button ion-button clear small full color="dark" (click)="selectMenu(ind)">{{item['name']}}</button>
+      </div>
+    </div>
+    <div class="menu-main-content">
+      <ng-container [ngSwitch]="subMenus['type']">
+        <ng-container *ngSwitchCase="'multi-column'">
+          <div *ngFor="let item of subMenus['list']">
+            <div class="menu-main-sub">
+              <div class="menu-main-sub-title">{{item['title']}}</div>
+              <div class="menu-main-sub-item">
+                <button *ngFor="let ite of item['list']" ion-button outline small color="dark"
+                        (click)="goToPage(ite)">
+                  {{ite['name']}}
+                </button>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+        <ng-container *ngSwitchDefault>
+          <div class="menu-main-sub">
+            <button *ngFor="let item of subMenus['list']"
+                    (click)="goToPage(item)"
+                    ion-button outline small
+                    color="dark">{{item['name']}}
+            </button>
+          </div>
+        </ng-container>
+      </ng-container>
+    </div>
+  </div>
+</ion-content>

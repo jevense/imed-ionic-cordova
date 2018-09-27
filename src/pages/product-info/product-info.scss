@@ -1,0 +1,57 @@
+page-product-info {
+
+  .imed-product-info {
+    padding: 1rem;
+    display: flex;
+    flex-direction: row;
+
+    .imed-product-info-thumbnails {
+      width: 40%;
+    }
+
+    .imed-product-info-detail {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      margin: 0 1rem;
+
+      .imed-list-item-title {
+        font-size: 2rem;
+      }
+      .imed-list-item-label {
+        color: $imed-nav-color;
+        .imed-list-item-label-last {
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+        }
+      }
+    }
+  }
+
+  .imed-product-brief {
+    padding: 1rem;
+    .imed-product-brief-title {
+      color: $imed-red;
+      font-size: large;
+    }
+  }
+
+  .imed-footer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    div {
+      flex-grow: 1;
+      color: white;
+      background-color: $imed-red;
+      border-radius: .2rem;
+      height: 100%;
+      padding: 1rem;
+      margin: .1rem;
+      text-align: center;
+    }
+  }
+
+}

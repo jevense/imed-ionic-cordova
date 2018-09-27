@@ -1,0 +1,6 @@
+{
+  "name": "imed",
+  "content_url": "http://192.168.2.3:31284",
+  "update": "start",
+  "min_native_interface": 1
+}

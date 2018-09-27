@@ -1,0 +1,86 @@
+<!--
+  Generated template for the ProductInfoPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>图书详情</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+<ion-content>
+  <div class="imed-product-info">
+    <div class="imed-product-info-thumbnails" text-center>
+      <img src="assets/imgs/{{item['cover']}}">
+    </div>
+    <div class="imed-product-info-detail">
+      <div class="imed-list-item-title">{{item['name']}}</div>
+      <div class="imed-list-item-label">
+        <div>
+          <span><span class="imed-red">{{item['price']}}</span>阅点</span>
+          <span><s>{{item['originPrice']}}</s>阅点</span>
+        </div>
+        <div>作者：{{item['author']}}</div>
+        <div class="imed-list-item-label-last">
+          <span>图书类型：{{item['type']}}</span>
+          <span>大小：{{item['size']}}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="separator"></div>
+
+  <div class="imed-product-fee">
+    <div class="imed-product-fee-title">支付金额</div>
+    <div><span class="imed-red" [innerHTML]="item['fee']"></span>阅点</div>
+  </div>
+
+  <div class="imed-product-pay">
+    <div class="separator"></div>
+
+    <ion-list no-lines>
+      <ion-item>
+        <ion-avatar item-start>
+          <img src="assets/icon/yuedian.png">
+        </ion-avatar>
+        <h2>使用阅点</h2>
+        <p>可用阅点<span class="imed-red" [innerHTML]="item['fee']"></span></p>
+        <ion-icon item-end name="checkmark-circle" class="imed-green"></ion-icon>
+      </ion-item>
+      <div class="separator"></div>
+      <ion-item>
+        <div item-start class="pay-icon">
+          <img src="assets/icon/zhifubao.png">
+        </div>
+        支付宝
+        <button ion-button icon-only item-end clear (click)="selectPayType('alipay')">
+          <ion-icon name="checkmark-circle" [ngClass]="{'imed-green':item['payType']=='alipay'}"></ion-icon>
+        </button>
+      </ion-item>
+      <div class="separator"></div>
+      <ion-item>
+        <div item-start class="pay-icon">
+          <img src="assets/icon/weixin.png">
+        </div>
+        微信
+        <button ion-button icon-only item-end clear (click)="selectPayType('weixin')">
+          <ion-icon name="checkmark-circle" [ngClass]="{'imed-green':item['payType']=='weixin'}"></ion-icon>
+        </button>
+      </ion-item>
+      <div class="separator"></div>
+      <div class="pay-tips">
+        友情提示：虚拟商品一经售出，无正当理由，概不退款
+      </div>
+    </ion-list>
+
+  </div>
+</ion-content>
+
+<ion-footer>
+  <button ion-button block color="imed-red" (click)="payConfirm()">确认购买</button>
+</ion-footer>

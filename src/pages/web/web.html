@@ -1,0 +1,30 @@
+<!--
+  Generated template for the WebPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+  <ion-toolbar>
+    <button ion-button icon-only small clear color="imed-red" (click)="back()">
+      <ion-icon name="arrow-back"></ion-icon>
+    </button>
+    <ion-title>{{config.title}}</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only small clear color="imed-red" (click)="close()">
+        <ion-icon name="close"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="content">
+  <!--scroll="true" overflow-scroll="true"-->
+  <div class="progress" [hidden]="isLoaded">
+    <div class="progress-inner" [ngStyle]="{'width': progress+'%'}"></div>
+  </div>
+
+  <iframe #iframe class="iframe"
+          sandbox="allow-scripts allow-top-navigation allow-pointer-lock allow-same-origin allow-popups allow-forms allow-modals"
+          [src]="secUrl" (load)="loaded()">
+  </iframe>
+</ion-content>
