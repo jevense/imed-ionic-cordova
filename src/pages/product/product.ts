@@ -18,16 +18,18 @@ import {SuperTabs} from "ionic2-super-tabs";
 export class ProductPage {
 
   title;
+  key;
+  data;
   showMenu: boolean = true;
   productList = ProductListPage;
 
-  data = [{name: '全部', key: 'all'}];
   @ViewChild(Navbar) navBar: Navbar;
   @ViewChild(SuperTabs) superTabs: SuperTabs;
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
     this.title = navParams.get('title');
-    let {data = this.data} = {data: navParams.get('data')};
+    this.key = navParams.get('key');
+    let {data = [{name: '全部', key: this.key}]} = {data: navParams.get('data')};
     this.data = data;
   }
 

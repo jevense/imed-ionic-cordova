@@ -16,17 +16,37 @@ export class HomePage {
 
   topMenus: Object[] = [
     [
-      {'icon-name': '5p3', key: '5p3', name: '5+3教材',},
       {
-        'icon-name': 'learn', key: 'learn', name: '学习套餐',
+        'icon-name': '5p3', key: '5p3-all', name: '5+3教材',
+        subList: [
+          {
+            name: '全部',
+            key: '5p3-all',
+          }, {
+            name: '临床',
+            key: '5p3-clinical',
+          }, {
+            name: '基础',
+            key: '5p3-base',
+          }, {
+            name: '公共',
+            key: '5p3-common',
+          }, {
+            name: '病例',
+            key: '5p3-case',
+          }
+        ]
       },
-      {'icon-name': 'operation', key: 'operation', name: '手术视频'},
-      {'icon-name': 'fee', key: 'fee', name: '免费专区'},
-      {'icon-name': 'year', key: 'year', name: '会员年卡'},
+      {
+        'icon-name': 'learn', key: 'learn-all', name: '学习套餐',
+      },
+      {'icon-name': 'operation', key: 'operation-all', name: '手术视频'},
+      {'icon-name': 'free', key: 'free-all', name: '免费专区'},
+      {'icon-name': 'year', key: 'year-all', name: '会员年卡'},
     ],
     [
       {
-        'icon-name': 'west', key: 'west', name: '西医图书',
+        'icon-name': 'west', key: 'west-all', name: '西医图书',
         subList: [
           {
             name: '全部',
@@ -53,7 +73,7 @@ export class HomePage {
         ]
       },
       {
-        'icon-name': 'chinese', key: 'chinese', name: '中医图书',
+        'icon-name': 'chinese', key: 'chinese-all', name: '中医图书',
         subList: [
           {
             name: '全部',
@@ -69,9 +89,9 @@ export class HomePage {
             key: 'chinese-science'
           }]
       },
-      {'icon-name': 'magazine', key: 'magazine', name: '毕教杂志'},
-      {'icon-name': 'database', key: 'database', name: '数据库'},
-      {'icon-name': 'disease', key: 'disease', name: '疾病教程'},
+      {'icon-name': 'magazine', key: 'magazine-all', name: '毕教杂志'},
+      {'icon-name': 'database', key: 'database-all', name: '数据库'},
+      {'icon-name': 'disease', key: 'disease-all', name: '疾病教程'},
     ]
   ];
   topBags: Object[] = [

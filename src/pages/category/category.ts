@@ -19,7 +19,6 @@ export class CategoryPage {
   menus: Object[] = [
     {
       name: '5+3教材',
-      key: '5p3',
       list: [
         {
           name: '56本教材',
@@ -33,28 +32,33 @@ export class CategoryPage {
       list: [
         {
           name: '52门全套',
-          key: 'learn-52',
+          id: '5763d1a30cf2161635635e63',
+          type: 'info',
         }, {
           name: '基础课程',
-          key: 'learn-base',
+          id: '5768eade0cf216163564f440',
+          type: 'info',
         }, {
           name: '临床课程',
-          key: 'learn-exercise',
+          id: '5768e52d0cf216163564eed7',
+          type: 'info',
         }, {
           name: '公共课程',
-          key: 'learn-common',
+          id: '5768ec9f0cf216163564f5e8',
+          type: 'info',
         }, {
           name: '开学季199/年教材套餐',
-          key: 'learn-year',
+          id: 'learn-year',
+          type: 'info',
         }, {
           name: '入培学习包',
-          key: 'learn-entrance',
+          id: 'learn-entrance',
+          type: 'info',
         },
       ]
     },
     {
       name: '西医图书',
-      key: 'west',
       list: [
         {
           name: '全部',
@@ -82,7 +86,6 @@ export class CategoryPage {
     },
     {
       name: '中医图书',
-      key: 'chinese',
       list: [
         {
           name: '全部',
@@ -120,7 +123,6 @@ export class CategoryPage {
     {
       name: '手术视频',
       type: 'multi-column',
-      key: 'operation',
       list: [
         {
           title: '全部学科',
@@ -163,7 +165,6 @@ export class CategoryPage {
     },
     {
       name: '考试培训',
-      key: 'exam',
       list: [
         {
           name: '住培结业理论通关包',
@@ -179,7 +180,6 @@ export class CategoryPage {
     },
     {
       name: '免费专区',
-      key: 'free',
       list: [
         {
           name: '全部',
@@ -189,7 +189,6 @@ export class CategoryPage {
     },
     {
       name: '会员年卡',
-      key: 'year',
       list: [
         {
           name: '学科-109/209/309年卡',
@@ -223,13 +222,22 @@ export class CategoryPage {
     }
   }
 
-  goToPage({name: title, key, type, url}) {
-    console.log(title);
-    if (type == 'url') {
-      // this.navCtrl.push('WebPage', {browser: {title, url,}}).catch();
-      this.modalCtrl.create(WebPage, {browser: {title, url,}}).present().catch();
-    } else {
-      this.navCtrl.push('ProductPage', {title, key}).catch();
+  goToPage({name: title, type, key, url, id, list}) {
+
+    switch (type) {
+      case 'url': {
+        this.modalCtrl.create(WebPage, {browser: {title, url,}}).present().catch();
+        break;
+      }
+      case 'info': {
+        this.navCtrl.push('ProductInfoPage', {id}).catch();
+        break;
+      }
+      case 'list':
+      default: {
+        this.navCtrl.push('ProductPage', {title, key, data: list}).catch();
+        break;
+      }
     }
   }
 }

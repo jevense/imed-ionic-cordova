@@ -1,6 +1,7 @@
 import {ErrorHandler, NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import {IonicApp, IonicErrorHandler, IonicModule} from 'ionic-angular';
+import {HttpClientModule} from '@angular/common/http';
 import {App} from './app.component';
 
 import {StatusBar} from '@ionic-native/status-bar';
@@ -12,6 +13,7 @@ import {BookPage} from "../pages/epub-reader/book/book";
 import {TocPage} from "../pages/epub-reader/toc/toc";
 import {SettingsPage} from "../pages/epub-reader/settings/settings";
 import {WebPageModule} from "../pages/web/web.module";
+import {HttpServiceProvider} from '../providers/http-service/http-service';
 
 @NgModule({
   declarations: [
@@ -24,6 +26,7 @@ import {WebPageModule} from "../pages/web/web.module";
   ],
   imports: [
     BrowserModule,
+    HttpClientModule,
     IonicModule.forRoot(App, {
       backButtonText: '',
       tabsHideOnSubPages: true,
@@ -44,7 +47,8 @@ import {WebPageModule} from "../pages/web/web.module";
   providers: [
     StatusBar,
     SplashScreen,
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
+    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    HttpServiceProvider
   ]
 })
 export class AppModule {

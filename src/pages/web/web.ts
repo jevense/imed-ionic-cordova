@@ -39,7 +39,6 @@ export class WebPage {
   ionViewDidLoad() {
     this.onProgress();
     this.todoName.nativeElement.contentWindow.onhashchange = () => {
-      console.log('===')
       this.history.push('1')
     }
   }

@@ -1,5 +1,6 @@
 import {Component} from '@angular/core';
 import {IonicPage, NavController, NavParams} from 'ionic-angular';
+import {HttpServiceProvider} from "../../providers/http-service/http-service";
 
 /**
  * Generated class for the ProductInfoPage page.
@@ -29,10 +30,17 @@ export class ProductInfoPage {
     online: true,
   };
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public navCtrl: NavController,
+              public navParams: NavParams,
+              public httpService: HttpServiceProvider) {
   }
 
   ionViewDidLoad() {
+    let isbn = this.navParams.get("isbn");
+    this.httpService.getProductByISBN(isbn)
+      .subscribe(item => {
+        this.item = item
+      });
     console.log('ionViewDidLoad ProductInfoPage');
   }
 

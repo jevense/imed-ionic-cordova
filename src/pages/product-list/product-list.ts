@@ -1,5 +1,6 @@
 import {Component} from '@angular/core';
 import {App, NavParams} from 'ionic-angular';
+import {HttpServiceProvider} from "../../providers/http-service/http-service";
 
 /**
  * Generated class for the ProductListPage page.
@@ -15,48 +16,35 @@ import {App, NavParams} from 'ionic-angular';
 export class ProductListPage {
 
   items = [];
+  page: number = 0;
+  category: string;
 
-  constructor(public appCtrl: App, public navParams: NavParams) {
+  constructor(public appCtrl: App,
+              public navParams: NavParams,
+              public httpService: HttpServiceProvider) {
+    this.category = this.navParams.get("key");
   }
 
   ionViewDidLoad() {
-    for (let i = 0; i < 10; i++) {
-      this.items.push({
-        name: '结膜切口的眼眶肌锥内海绵状血管瘤摘除',
-        cover: 'bag-1.png',
-        author: '孙丰源',
-        type: '通关包',
-        size: '2MB',
-        price: '640',
-        originPrice: '800'
+
+    this.httpService.getProductList(this.category, this.page++,)
+      .subscribe(items => {
+        this.items.push(...items);
       });
-    }
     console.log('ionViewDidLoad ProductListPage');
   }
 
 
   doInfinite(infiniteScroll) {
     console.log('Begin async operation');
-
-    setTimeout(() => {
-      for (let i = 0; i < 10; i++) {
-        this.items.push({
-          name: '结膜切口的眼眶肌锥内海绵状血管瘤摘除',
-          cover: 'bag-1.png',
-          author: '孙丰源',
-          type: '通关包',
-          size: '2MB',
-          price: '640',
-          originPrice: '800'
-        });
-      }
-
-      console.log('Async operation has ended');
-      infiniteScroll.complete();
-    }, 500);
+    this.httpService.getProductList(this.category, this.page++,)
+      .subscribe(items => {
+        this.items.push(...items);
+        infiniteScroll.complete();
+      });
   }
 
   goToDetail(item) {
-    this.appCtrl.getRootNav().push('ProductInfoPage', {},).catch();
+    this.appCtrl.getRootNav().push('ProductInfoPage', {isbn: item['isbn']},).catch();
   }
 }

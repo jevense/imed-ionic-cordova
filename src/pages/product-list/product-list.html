@@ -2,10 +2,9 @@
   <ion-list>
     <ion-item *ngFor="let item of items" class="imed-list-item" (click)="goToDetail(item)">
       <div item-start style="width: 25%">
-        <img src="assets/imgs/{{item['cover']}}">
+        <img [src]="item['cover']">
       </div>
-
-      <div item-end class="justify-content-around">
+      <div class="justify-content-around">
         <div>{{item['name']}}</div>
         <div class="imed-list-item-label">
           <div>

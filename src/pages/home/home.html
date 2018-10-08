@@ -70,7 +70,7 @@
         <ion-col col-12 class="top-menu">
           <div *ngFor="let item of topMenus[0]" class="top-menu-item" (click)="locate('list',item)">
             <div class="top-menu-icon top-menu-icon-{{item['icon-name']}}"></div>
-            <div>{{item['name']}}</div>
+            <div text-center>{{item['name']}}</div>
           </div>
         </ion-col>
       </ion-row>
@@ -78,7 +78,7 @@
         <ion-col col-12 class="top-menu">
           <div *ngFor="let item of topMenus[1]" class="top-menu-item" (click)="locate('list',item)">
             <div class="top-menu-icon top-menu-icon-{{item['icon-name']}}"></div>
-            <div>{{item['name']}}</div>
+            <div text-center>{{item['name']}}</div>
           </div>
         </ion-col>
       </ion-row>
