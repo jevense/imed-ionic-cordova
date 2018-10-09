@@ -45,6 +45,6 @@ export class ProductListPage {
   }
 
   goToDetail(item) {
-    this.appCtrl.getRootNav().push('ProductInfoPage', {isbn: item['isbn']},).catch();
+    this.appCtrl.getRootNavs()[0].push('page-product-info', {id: item['id']},).catch();
   }
 }

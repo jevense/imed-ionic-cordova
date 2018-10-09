@@ -189,11 +189,11 @@ export class HomePage {
         break;
       }
       case 'list': {
-        this.navCtrl.push('ProductPage', {title, key, data: subList}).catch();
+        this.navCtrl.push('product', {title, key, data: subList}).catch();
         break;
       }
       case 'info': {
-        this.navCtrl.push('ProductInfoPage', {id}).catch();
+        this.navCtrl.push('page-product-info', {isbn: id}).catch();
         break;
       }
     }

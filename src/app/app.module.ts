@@ -14,6 +14,7 @@ import {TocPage} from "../pages/epub-reader/toc/toc";
 import {SettingsPage} from "../pages/epub-reader/settings/settings";
 import {WebPageModule} from "../pages/web/web.module";
 import {HttpServiceProvider} from '../providers/http-service/http-service';
+import './global'
 
 @NgModule({
   declarations: [
@@ -52,4 +53,5 @@ import {HttpServiceProvider} from '../providers/http-service/http-service';
   ]
 })
 export class AppModule {
+
 }

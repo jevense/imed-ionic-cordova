@@ -10,7 +10,10 @@ import {SuperTabs} from "ionic2-super-tabs";
  * Ionic pages and navigation.
  */
 
-@IonicPage()
+@IonicPage({
+  name: 'product',
+  segment: 'product'
+})
 @Component({
   selector: 'page-product',
   templateUrl: 'product.html',
