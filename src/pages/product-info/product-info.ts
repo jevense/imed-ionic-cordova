@@ -5,7 +5,7 @@ import WebCallApp from "../../app/global";
 import {filter} from "rxjs/operators";
 
 @IonicPage({
-  name: 'page-product-info',
+  name: 'product-info',
   segment: 'product/:id'
 })
 @Component({
@@ -14,18 +14,18 @@ import {filter} from "rxjs/operators";
 })
 export class ProductInfoPage {
 
-  item = {
+  item: ProductInfo = {
     id: '',
-    name: '结膜切口的眼眶肌锥内海绵状血管瘤摘除',
-    cover: 'assets/imgs/bag-1.png',
-    author: '孙丰源',
+    name: '',
+    cover: '',
+    author: '',
     textbook: '',
     textbookType: '',
-    size: '2MB',
-    price: '640',
-    originPrice: '800',
-    briefIntroduction: "12312",
-    catalog: "123123",
+    size: '',
+    price: '',
+    originPrice: '',
+    briefIntroduction: '',
+    catalog: '',
     owner: true,
   };
 
@@ -42,6 +42,7 @@ export class ProductInfoPage {
     let {id} = this.navParams.data;
     this.httpService.getProductById(id)
       .subscribe(item => {
+        console.log(item);
         this.item = {...item}
       });
     console.log('ionViewDidLoad ProductInfoPage');
@@ -57,17 +58,18 @@ export class ProductInfoPage {
     }
   }
 
-  buy(item) {
+  buy() {
     WebCallApp("GetAPPVersion")
       .pipe(filter(param => param['sn'] == "GetAPPVersion"))
       .subscribe(({data}) => {
+        console.log(data);
         if (data['touristsState']) {
           this.alertCtrl.create({
             title: '请登录',
             buttons: ['OK']
           }).present();
         } else {
-          let {token, productId, platform} = data;
+          let {token, platform} = data;
           let {id} = this.item;
           this.navCtrl.push('OrderPage', {token, platform, id},).catch();
         }
@@ -82,4 +84,19 @@ export class ProductInfoPage {
     return this.item['owner'] && this.item['textbook'] === '0' && this.item['textbookType'] === '0'
   }
 
+}
+
+class ProductInfo {
+  id: string;
+  name: string;
+  cover: string;
+  author: string;
+  textbook: string;
+  textbookType: string;
+  size: string;
+  price: string;
+  originPrice: string;
+  briefIntroduction: string;
+  catalog: string;
+  owner: boolean;
 }

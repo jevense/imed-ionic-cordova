@@ -230,12 +230,12 @@ export class CategoryPage {
         break;
       }
       case 'info': {
-        this.navCtrl.push('ProductInfoPage', {id}).catch();
+        this.navCtrl.push('product-info', {id}).catch();
         break;
       }
       case 'list':
       default: {
-        this.navCtrl.push('ProductPage', {title, key, data: list}).catch();
+        this.navCtrl.push('product', {title, key, data: list}).catch();
         break;
       }
     }

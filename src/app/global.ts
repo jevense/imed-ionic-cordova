@@ -1,11 +1,10 @@
 import {Subject} from "rxjs/Subject";
-import {filter} from "rxjs/operators";
 
 let WebCallApp = (command, args = {}) => {
   let params = {command, args};
-  if (window['webkit'] && window['webkit']['messageHandlers']) {
+  if (window['webkit'] && window['webkit']['messageHandlers'] && window['webkit']['messageHandlers']["WebCallApp"]) {
     window['webkit']['messageHandlers']["WebCallApp"]['postMessage'](JSON.stringify(params));
-  } else {
+  } else if (window['Elf'] && window['Elf']['WebCallApp']) {
     window['Elf']['WebCallApp'](JSON.stringify(params));
   }
   return subject;
@@ -13,6 +12,7 @@ let WebCallApp = (command, args = {}) => {
 
 let subject = new Subject();
 
+window['Elf'] = {...window['Elf']};
 window['Elf'].AppCallWeb = function (sn, data) {
   subject.next({sn, data});
   // if (sn === 'MsgOpenSuccess') {	//支付宝、或微信时需通知一下

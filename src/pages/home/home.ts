@@ -193,7 +193,7 @@ export class HomePage {
         break;
       }
       case 'info': {
-        this.navCtrl.push('page-product-info', {isbn: id}).catch();
+        this.navCtrl.push('product-info', {isbn: id}).catch();
         break;
       }
     }

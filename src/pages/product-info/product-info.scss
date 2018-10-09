@@ -13,7 +13,7 @@ page-product-info {
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      margin: 0 1rem;
+      margin: 0 .5rem 0 1rem;
 
       .imed-list-item-title {
         font-size: 2rem;
@@ -21,9 +21,9 @@ page-product-info {
       .imed-list-item-label {
         color: $imed-nav-color;
         .imed-list-item-label-last {
-          display: flex;
-          flex-direction: row;
-          justify-content: space-between;
+          //display: flex;
+          //flex-direction: row;
+          //justify-content: space-between;
         }
       }
     }
