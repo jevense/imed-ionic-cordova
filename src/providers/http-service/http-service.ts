@@ -11,8 +11,8 @@ import {Observable} from "rxjs/Observable";
 @Injectable()
 export class HttpServiceProvider {
 
-  url = 'http://192.168.2.3:8082/product';
-  busUrl = 'http://192.168.8.143:5005/bus2/services';
+  url = 'http://192.168.8.144:8092/store/product';
+  busUrl = 'http://192.168.9.9:8080/bus/services';
 
   constructor(public http: HttpClient) {
     console.log('Hello HttpServiceProvider Provider');

@@ -44,7 +44,7 @@ export class OrderPage {
   }
 
   ionViewDidLoad() {
-    let {id, token, platform, type = 'id',} = this.navParams.data;
+    let {id, token, platform, type = 'id'} = this.navParams.data;
 
     let args = {
       "serviceModule": "BS-Service",
@@ -80,7 +80,7 @@ export class OrderPage {
 
   payConfirm() {
     if (!this.status) return false;
-    let {id, token, platform, type = 'id',} = this.navParams.data;
+    let {id, token, platform,} = this.navParams.data;
     if (this.item.isAppPay == '0') {
       this.status = false;
       let args = {
