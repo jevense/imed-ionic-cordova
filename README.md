@@ -1,0 +1,1 @@
+# imed-ionic-cordova
