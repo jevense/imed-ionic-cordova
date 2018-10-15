@@ -13,6 +13,8 @@ let WebCallApp = (command, args = {}) => {
 let subject = new Subject();
 
 window['Elf'] = {...window['Elf']};
+console.log(111);
+console.log(window['Elf']);
 window['Elf'].AppCallWeb = function (sn, data) {
   subject.next({sn, data});
   // if (sn === 'MsgOpenSuccess') {	//支付宝、或微信时需通知一下

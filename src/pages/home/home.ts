@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {ModalController, NavController, Refresher} from 'ionic-angular';
-import {WebPage} from "../web/web";
+import WebCallApp from "../../app/global";
 
 /**
  * Generated class for the HomePage page.
@@ -185,7 +185,8 @@ export class HomePage {
     // this.navCtrl.push('WebPage', {browser: {title, url: url}}).catch();
     switch (type) {
       case 'url': {
-        this.modalCtrl.create(WebPage, {browser: {title, url,}}).present().catch();
+        WebCallApp("CmdOpenUrl", {url: url});
+        // this.modalCtrl.create(WebPage, {browser: {title, url,}}).present().catch();
         break;
       }
       case 'list': {

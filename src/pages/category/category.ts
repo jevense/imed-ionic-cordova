@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {IonicPage, ModalController, NavController, NavParams} from 'ionic-angular';
-import {WebPage} from "../web/web";
+import WebCallApp from "../../app/global";
 
 /**
  * Generated class for the CategoryPage page.
@@ -218,7 +218,8 @@ export class CategoryPage {
 
   navigate(item) {
     if (item['type'] == 'url') {
-      this.navCtrl.push('WebPage', {browser: {title: item['name'], url: item['url']}}).catch();
+      // this.navCtrl.push('WebPage', {browser: {title: item['name'], url: item['url']}}).catch();
+      WebCallApp("CmdOpenUrl", {url: item['url']});
     }
   }
 
@@ -226,7 +227,8 @@ export class CategoryPage {
 
     switch (type) {
       case 'url': {
-        this.modalCtrl.create(WebPage, {browser: {title, url,}}).present().catch();
+        // this.modalCtrl.create(WebPage, {browser: {title, url,}}).present().catch();
+        WebCallApp("CmdOpenUrl", {url: url});
         break;
       }
       case 'info': {

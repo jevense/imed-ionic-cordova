@@ -75,6 +75,11 @@ export class OrderPage {
   }
 
   selectPayType(payType: string) {
+    if (payType == 'alipay') {
+      this.payType = '1';
+    } else {
+      this.payType = '2'
+    }
     this.item['payType'] = payType;
   }
 

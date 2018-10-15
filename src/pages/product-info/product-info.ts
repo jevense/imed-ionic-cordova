@@ -2,7 +2,7 @@ import {Component} from '@angular/core';
 import {AlertController, IonicPage, NavController, NavParams} from 'ionic-angular';
 import {HttpServiceProvider} from "../../providers/http-service/http-service";
 import WebCallApp from "../../app/global";
-import {filter} from "rxjs/operators";
+// import {filter} from "rxjs/operators";
 
 @IonicPage({
   name: 'product-info',
@@ -59,8 +59,9 @@ export class ProductInfoPage {
   }
 
   buy() {
+    console.log(WebCallApp);
     WebCallApp("GetAPPVersion")
-      .pipe(filter(param => param['sn'] == "GetAPPVersion"))
+      // .pipe(filter(param => param['sn'] == "GetAPPVersion"))
       .subscribe(({data}) => {
         console.log(data);
         if (data['touristsState']) {
