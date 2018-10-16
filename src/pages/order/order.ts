@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
-import {IonicPage, NavController, NavParams} from 'ionic-angular';
+import {AlertController, IonicPage, NavController, NavParams} from 'ionic-angular';
 import {HttpServiceProvider} from "../../providers/http-service/http-service";
-import WebCallApp from "../../app/global";
+import WebCallApp, {type1Array, type2Array} from "../../app/global";
 
 /**
  * Generated class for the OrderPage page.
@@ -18,33 +18,36 @@ import WebCallApp from "../../app/global";
 export class OrderPage {
 
   item = {
-    name: '结膜切口的眼眶肌锥内海绵状血管瘤摘除',
-    cover: 'bag-1.png',
-    author: '孙丰源',
-    type: '通关包',
-    size: '2MB',
-    price: '640',
-    originPrice: '800',
-    brief: "12312",
-    catalog: "123123",
+    name: '',
+    cover: '',
+    author: '',
+    type: '',
+    size: '',
+    price: '',
+    originPrice: '',
+    brief: "",
+    catalog: "",
     owner: true,
     online: true,
-    fee: '1222',
-    payType: 'alipay',
+    fee: '',
+    payType: '1',
     isAppPay: '0',
     actualPaymentAmount: '',
   };
 
-  status: boolean = true;
-  payType = '1';
+  // status: boolean = true;
+  platform;
 
   constructor(public navCtrl: NavController,
               public httpService: HttpServiceProvider,
-              public navParams: NavParams) {
+              public navParams: NavParams,
+              public alertCtrl: AlertController) {
   }
 
   ionViewDidLoad() {
     let {id, token, platform, type = 'id'} = this.navParams.data;
+
+    this.platform = platform;
 
     let args = {
       "serviceModule": "BS-Service",
@@ -57,37 +60,53 @@ export class OrderPage {
       },
       "TerminalType": "A"
     };
-    this.httpService.postBus(encodeURIComponent(JSON.stringify(args)))
-      .subscribe(res => {
-        let result = JSON.parse(decodeURIComponent(res['data'].replace(/\+/g, '%20')));
-        let resultObj = JSON.parse(result["serviceResult"]);
-        if (resultObj.flag === "true") {
-          this.item = {...resultObj.result}
+    console.log(args);
+    this.httpService.postBus(encodeURIComponent(JSON.stringify(args))).subscribe(res => {
+      // let result = JSON.parse(res.replace(/\+/g, '%20'));
+      let result = JSON.parse(decodeURIComponent(res));
+      if (!result['opFlag'] || result['opFlag'] == 'false') {
+        this.alertCtrl.create({
+          title: result['errorMessage'],
+          buttons: ['OK']
+        }).present();
+      } else {
+        let resultObj = result['serviceResult'];
+        console.log(resultObj);
+        if (resultObj.flag === 'true') {
+          this.item = {...this.item, ...resultObj.result};
+          console.log(this.item);
         } else {
           console.log(resultObj.error);
         }
-      });
-    this.httpService.getProductById(id)
-      .subscribe(item => {
+      }
 
-      });
+    });
+    // this.httpService.getProductById(id)
+    //   .subscribe(item => {
+    //
+    //   });
     console.log('ionViewDidLoad OrderPage');
   }
 
-  selectPayType(payType: string) {
-    if (payType == 'alipay') {
-      this.payType = '1';
+  bookType() {
+    let textbook = this.item['textbook'];
+    if (textbook == '0') {
+      return type1Array[textbook]
     } else {
-      this.payType = '2'
+      let textbookType = this.item['textbookType'];
+      return type2Array[textbookType]
     }
-    this.item['payType'] = payType;
+  }
+
+  selectPayType(payType: string = '1') {
+    this.item.payType = payType;
   }
 
   payConfirm() {
-    if (!this.status) return false;
+    // if (!this.status) return false;
     let {id, token, platform,} = this.navParams.data;
     if (this.item.isAppPay == '0') {
-      this.status = false;
+      // this.status = false;
       let args = {
         "serviceModule": "BS-Service",
         "serviceNumber": "0301501",
@@ -102,13 +121,17 @@ export class OrderPage {
       };
 
       this.httpService.postBus(encodeURIComponent(JSON.stringify(args))).subscribe(res => {
-        let result = JSON.parse(decodeURIComponent(res['data'].replace(/\+/g, '%20')));
-        if (!result["opFlag"] || result["opFlag"] === false) {
-          if (result["errorMessage"].indexOf("E012-") >= 0) {
-            WebCallApp("UserLogout", {logoutType: "E012"});
-          }
+        let result = JSON.parse(decodeURIComponent(res));
+        if (!result['opFlag'] || result['opFlag'] === 'false') {
+          // if (result['errorMessage'].indexOf('E012-') >= 0) {
+          //   WebCallApp('UserLogout', {logoutType: 'E012'});
+          // }
+          this.alertCtrl.create({
+            title: result['errorMessage'],
+            buttons: ['OK']
+          }).present();
         } else {
-          let resultObj = JSON.parse(result["serviceResult"]);
+          let resultObj = JSON.parse(result['serviceResult']);
           if (resultObj['flag'] === 'true') {
             this.navCtrl.push('PaySuccessPage', {
               token, platform, data: resultObj['result']
@@ -118,29 +141,22 @@ export class OrderPage {
           }
         }
       }, e => {
-        this.status = true
+        // this.status = true
       })
 
     } else {
       if (platform === "0") {
-        WebCallApp(JSON.stringify({
-          command: "openRechargeView",
-          args: {}
-        }));
+        WebCallApp("openRechargeView");
       } else if (platform === "2") {
         alert("对不起，暂不支持PC支付购买，请到手机端支付购买");
       } else {
-        let appCallData = {
-          command: "payment",
-          args: {
-            payType: this.payType,
-            bookid: id,
-            amount: `${this.item.actualPaymentAmount}`,
-            uuid: '',
-            discountId: ''
-          }
-        };
-        WebCallApp(JSON.stringify(appCallData));
+        WebCallApp("payment", {
+          payType: this.item.payType,
+          bookid: id,
+          amount: `${this.item.actualPaymentAmount}`,
+          uuid: '',
+          discountId: ''
+        });
       }
 
     }

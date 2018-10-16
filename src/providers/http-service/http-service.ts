@@ -12,7 +12,9 @@ import {Observable} from "rxjs/Observable";
 export class HttpServiceProvider {
 
   url = 'http://192.168.8.144:8092/store/product';
-  busUrl = 'http://192.168.9.9:8080/bus/services';
+  // busUrl = 'http://192.168.9.9:8080/bus/services';
+  busUrl = 'http://123.56.15.197:5002/services';
+  // busUrl = 'http://192.168.8.144:5005/bus/services';
 
   constructor(public http: HttpClient) {
     console.log('Hello HttpServiceProvider Provider');
@@ -47,7 +49,9 @@ export class HttpServiceProvider {
     return this.get(`${this.url}/${id}`)
   }
 
-  postBus(body: string) {
-    return this.http.post(this.busUrl, body)
+  postBus(body: string): Observable<string> {
+    return this.http.post(this.busUrl, body, {
+      responseType: 'text'
+    })
   }
 }

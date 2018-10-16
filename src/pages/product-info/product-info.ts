@@ -1,7 +1,9 @@
 import {Component} from '@angular/core';
 import {AlertController, IonicPage, NavController, NavParams} from 'ionic-angular';
 import {HttpServiceProvider} from "../../providers/http-service/http-service";
-import WebCallApp from "../../app/global";
+import WebCallApp, {type1Array, type2Array} from "../../app/global";
+import {filter} from "rxjs/operators";
+
 // import {filter} from "rxjs/operators";
 
 @IonicPage({
@@ -51,26 +53,28 @@ export class ProductInfoPage {
   bookType() {
     let textbook = this.item['textbook'];
     if (textbook != '0') {
-      return this.type1Array[textbook]
+      return type1Array[textbook]
     } else {
       let textbookType = this.item['textbookType'];
-      return this.type2Array[textbookType]
+      return type2Array[textbookType]
     }
   }
 
   buy() {
-    console.log(WebCallApp);
     WebCallApp("GetAPPVersion")
-      // .pipe(filter(param => param['sn'] == "GetAPPVersion"))
-      .subscribe(({data}) => {
-        console.log(data);
-        if (data['touristsState']) {
+      .pipe(filter(param => param['sn'] == "GetAPPVersion"))
+      .subscribe(({data: res}) => {
+        console.log(res);
+        console.log(decodeURIComponent(res));
+        let {serviceResult: {result}} = JSON.parse(decodeURIComponent(res));
+        console.log(result);
+        if (result['touristsState'] == '1') {
           this.alertCtrl.create({
             title: '请登录',
             buttons: ['OK']
           }).present();
         } else {
-          let {token, platform} = data;
+          let {token, platform} = result;
           let {id} = this.item;
           this.navCtrl.push('OrderPage', {token, platform, id},).catch();
         }

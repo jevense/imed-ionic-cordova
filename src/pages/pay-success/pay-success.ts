@@ -54,7 +54,9 @@ export class PaySuccessPage {
 
     this.httpService.postBus(encodeURIComponent(JSON.stringify(args)))
       .subscribe(res => {
+        console.log(res);
         let result = JSON.parse(decodeURIComponent(res['data'].replace(/\+/g, '%20')));
+        console.log(result);
         let resultObj = JSON.parse(result["serviceResult"]);
         if (resultObj.flag === "true") {
           this.item = {...resultObj['result']}

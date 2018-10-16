@@ -15,7 +15,7 @@
 <ion-content>
   <div class="imed-product-info">
     <div class="imed-product-info-thumbnails" text-center>
-      <img src="assets/imgs/{{item['cover']}}">
+      <img [src]="item['cover']">
     </div>
     <div class="imed-product-info-detail">
       <div class="imed-list-item-title">{{item['name']}}</div>
@@ -26,8 +26,8 @@
         </div>
         <div>作者：{{item['author']}}</div>
         <div class="imed-list-item-label-last">
-          <span>图书类型：{{item['type']}}</span>
-          <span>大小：{{item['size']}}</span>
+          <span>图书类型：{{bookType()}}</span>
+          <!--<span>大小：{{item['size']}}</span>-->
         </div>
       </div>
     </div>
@@ -37,7 +37,7 @@
 
   <div class="imed-product-fee">
     <div class="imed-product-fee-title">支付金额</div>
-    <div><span class="imed-red" [innerHTML]="item['fee']"></span>阅点</div>
+    <div><span class="imed-red" [innerHTML]="item['actualPrice']"></span>阅点</div>
   </div>
 
   <div class="imed-product-pay">
@@ -49,29 +49,31 @@
           <img src="assets/icon/yuedian.png">
         </ion-avatar>
         <h2>使用阅点</h2>
-        <p>可用阅点<span class="imed-red" [innerHTML]="item['fee']"></span></p>
+        <p>可用阅点<span class="imed-red" [innerHTML]="item['availablePoint']"></span></p>
         <ion-icon item-end name="checkmark-circle" class="imed-green"></ion-icon>
       </ion-item>
-      <div class="separator"></div>
-      <ion-item>
-        <div item-start class="pay-icon">
-          <img src="assets/icon/zhifubao.png">
-        </div>
-        支付宝
-        <button ion-button icon-only item-end clear (click)="selectPayType('alipay')">
-          <ion-icon name="checkmark-circle" [ngClass]="{'imed-green':item['payType']=='alipay'}"></ion-icon>
-        </button>
-      </ion-item>
-      <div class="separator"></div>
-      <ion-item>
-        <div item-start class="pay-icon">
-          <img src="assets/icon/weixin.png">
-        </div>
-        微信
-        <button ion-button icon-only item-end clear (click)="selectPayType('weixin')">
-          <ion-icon name="checkmark-circle" [ngClass]="{'imed-green':item['payType']=='weixin'}"></ion-icon>
-        </button>
-      </ion-item>
+      <ng-container *ngIf="this.item.isAppPay == '1' && platform != '0'">
+        <div class="separator"></div>
+        <ion-item>
+          <div item-start class="pay-icon">
+            <img src="assets/icon/zhifubao.png">
+          </div>
+          支付宝
+          <button ion-button icon-only item-end clear (click)="selectPayType('1')">
+            <ion-icon name="checkmark-circle" [ngClass]="{'imed-green':item['payType']=='1'}"></ion-icon>
+          </button>
+        </ion-item>
+        <div class="separator"></div>
+        <ion-item>
+          <div item-start class="pay-icon">
+            <img src="assets/icon/weixin.png">
+          </div>
+          微信
+          <button ion-button icon-only item-end clear (click)="selectPayType('2')">
+            <ion-icon name="checkmark-circle" [ngClass]="{'imed-green':item['payType']=='2'}"></ion-icon>
+          </button>
+        </ion-item>
+      </ng-container>
       <div class="separator"></div>
       <div class="pay-tips">
         友情提示：虚拟商品一经售出，无正当理由，概不退款
