@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
-import {ModalController, NavController, Refresher} from 'ionic-angular';
-import WebCallApp from "../../app/global";
+import {IonicPage, ModalController, NavController, Refresher} from 'ionic-angular';
+import WebCallApp, {exactInfoFromRes, serialNumber} from "../../app/global";
 
 /**
  * Generated class for the HomePage page.
@@ -8,6 +8,7 @@ import WebCallApp from "../../app/global";
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
  */
+@IonicPage()
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html',
@@ -161,7 +162,26 @@ export class HomePage {
     },
   ];
 
+  result;
+
   constructor(public navCtrl: NavController, public modalCtrl: ModalController) {
+  }
+
+  ionViewDidLoad() {
+
+    let serialGetAPPVersion = serialNumber();
+    WebCallApp('GetAPPVersion', {}, serialGetAPPVersion).subscribe(({sn, data: res}) => {
+      if (sn == serialGetAPPVersion) {
+        this.result = exactInfoFromRes(res);
+        console.log(this.result)
+      }
+    });
+    console.log('ionViewDidLoad ProductInfoPage');
+  }
+
+  ionViewWillEnter() {
+    WebCallApp("TabbarShow");
+    console.log('TabbarShow');
   }
 
   getItems($event: UIEvent) {
@@ -178,11 +198,24 @@ export class HomePage {
   }
 
   goToCategoryPage() {
+    WebCallApp("TabbarHiddent");
     this.navCtrl.push('CategoryPage', {}, {direction: 'back'}).catch();
   }
 
+  openOperation() {
+    let {token} = this.result;
+    WebCallApp("CmdOpenUrl", {url: `http://mvw-testing.oss-cn-beijing.aliyuncs.com/cst-phone/ui/list.html?token=${token}&type=1`});
+  }
+
+  search() {
+    let {token} = this.result;
+    WebCallApp("CmdOpenUrl", {url: `http://123.56.15.197:7162/phone/searchhome.html?token=${token}`});
+  }
+
+
   locate(type: string = 'url', {url, name: title, key, subList, id}) {
     // this.navCtrl.push('WebPage', {browser: {title, url: url}}).catch();
+    WebCallApp("TabbarHiddent");
     switch (type) {
       case 'url': {
         WebCallApp("CmdOpenUrl", {url: url});

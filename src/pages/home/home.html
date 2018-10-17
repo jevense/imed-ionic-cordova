@@ -13,7 +13,7 @@
     </ion-buttons>
 
     <ion-title>
-      <div>首页1</div>
+      <div>首页</div>
     </ion-title>
 
     <!--<ion-toolbar color="light">-->
@@ -26,7 +26,7 @@
     <!--</ion-toolbar>-->
 
     <ion-buttons end>
-      <button ion-button icon-only color="imed-red">
+      <button ion-button icon-only color="imed-red" (click)="search()">
         <ion-icon name="ios-search-outline"></ion-icon>
       </button>
     </ion-buttons>
@@ -46,7 +46,8 @@
   <div class="imed-slide">
     <ion-slides pager>
       <ion-slide>
-        <div (click)="locate('url',{name:'执医通关包',url:'https://mall.imed.org.cn/ui/phone/activities.html#/activity/20180901'})">
+        <div
+          (click)="locate('url',{name:'执医通关包',url:'https://mall.imed.org.cn/ui/phone/activities.html#/activity/20180901'})">
           <img src="assets/imgs/carousel.png">
         </div>
       </ion-slide>
@@ -85,9 +86,9 @@
     </ion-grid>
     <!--轮播菜单-->
     <!--<div class="slide-bag" (pan)="panEvent($event)">-->
-      <!--<div *ngFor="let item of slideBags" (click)="locate('info',item)">-->
-        <!--<img src="assets/imgs/{{item['cover']}}">-->
-      <!--</div>-->
+    <!--<div *ngFor="let item of slideBags" (click)="locate('info',item)">-->
+    <!--<img src="assets/imgs/{{item['cover']}}">-->
+    <!--</div>-->
     <!--</div>-->
   </div>
   <div class="separator"></div>
@@ -119,7 +120,7 @@
     <div class="home-card">
       <div class="home-card-title">
         <span class="home-card-title-text">手术视频</span>
-        <button ion-button icon-only clear color="nav">
+        <button ion-button icon-only clear color="nav" (click)="openOperation()">
           <ion-icon name="arrow-forward"></ion-icon>
         </button>
       </div>

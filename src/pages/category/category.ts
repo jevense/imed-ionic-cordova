@@ -216,13 +216,6 @@ export class CategoryPage {
     this.subMenus = this.menus[index]
   }
 
-  navigate(item) {
-    if (item['type'] == 'url') {
-      // this.navCtrl.push('WebPage', {browser: {title: item['name'], url: item['url']}}).catch();
-      WebCallApp("CmdOpenUrl", {url: item['url']});
-    }
-  }
-
   goToPage({name: title, type, key, url, id, list}) {
 
     switch (type) {

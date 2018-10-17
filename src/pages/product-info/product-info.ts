@@ -1,10 +1,7 @@
 import {Component} from '@angular/core';
 import {AlertController, IonicPage, NavController, NavParams} from 'ionic-angular';
 import {HttpServiceProvider} from "../../providers/http-service/http-service";
-import WebCallApp, {type1Array, type2Array} from "../../app/global";
-import {filter} from "rxjs/operators";
-
-// import {filter} from "rxjs/operators";
+import WebCallApp, {exactInfoFromRes, serialNumber, type1Array, type2Array} from "../../app/global";
 
 @IonicPage({
   name: 'product-info',
@@ -29,10 +26,11 @@ export class ProductInfoPage {
     briefIntroduction: '',
     catalog: '',
     owner: true,
+    state: 'remote',
+    isbn: '',
   };
 
-  type1Array = ['教材', 'pdf', '教程', '通关包', '执医通关包', '手术视频'];
-  type2Array = ['普通教材', '病例分析', '手术', '杂志', '试题', '试题包', '执医通关包', '未知类型'];
+  result;
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
@@ -42,11 +40,31 @@ export class ProductInfoPage {
 
   ionViewDidLoad() {
     let {id} = this.navParams.data;
-    this.httpService.getProductById(id)
-      .subscribe(item => {
-        console.log(item);
-        this.item = {...item}
-      });
+
+    let serialGetAPPVersion = serialNumber();
+    WebCallApp('GetAPPVersion', {}, serialGetAPPVersion).subscribe(({sn, data: res}) => {
+      if (sn == serialGetAPPVersion) {
+
+        this.result = exactInfoFromRes(res);
+
+        this.httpService.getProductById(id, this.result["token"]).subscribe(item => {
+          console.log(item);
+          this.item = {...item};
+          let {isbn} = this.item;
+          let serialGetBookState = serialNumber();
+          WebCallApp('GetBookState', {isbn}, serialGetBookState).subscribe(({sn, data: bookState}) => {
+            if (sn == serialGetBookState) {
+              let result = exactInfoFromRes(bookState);
+              if (result['state'] == '8') {
+                this.item['state'] = 'local';
+              } else {
+                this.item['state'] = 'remote';
+              }
+            }
+          });
+        });
+      }
+    });
     console.log('ionViewDidLoad ProductInfoPage');
   }
 
@@ -61,24 +79,20 @@ export class ProductInfoPage {
   }
 
   buy() {
-    WebCallApp("GetAPPVersion")
-      .pipe(filter(param => param['sn'] == "GetAPPVersion"))
-      .subscribe(({data: res}) => {
-        console.log(res);
-        console.log(decodeURIComponent(res));
-        let {serviceResult: {result}} = JSON.parse(decodeURIComponent(res));
-        console.log(result);
-        if (result['touristsState'] == '1') {
-          this.alertCtrl.create({
-            title: '请登录',
-            buttons: ['OK']
-          }).present();
-        } else {
-          let {token, platform} = result;
-          let {id} = this.item;
-          this.navCtrl.push('OrderPage', {token, platform, id},).catch();
-        }
-      });
+    if (this.result['touristsState'] == '1') {
+      this.alertCtrl.create({
+        title: '请登录',
+        buttons: ['OK']
+      }).present();
+    } else {
+      let {token, platform} = this.result;
+      let {id} = this.item;
+      this.navCtrl.push('OrderPage', {token, platform, id},).catch();
+    }
+  }
+
+  download() {
+
   }
 
   open(item) {
@@ -87,6 +101,15 @@ export class ProductInfoPage {
 
   online() {
     return this.item['owner'] && this.item['textbook'] === '0' && this.item['textbookType'] === '0'
+  }
+
+
+  goBack() {
+    if (this.navCtrl.canGoBack()) {
+      this.navCtrl.pop().catch();
+    } else {
+      WebCallApp("CmdGoBack");
+    }
   }
 
 }
@@ -104,4 +127,6 @@ class ProductInfo {
   briefIntroduction: string;
   catalog: string;
   owner: boolean;
+  state: string;
+  isbn: string;
 }

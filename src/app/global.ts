@@ -1,7 +1,7 @@
 import {Subject} from "rxjs/Subject";
 
-let WebCallApp = (command, args = {}) => {
-  let params = {command, args};
+let WebCallApp = (command, args = {}, sn = serialNumber()) => {
+  let params = {command, args, sn};
   if (window['Elf'] && window['Elf']['WebCallApp']) {
     console.log('android');
     window['Elf']['WebCallApp'](JSON.stringify(params));
@@ -15,9 +15,7 @@ let WebCallApp = (command, args = {}) => {
 let subject = new Subject();
 
 
-if (!window['Elf']) {
-  window['Elf'] = {};//如果对象没有ELF对象，则初始化
-}
+if (!window['Elf']) window['Elf'] = {}; //如果对象没有ELF对象，则初始化
 window['Elf'].AppCallWeb = function (sn, data) {
   subject.next({sn, data});
   // if (sn === 'MsgOpenSuccess') {	//支付宝、或微信时需通知一下
@@ -33,6 +31,24 @@ window['Elf'].AppCallWeb = function (sn, data) {
   // } else {
   //   console.log(sn + data)
   // }
+};
+
+export const serialNumber = () => {
+  return Math.random();
+};
+
+export const exactInfoFromRes = (res: string) => {
+  let {serviceResult} = JSON.parse(decodeURIComponent(res));
+  console.log(serviceResult);
+  if (typeof serviceResult == 'string') {
+    serviceResult = JSON.parse(serviceResult);
+  }
+  let result = serviceResult['result'];
+  if (typeof result == 'string') {
+    result = JSON.parse(result);
+  }
+  console.log(result);
+  return result;
 };
 
 

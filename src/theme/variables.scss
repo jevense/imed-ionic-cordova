@@ -101,10 +101,14 @@ $toolbar-md-button-color: $imed-red;
   background: #F4F5F6;
 }
 
-ion-header{
-  ion-navbar:nth-child(1){
-    padding-top:constant(safe-area-inset-top)!important;
-    padding-top:env(safe-area-inset-top)!important;
+ion-header {
+  ion-navbar:nth-child(1) {
+    padding-top: constant(safe-area-inset-top) !important;
+    padding-top: env(safe-area-inset-top) !important;
   }
 }
+
+//.ios .ion-page.show-page ~ .nav-decor {
+//  background-color: white !important;
+//}
 

@@ -1,14 +1,14 @@
 import {Component, ViewChild} from '@angular/core';
-// import {StatusBar} from '@ionic-native/status-bar';
-// import {SplashScreen} from '@ionic-native/splash-screen';
-import {HomePage} from "../pages/home/home";
+
+// import {HomePage} from "../pages/home/home";
 
 @Component({
   templateUrl: 'app.html'
 })
 export class App {
+
   @ViewChild('rootNav') nav;
-  rootPage: any = HomePage;
+  rootPage: any = Index;
 
   // constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen) {
   //   platform.ready().then(() => {
@@ -21,6 +21,12 @@ export class App {
 
   ngAfterViewInit() {
     // Let's navigate from TabsPage to Page1
-    // this.nav.push(LoginPage);
+    this.nav.push('HomePage');
   }
+}
+
+@Component({
+  template: `<div>Test</div>`
+})
+export class Index {
 }

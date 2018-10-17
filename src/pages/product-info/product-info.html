@@ -6,9 +6,16 @@
 -->
 <ion-header>
 
-  <ion-navbar>
+  <ion-toolbar>
+    <ion-buttons start>
+      <button ion-button icon-only (click)="goBack()">
+        <ion-icon name="arrow-back"></ion-icon>
+      </button>
+    </ion-buttons>
+
     <ion-title>图书详情</ion-title>
-  </ion-navbar>
+
+  </ion-toolbar>
 
 </ion-header>
 
@@ -61,10 +68,13 @@
       立即购买
     </div>
     <ng-template #elseBlock>
-      <div color="danger" (click)="buy()">
+      <div color="danger" *ngIf="state=='remote'" (click)="download()">
         立即下载
       </div>
-      <div color="danger" *ngIf="online()" (click)="open(item)">
+      <div color="danger" *ngIf="state=='local'" (click)="open()">
+        打开图书
+      </div>
+      <div color="danger" *ngIf="online()" (click)="open()">
         在线阅读
       </div>
     </ng-template>
