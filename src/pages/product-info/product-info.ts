@@ -39,33 +39,33 @@ export class ProductInfoPage {
   }
 
   ionViewDidLoad() {
-    let {id} = this.navParams.data;
-
     let serialGetAPPVersion = serialNumber();
     WebCallApp('GetAPPVersion', {}, serialGetAPPVersion).subscribe(({sn, data: res}) => {
       if (sn == serialGetAPPVersion) {
-
         this.result = exactInfoFromRes(res);
-
-        this.httpService.getProductById(id, this.result["token"]).subscribe(item => {
-          console.log(item);
-          this.item = {...item};
-          let {isbn} = this.item;
-          let serialGetBookState = serialNumber();
-          WebCallApp('GetBookState', {isbn}, serialGetBookState).subscribe(({sn, data: bookState}) => {
-            if (sn == serialGetBookState) {
-              let result = exactInfoFromRes(bookState);
-              if (result['state'] == '8') {
-                this.item['state'] = 'local';
-              } else {
-                this.item['state'] = 'remote';
-              }
-            }
-          });
-        });
       }
     });
     console.log('ionViewDidLoad ProductInfoPage');
+  }
+
+  ionViewWillEnter() {
+    let {id} = this.navParams.data;
+    this.httpService.getProductById(id, this.result["token"]).subscribe(item => {
+      console.log(item);
+      this.item = {...item};
+      let {isbn} = this.item;
+      let serialGetBookState = serialNumber();
+      WebCallApp('GetBookState', {isbn}, serialGetBookState).subscribe(({sn, data: bookState}) => {
+        if (sn == serialGetBookState) {
+          let result = exactInfoFromRes(bookState);
+          if (result['state'] == '8') {
+            this.item['state'] = 'local';
+          } else {
+            this.item['state'] = 'remote';
+          }
+        }
+      });
+    });
   }
 
   bookType() {
@@ -87,7 +87,7 @@ export class ProductInfoPage {
     } else {
       let {token, platform} = this.result;
       let {id} = this.item;
-      this.navCtrl.push('OrderPage', {token, platform, id},).catch();
+      this.navCtrl.push('OrderPage', {token, platform, id},).catch(e => console.log(e));
     }
   }
 
@@ -105,7 +105,7 @@ export class ProductInfoPage {
 
 
   goBack() {
-    if (this.navCtrl.canGoBack()) {
+    if (this.navCtrl.canGoBack() && this.navCtrl.length() > 2) {
       this.navCtrl.pop().catch();
     } else {
       WebCallApp("CmdGoBack");

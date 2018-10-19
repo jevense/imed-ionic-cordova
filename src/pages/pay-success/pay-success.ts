@@ -1,6 +1,7 @@
 import {Component} from '@angular/core';
 import {IonicPage, NavController, NavParams} from 'ionic-angular';
 import {HttpServiceProvider} from "../../providers/http-service/http-service";
+import {default as WebCallApp, type1Array, type2Array} from "../../app/global";
 
 /**
  * Generated class for the PaySuccessPage page.
@@ -14,23 +15,18 @@ import {HttpServiceProvider} from "../../providers/http-service/http-service";
   templateUrl: 'pay-success.html',
 })
 export class PaySuccessPage {
-  paySuccess = {
-    consumePoint: '',
-    balance: '',
-  };
 
   item = {
-    name: '结膜切口的眼眶肌锥内海绵状血管瘤摘除',
-    cover: 'bag-1.png',
-    author: '孙丰源',
-    type: '通关包',
-    size: '2MB',
-    price: '640',
-    originPrice: '800',
-    brief: "12312",
-    catalog: "123123",
-    owner: true,
-    online: true,
+    name: '',
+    cover: '',
+    author: '',
+    textbook: '',
+    textbookType: '',
+    size: '',
+    price: '',
+    originPrice: '',
+    consumePoint: '',
+    balance: '',
   };
 
   constructor(public navCtrl: NavController,
@@ -39,6 +35,11 @@ export class PaySuccessPage {
   }
 
   ionViewDidLoad() {
+    console.log('ionViewDidLoad PaySuccessPage2');
+  }
+
+  ionViewWillEnter() {
+
     let {token, platform, data} = this.navParams.data;
 
     let args = {
@@ -52,24 +53,34 @@ export class PaySuccessPage {
       "TerminalType": "A"
     };
 
-    this.httpService.postBus(encodeURIComponent(JSON.stringify(args)))
-      .subscribe(res => {
-        console.log(res);
-        let result = JSON.parse(decodeURIComponent(res['data'].replace(/\+/g, '%20')));
-        console.log(result);
-        let resultObj = JSON.parse(result["serviceResult"]);
-        if (resultObj.flag === "true") {
-          this.item = {...resultObj['result']}
-        } else {
-          console.log(resultObj.error);
-        }
-        return resultObj.result
-      });
-    console.log('ionViewDidLoad PaySuccessPage');
+    this.httpService.postBus(args).subscribe(result => {
+      let serviceResult = result["serviceResult"];
+      if (serviceResult['flag'] == "true") {
+        this.item = {...this.item, ...serviceResult['result']};
+        console.log(this.item);
+      } else {
+        console.log(serviceResult['error']);
+      }
+    });
+  }
+
+  bookType() {
+    let textbook = this.item['textbook'];
+    if (textbook == '0') {
+      return type1Array[textbook]
+    } else {
+      let textbookType = this.item['textbookType'];
+      return type2Array[textbookType]
+    }
   }
 
   learn() {
-    this.navCtrl.popToRoot().catch();
+    if (this.item['textbook'] == '5' && this.item['textbookType'] == '2') {
+      WebCallApp("CmdGoBack");
+    } else {
+      this.navCtrl.popToRoot().catch();
+    }
+
   }
 
 }

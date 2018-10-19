@@ -1,4 +1,5 @@
 import {Subject} from "rxjs/Subject";
+import {WebPage} from "../pages/web/web";
 
 let WebCallApp = (command, args = {}, sn = serialNumber()) => {
   let params = {command, args, sn};
@@ -8,6 +9,10 @@ let WebCallApp = (command, args = {}, sn = serialNumber()) => {
   } else if (window['webkit'] && window['webkit']['messageHandlers'] && window['webkit']['messageHandlers']["WebCallApp"]) {
     console.log('ios');
     window['webkit']['messageHandlers']["WebCallApp"]['postMessage'](JSON.stringify(params));
+  } else {
+    if (command == 'CmdOpenUrl') {
+      args['modal'].create(WebPage, {browser: {title: "", url: args['url'],}}).present().catch();
+    }
   }
   return subject;
 };

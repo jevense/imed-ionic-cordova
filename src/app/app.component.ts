@@ -1,4 +1,5 @@
-import {Component, ViewChild} from '@angular/core';
+import {Component} from '@angular/core';
+import {HomePage} from "../pages/home/home";
 
 // import {HomePage} from "../pages/home/home";
 
@@ -7,8 +8,7 @@ import {Component, ViewChild} from '@angular/core';
 })
 export class App {
 
-  @ViewChild('rootNav') nav;
-  rootPage: any = Index;
+  rootPage: any = HomePage;
 
   // constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen) {
   //   platform.ready().then(() => {
@@ -21,12 +21,6 @@ export class App {
 
   ngAfterViewInit() {
     // Let's navigate from TabsPage to Page1
-    this.nav.push('HomePage');
+    // this.nav.push('');
   }
-}
-
-@Component({
-  template: `<div>Test</div>`
-})
-export class Index {
 }

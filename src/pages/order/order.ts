@@ -44,7 +44,7 @@ export class OrderPage {
               public alertCtrl: AlertController) {
   }
 
-  ionViewDidLoad() {
+  ionViewWillEnter() {
     let {id, token, platform, type = 'id'} = this.navParams.data;
 
     this.platform = platform;
@@ -60,31 +60,23 @@ export class OrderPage {
       },
       "TerminalType": "A"
     };
-    console.log(args);
-    this.httpService.postBus(encodeURIComponent(JSON.stringify(args))).subscribe(res => {
+    this.httpService.postBus(args).subscribe(result => {
       // let result = JSON.parse(res.replace(/\+/g, '%20'));
-      let result = JSON.parse(decodeURIComponent(res));
       if (!result['opFlag'] || result['opFlag'] == 'false') {
         this.alertCtrl.create({
           title: result['errorMessage'],
           buttons: ['OK']
         }).present();
       } else {
-        let resultObj = result['serviceResult'];
-        console.log(resultObj);
-        if (resultObj.flag === 'true') {
-          this.item = {...this.item, ...resultObj.result};
-          console.log(this.item);
+        let serviceResult = result['serviceResult'];
+        if (serviceResult.flag === 'true') {
+          this.item = {...this.item, ...serviceResult.result};
         } else {
-          console.log(resultObj.error);
+          console.log(serviceResult.error);
         }
       }
 
     });
-    // this.httpService.getProductById(id)
-    //   .subscribe(item => {
-    //
-    //   });
     console.log('ionViewDidLoad OrderPage');
   }
 
@@ -120,8 +112,7 @@ export class OrderPage {
         "TerminalType": "A"
       };
 
-      this.httpService.postBus(encodeURIComponent(JSON.stringify(args))).subscribe(res => {
-        let result = JSON.parse(decodeURIComponent(res));
+      this.httpService.postBus(args).subscribe(result => {
         if (!result['opFlag'] || result['opFlag'] === 'false') {
           // if (result['errorMessage'].indexOf('E012-') >= 0) {
           //   WebCallApp('UserLogout', {logoutType: 'E012'});
@@ -131,17 +122,20 @@ export class OrderPage {
             buttons: ['OK']
           }).present();
         } else {
-          let resultObj = JSON.parse(result['serviceResult']);
-          if (resultObj['flag'] === 'true') {
+          let serviceResult = result['serviceResult'];
+          if (typeof serviceResult == 'string') {
+            serviceResult = JSON.parse(serviceResult);
+          }
+          if (serviceResult['flag'] === 'true') {
             this.navCtrl.push('PaySuccessPage', {
-              token, platform, data: resultObj['result']
+              token, platform, data: serviceResult['result']
             },).catch();
-          } else {
-            console.log(resultObj)
+          }else {
+            console.log('')
           }
         }
       }, e => {
-        // this.status = true
+        console.log(e)
       })
 
     } else {

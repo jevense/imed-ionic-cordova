@@ -1,6 +1,7 @@
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {Observable} from "rxjs/Observable";
+import {map} from "rxjs/operators";
 
 /*
   Generated class for the HttpServiceProvider provider.
@@ -11,8 +12,8 @@ import {Observable} from "rxjs/Observable";
 @Injectable()
 export class HttpServiceProvider {
 
-  url = 'http://192.168.8.144:8092/store/product';
-  // url = 'http://123.56.15.197:7152/product';
+  // url = 'http://192.168.8.144:8092/store/product';
+  url = 'http://123.56.15.197:7152/product';
   // busUrl = 'http://192.168.9.9:8080/bus/services';
   busUrl = 'http://123.56.15.197:5002/services';
 
@@ -55,9 +56,13 @@ export class HttpServiceProvider {
     }
   }
 
-  postBus(body: string): Observable<string> {
-    return this.http.post(this.busUrl, body, {
+  postBus(body: object): Observable<object> {
+    return this.http.post(this.busUrl, JSON.stringify(body), {
+      headers: new HttpHeaders({
+        "Accept": "text/plain",
+        "Content-Type": "text/plain"
+      }),
       responseType: 'text'
-    })
+    }).pipe(map(res => JSON.parse(decodeURIComponent(res))))
   }
 }

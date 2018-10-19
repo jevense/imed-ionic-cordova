@@ -15,7 +15,7 @@
 <ion-content>
   <div class="imed-product-info">
     <div class="imed-product-info-thumbnails" text-center>
-      <img src="assets/imgs/{{item['cover']}}">
+      <img [src]="item['cover']">
     </div>
     <div class="imed-product-info-detail">
       <div class="imed-list-item-title">{{item['name']}}</div>
@@ -26,7 +26,7 @@
         </div>
         <div>作者：{{item['author']}}</div>
         <div class="imed-list-item-label-last">
-          <span>图书类型：{{item['type']}}</span>
+          <span>图书类型：{{bookType()}}</span>
           <span>大小：{{item['size']}}</span>
         </div>
       </div>
@@ -36,11 +36,11 @@
   <div class="separator"></div>
 
   <div text-end class="imed-item-block">
-    本次购买共消费：{{paySuccess['consumePoint']}} 阅点
+    本次购买共消费：{{item['consumePoint']}} 阅点
   </div>
   <div class="separator"></div>
   <div text-end class="imed-item-block">
-    账户余额：{{paySuccess['balance']}} 阅点
+    账户余额：{{item['balance']}} 阅点
   </div>
   <div class="separator"></div>
 </ion-content>

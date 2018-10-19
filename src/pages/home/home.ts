@@ -91,7 +91,13 @@ export class HomePage {
           }]
       },
       {'icon-name': 'magazine', key: 'magazine-all', name: '毕教杂志'},
-      {'icon-name': 'database', key: 'database-all', name: '数据库'},
+      {
+        'icon-name': 'database',
+        key: 'database-all',
+        name: '数据库',
+        type: 'url',
+        url: 'http://mshuju.mvwchina.com',
+      },
       {'icon-name': 'disease', key: 'disease-all', name: '疾病教程'},
     ]
   ];
@@ -123,11 +129,13 @@ export class HomePage {
       topTitle: 'doc-sub-title-1.png',
       list: [
         {
+          type: 'url',
           name: '临床执业医师考试通关包实践技能考试',
           url: 'https://mall.imed.org.cn/ui/phone/activities.html#/exam/40288810624e037d01624e03979d0357',
           cover: 'bag-doc-1.png',
         },
         {
+          type: 'url',
           name: '临床执业医师考试综合理论通关包',
           url: 'https://mall.imed.org.cn/ui/phone/activities.html#/exam/40288810624e037d01624e03979d035b',
           cover: 'bag-doc-2.png',
@@ -184,10 +192,6 @@ export class HomePage {
     console.log('TabbarShow');
   }
 
-  getItems($event: UIEvent) {
-
-  }
-
   doRefresh(refresher: Refresher) {
     console.log('Begin async operation', refresher);
 
@@ -213,12 +217,12 @@ export class HomePage {
   }
 
 
-  locate(type: string = 'url', {url, name: title, key, subList, id}) {
+  locate({url, name: title, key, subList, id, type = 'list'}) {
     // this.navCtrl.push('WebPage', {browser: {title, url: url}}).catch();
     WebCallApp("TabbarHiddent");
     switch (type) {
       case 'url': {
-        WebCallApp("CmdOpenUrl", {url: url});
+        WebCallApp("CmdOpenUrl", {url: url, modal: this.modalCtrl,});
         // this.modalCtrl.create(WebPage, {browser: {title, url,}}).present().catch();
         break;
       }
@@ -234,7 +238,7 @@ export class HomePage {
 
   }
 
-  panEvent($event) {
-    // $event.stopPropagation();
-  }
+  // panEvent($event) {
+  //   // $event.stopPropagation();
+  // }
 }

@@ -2,7 +2,7 @@ import {ErrorHandler, NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import {IonicApp, IonicErrorHandler, IonicModule} from 'ionic-angular';
 import {HttpClientModule} from '@angular/common/http';
-import {App, Index} from './app.component';
+import {App} from './app.component';
 
 import {ProductListPage} from "../pages/product-list/product-list";
 import {ProductInfoPageModule} from "../pages/product-info/product-info.module";
@@ -12,11 +12,12 @@ import {SettingsPage} from "../pages/epub-reader/settings/settings";
 import {HomePageModule} from "../pages/home/home.module";
 import {HttpServiceProvider} from '../providers/http-service/http-service';
 import './global'
+import {WebPage} from "../pages/web/web";
+import {WebPageModule} from "../pages/web/web.module";
 
 @NgModule({
   declarations: [
     App,
-    Index,
     ProductListPage,
     BookPage,
     TocPage,
@@ -25,6 +26,7 @@ import './global'
   imports: [
     BrowserModule,
     HttpClientModule,
+    WebPageModule,
     IonicModule.forRoot(App, {
       backButtonText: '',
       tabsHideOnSubPages: true,
@@ -37,7 +39,7 @@ import './global'
   bootstrap: [IonicApp],
   entryComponents: [
     App,
-    Index,
+    WebPage,
     ProductListPage,
     BookPage,
     TocPage,
