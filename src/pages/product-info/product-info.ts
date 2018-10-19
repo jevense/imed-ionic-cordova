@@ -49,8 +49,8 @@ export class ProductInfoPage {
   }
 
   ionViewWillEnter() {
-    let {id} = this.navParams.data;
-    this.httpService.getProductById(id, this.result["token"]).subscribe(item => {
+    let {isbn} = this.navParams.data;
+    this.httpService.getProductById(isbn, this.result["token"]).subscribe(item => {
       console.log(item);
       this.item = {...item};
       let {isbn} = this.item;
@@ -105,7 +105,7 @@ export class ProductInfoPage {
 
 
   goBack() {
-    if (this.navCtrl.canGoBack() && this.navCtrl.length() > 2) {
+    if (this.navCtrl.canGoBack()) {
       this.navCtrl.pop().catch();
     } else {
       WebCallApp("CmdGoBack");

@@ -50,7 +50,7 @@ export class HttpServiceProvider {
 
   getProductById(id: string, result: string = "") {
     if (result) {
-      return this.get(`${this.url}/${id}?token=${result}&type=id`)
+      return this.get(`${this.url}/${id}?token=${result}&type=isbn`)
     } else {
       return this.get(`${this.url}/${id}`)
     }
