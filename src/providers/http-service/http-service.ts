@@ -2,6 +2,8 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {Observable} from "rxjs/Observable";
 import {map} from "rxjs/operators";
+import {busUrl, recommendUrl, url} from "../../app/global";
+import {Product} from "../../components/Product";
 
 /*
   Generated class for the HttpServiceProvider provider.
@@ -12,52 +14,36 @@ import {map} from "rxjs/operators";
 @Injectable()
 export class HttpServiceProvider {
 
-  // url = 'http://192.168.8.144:8092/store/product';
-  url = 'http://123.56.15.197:7152/product';
-  // busUrl = 'http://192.168.9.9:8080/bus/services';
-  busUrl = 'http://123.56.15.197:5002/services';
-
   // busUrl = 'http://192.168.8.144:5005/bus/services';
 
   constructor(public http: HttpClient) {
     console.log('Hello HttpServiceProvider Provider');
   }
 
-  //post请求
-  post(url: string, body: any = {}): Observable<any> {
-    return this.http.post(url, body, {
-      headers: new HttpHeaders({
-        "Accept": "application/json",
-        "Content-Type": "application/json"
-      })
+  getProductList(category: string, page: number = 0): Observable<Product> {
+    return this.http.get<Product>(url, {
+      params: {
+        page: page.toString(), category: category.toString()
+      }
     })
   }
 
-  //get请求
-  get(url: string, body: any = {}): Observable<any> {
-    return this.http.get(url, {
-      headers: new HttpHeaders({
-        "Accept": "application/json",
-        "Content-Type": "application/json"
-      }),
-      params: body
+  getRecommendList(page: number = 0, size: number = 10): Observable<Product> {
+    return this.http.get<Product>(recommendUrl, {
+      params: {
+        page: page.toString(), size: size.toString()
+      }
     })
   }
 
-  getProductList(category: string, page: number = 0) {
-    return this.get(this.url, {page, category,})
-  }
-
-  getProductById(id: string, result: string = "") {
-    if (result) {
-      return this.get(`${this.url}/${id}?token=${result}&type=isbn`)
-    } else {
-      return this.get(`${this.url}/${id}`)
-    }
+  getProductById(id: string, token: string = ""): Observable<Product> {
+    return this.http.get<Product>(`${url}/${id}`, {
+      params: {token,}
+    });
   }
 
   postBus(body: object): Observable<object> {
-    return this.http.post(this.busUrl, JSON.stringify(body), {
+    return this.http.post(busUrl, JSON.stringify(body), {
       headers: new HttpHeaders({
         "Accept": "text/plain",
         "Content-Type": "text/plain"

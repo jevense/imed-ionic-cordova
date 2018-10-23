@@ -32,19 +32,19 @@ export class CategoryPage {
       list: [
         {
           name: '52门全套',
-          isbn: '5763d1a30cf2161635635e63',
+          id: '5763d1a30cf2161635635e63',
           type: 'info',
         }, {
           name: '基础课程',
-          isbn: '5768eade0cf216163564f440',
+          id: '5768eade0cf216163564f440',
           type: 'info',
         }, {
           name: '临床课程',
-          isbn: '5768e52d0cf216163564eed7',
+          id: '5768e52d0cf216163564eed7',
           type: 'info',
         }, {
           name: '公共课程',
-          isbn: '5768ec9f0cf216163564f5e8',
+          id: '5768ec9f0cf216163564f5e8',
           type: 'info',
         }, {
           name: '开学季199/年教材套餐',
@@ -216,7 +216,7 @@ export class CategoryPage {
     this.subMenus = this.menus[index]
   }
 
-  goToPage({name: title, type, key, url, isbn, list}) {
+  goToPage({name: title, type, key, url, id, list}) {
 
     switch (type) {
       case 'url': {
@@ -225,7 +225,7 @@ export class CategoryPage {
         break;
       }
       case 'info': {
-        this.navCtrl.push('product-info', {isbn,}).catch();
+        this.navCtrl.push('product-info', {id}).catch();
         break;
       }
       case 'list':

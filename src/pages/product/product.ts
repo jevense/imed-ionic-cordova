@@ -9,7 +9,6 @@ import {SuperTabs} from "ionic2-super-tabs";
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
  */
-
 @IonicPage({
   name: 'product',
   segment: 'product'
@@ -23,7 +22,6 @@ export class ProductPage {
   title;
   key;
   data;
-  showMenu: boolean = true;
   productList = ProductListPage;
 
   @ViewChild(Navbar) navBar: Navbar;

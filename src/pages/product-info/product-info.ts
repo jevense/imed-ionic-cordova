@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
 import {AlertController, IonicPage, NavController, NavParams} from 'ionic-angular';
 import {HttpServiceProvider} from "../../providers/http-service/http-service";
-import WebCallApp, {exactInfoFromRes, serialNumber, type1Array, type2Array} from "../../app/global";
+import WebCallApp, {exactInfoFromRes, onlineReadUrl, serialNumber, type1Array, type2Array} from "../../app/global";
 
 @IonicPage({
   name: 'product-info',
@@ -30,7 +30,7 @@ export class ProductInfoPage {
     isbn: '',
   };
 
-  result;
+  result = {token: '', platform: ''};
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
@@ -49,8 +49,9 @@ export class ProductInfoPage {
   }
 
   ionViewWillEnter() {
-    let {isbn} = this.navParams.data;
-    this.httpService.getProductById(isbn, this.result["token"]).subscribe(item => {
+    let {id} = this.navParams.data;
+    let {token} = this.result;
+    this.httpService.getProductById(id, token,).subscribe(item => {
       console.log(item);
       this.item = {...item};
       let {isbn} = this.item;
@@ -85,22 +86,75 @@ export class ProductInfoPage {
         buttons: ['OK']
       }).present();
     } else {
-      let {token, platform} = this.result;
       let {id} = this.item;
-      this.navCtrl.push('OrderPage', {token, platform, id},).catch(e => console.log(e));
+      this.navCtrl.push('OrderPage', {id},).catch(e => console.log(e));
     }
   }
 
   download() {
-
+    let getNetworkState = serialNumber();
+    WebCallApp("GetNetworkState", {}, getNetworkState).subscribe(({sn, data: res}) => {
+      if (sn == getNetworkState) {
+        // let result = exactInfoFromRes(res);//TODO
+      }
+    });
+    // function (result) {
+    //   if (result.result.network == "2") {
+    //     Elf.components.confirm({
+    //       title: "正在使用非Wi-Fi网络下载",
+    //       text: "非Wi-Fi下载将产生流量费用",
+    //       minWidth: "240px",
+    //       buttons: {
+    //         "确定": function () {
+    //           args.nonWifi = "1";
+    //           WebCallApp("CmdDownloadBook", args);
+    //           bookData.downloadState = 1;
+    //           Elf.AppCallWeb("MsgUpdateBookState", JSON.stringify(bookData));
+    //         },
+    //         "取消": function () {
+    //         }
+    //       }
+    //     });
+    //   } else if (result.result.network == "0" || result.result.network == "1") {
+    //     //无网络
+    //     Elf.components.toast({text: "当前无网络"});
+    //   } else {
+    //     //wifi
+    //     WebCallApp("CmdDownloadBook", args);
+    //     bookData.downloadState = 1;
+    //     Elf.AppCallWeb("MsgUpdateBookState", JSON.stringify(bookData));
+    //   }
+    // });
+    WebCallApp("CmdDownloadBook", {isbn: this.item.isbn, book: this.item, nonWifi: "0"});
   }
 
-  open(item) {
-    this.navCtrl.push('EpubReaderPage', {},).catch();
+  readOnline() {
+    let {isbn} = this.item;
+    let {token} = this.result;
+    WebCallApp("CmdOpenUrl", {url: onlineReadUrl + `?isbn=${isbn}&token=${token}`});
   }
 
-  online() {
-    return this.item['owner'] && this.item['textbook'] === '0' && this.item['textbookType'] === '0'
+  readLocal() {
+    let {isbn, textbook} = this.item;
+    let {token} = this.result;
+    let args = {
+      isbn: isbn,
+      static: "1",
+      book: this.item
+    };
+    if (textbook == "1") {
+      WebCallApp("CmdOpenPDFBook", args);
+    } else {
+      WebCallApp("CmdOpenUrl", {url: onlineReadUrl + `?isbn=${isbn}&token=${token}`});
+    }
+  }
+
+  isPdf() {
+    return this.item['textbook'] === '1'
+  }
+
+  isTextBook() {
+    return this.item['textbook'] === '0' && this.item['textbookType'] === '0'
   }
 
 

@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
 import {AlertController, IonicPage, NavController, NavParams} from 'ionic-angular';
 import {HttpServiceProvider} from "../../providers/http-service/http-service";
-import WebCallApp, {type1Array, type2Array} from "../../app/global";
+import WebCallApp, {exactInfoFromRes, serialNumber, type1Array, type2Array} from "../../app/global";
 
 /**
  * Generated class for the OrderPage page.
@@ -10,7 +10,9 @@ import WebCallApp, {type1Array, type2Array} from "../../app/global";
  * Ionic pages and navigation.
  */
 
-@IonicPage()
+@IonicPage({
+  segment: 'page-order/:id'
+})
 @Component({
   selector: 'page-order',
   templateUrl: 'order.html',
@@ -44,10 +46,22 @@ export class OrderPage {
               public alertCtrl: AlertController) {
   }
 
-  ionViewWillEnter() {
-    let {id, token, platform, type = 'id'} = this.navParams.data;
+  result = {token: '', platform: ''};
 
-    this.platform = platform;
+  ionViewDidLoad() {
+    let serialGetAPPVersion = serialNumber();
+    WebCallApp('GetAPPVersion', {}, serialGetAPPVersion).subscribe(({sn, data: res}) => {
+      if (sn == serialGetAPPVersion) {
+        this.result = exactInfoFromRes(res);
+      }
+    });
+    console.log('ionViewDidLoad ProductInfoPage');
+  }
+
+  ionViewWillEnter() {
+    let {id} = this.navParams.data;
+    let {token, platform,} = this.result;
+    let type = this.navCtrl.canGoBack() ? "id" : "isbn";
 
     let args = {
       "serviceModule": "BS-Service",
@@ -96,7 +110,9 @@ export class OrderPage {
 
   payConfirm() {
     // if (!this.status) return false;
-    let {id, token, platform,} = this.navParams.data;
+    let {id} = this.navParams.data;
+    let {token, platform,} = this.result;
+    let type = this.navCtrl.canGoBack() ? "id" : "isbn";
     if (this.item.isAppPay == '0') {
       // this.status = false;
       let args = {
@@ -106,6 +122,7 @@ export class OrderPage {
         "args": {
           "token": token,
           "bookId": id,
+          "type": type,
           "platform": platform,
           "discountId": ""
         },
@@ -130,7 +147,7 @@ export class OrderPage {
             this.navCtrl.push('PaySuccessPage', {
               token, platform, data: serviceResult['result']
             },).catch();
-          }else {
+          } else {
             console.log('')
           }
         }
@@ -144,12 +161,23 @@ export class OrderPage {
       } else if (platform === "2") {
         alert("对不起，暂不支持PC支付购买，请到手机端支付购买");
       } else {
+        let serialpayment = serialNumber();
         WebCallApp("payment", {
           payType: this.item.payType,
           bookid: id,
           amount: `${this.item.actualPaymentAmount}`,
           uuid: '',
           discountId: ''
+        }, serialpayment).subscribe(({sn, data: res}) => {
+          if (sn == serialpayment) {
+            let result = exactInfoFromRes(res);
+            console.log(result);
+            if (result['opFlag'] == 'true') {
+              this.navCtrl.push('PaySuccessPage', {
+                token, platform, data: result['serviceResult']['result']['tradeNo']
+              }).catch();
+            }
+          }
         });
       }
 

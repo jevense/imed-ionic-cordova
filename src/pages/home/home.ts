@@ -1,6 +1,8 @@
 import {Component} from '@angular/core';
-import {IonicPage, ModalController, NavController, Refresher} from 'ionic-angular';
-import WebCallApp, {exactInfoFromRes, serialNumber} from "../../app/global";
+import {IonicPage, NavController, Refresher} from 'ionic-angular';
+import WebCallApp, {exactInfoFromRes, operationUrl, searchUrl, serialNumber} from "../../app/global";
+import {HttpServiceProvider} from "../../providers/http-service/http-service";
+import {Product} from "../../components/Product";
 
 /**
  * Generated class for the HomePage page.
@@ -35,14 +37,17 @@ export class HomePage {
           }, {
             name: '病例',
             key: '5p3-case',
+          }, {
+            name: '套餐',
+            key: 'learn-all',
           }
         ]
       },
       {
-        'icon-name': 'learn', key: 'learn-all', name: '学习套餐',
+        'icon-name': 'learn', key: 'exam-rst', name: '考试培训',
       },
       {'icon-name': 'operation', key: 'operation-all', name: '手术视频'},
-      {'icon-name': 'free', key: 'free-all', name: '免费专区'},
+      {'icon-name': 'disease', key: 'disease-all', name: '疾病教程'},
       {'icon-name': 'year', key: 'year-all', name: '会员年卡'},
     ],
     [
@@ -98,14 +103,10 @@ export class HomePage {
         type: 'url',
         url: 'http://mshuju.mvwchina.com',
       },
-      {'icon-name': 'disease', key: 'disease-all', name: '疾病教程'},
+      {'icon-name': 'free', key: 'free-all', name: '免费专区'},
     ]
   ];
-  topBags: Object[] = [
-    {name: '全科', cover: 'bag-1.png'},
-    {name: '中医科', cover: 'bag-2.png'},
-    {name: '辅助判读', cover: 'bag-3.png'},
-  ];
+  topBags: Product[];
   topOperations: Object[] = [
     {
       name: '结膜切口的眼眶肌锥内海绵状血管瘤摘除',
@@ -146,11 +147,13 @@ export class HomePage {
       topTitle: 'doc-sub-title-2.png',
       list: [
         {
+          type: 'url',
           name: '临床执业助理医师考试通关包实践技能考试',
           url: 'https://mall.imed.org.cn/ui/phone/activities.html#/exam/40288810624e037d01624e03979d035c',
           cover: 'bag-doc-3.png',
         },
         {
+          type: 'url',
           name: '临床执业助理医师考试综合理论通关包',
           url: 'https://mall.imed.org.cn/ui/phone/activities.html#/exam/40288810624e037d01624e03979d035d',
           cover: 'bag-doc-4.png',
@@ -172,7 +175,7 @@ export class HomePage {
 
   result;
 
-  constructor(public navCtrl: NavController, public modalCtrl: ModalController) {
+  constructor(public navCtrl: NavController, public httpService: HttpServiceProvider) {
   }
 
   ionViewDidLoad() {
@@ -181,9 +184,13 @@ export class HomePage {
     WebCallApp('GetAPPVersion', {}, serialGetAPPVersion).subscribe(({sn, data: res}) => {
       if (sn == serialGetAPPVersion) {
         this.result = exactInfoFromRes(res);
-        console.log(this.result)
       }
     });
+
+    this.httpService.getRecommendList(0, 3).subscribe(items => {
+      this.topBags.push(...items);
+    })
+
     console.log('ionViewDidLoad ProductInfoPage');
   }
 
@@ -208,12 +215,12 @@ export class HomePage {
 
   openOperation() {
     let {token} = this.result;
-    WebCallApp("CmdOpenUrl", {url: `http://mvw-testing.oss-cn-beijing.aliyuncs.com/cst-phone/ui/list.html?token=${token}&type=1`});
+    WebCallApp("CmdOpenUrl", {url: operationUrl + `?token=${token}&type=1`});
   }
 
   search() {
     let {token} = this.result;
-    WebCallApp("CmdOpenUrl", {url: `http://123.56.15.197:7162/phone/searchhome.html?token=${token}`});
+    WebCallApp("CmdOpenUrl", {url: searchUrl + `?token=${token}`});
   }
 
 
@@ -222,7 +229,7 @@ export class HomePage {
     WebCallApp("TabbarHiddent");
     switch (type) {
       case 'url': {
-        WebCallApp("CmdOpenUrl", {url: url, modal: this.modalCtrl,});
+        WebCallApp("CmdOpenUrl", {url: url});
         // this.modalCtrl.create(WebPage, {browser: {title, url,}}).present().catch();
         break;
       }
@@ -230,8 +237,12 @@ export class HomePage {
         this.navCtrl.push('product', {title, key, data: subList}).catch();
         break;
       }
+      case 'recommend': {
+        this.navCtrl.push('product', {title, key, data: []}).catch();
+        break;
+      }
       case 'info': {
-        this.navCtrl.push('product-info', {isbn: id}).catch();
+        this.navCtrl.push('product-info', {id,}).catch();
         break;
       }
     }

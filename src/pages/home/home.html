@@ -70,6 +70,7 @@
       <ion-row>
         <ion-col col-12 class="top-menu">
           <div *ngFor="let item of topMenus[0]" class="top-menu-item" (click)="locate(item)">
+            <ion-badge *ngIf="item.key=='year-all'" class="badge">coming</ion-badge>
             <div class="top-menu-icon top-menu-icon-{{item['icon-name']}}"></div>
             <div text-center>{{item['name']}}</div>
           </div>
@@ -96,16 +97,20 @@
   <div>
     <div class="home-card">
       <div class="home-card-title">
-        <span class="home-card-title-text">住陪通关包</span>
-        <button ion-button icon-only clear color="nav" (click)="locate({name: '住陪通关包',type:'list',key:'exam-rst'})">
+        <span class="home-card-title-text">精品推荐</span>
+        <button ion-button icon-only clear color="nav"
+                (click)="locate({name: '精品推荐',type:'recommend',key:'recommend'})">
           <ion-icon name="arrow-forward"></ion-icon>
         </button>
       </div>
       <div class="home-card-row">
         <ion-grid>
           <ion-row>
-            <ion-col *ngFor="let item of topBags" col-4 class="home-card-row-item">
-              <img src="assets/imgs/{{item['cover']}}">
+            <ion-col col-4
+                     *ngFor="let item of topBags"
+                     (click)="locate({name: item,type:'recommend',key:'recommend'})"
+                     class="home-card-row-item">
+              <img [src]="item['cover']">
               <!--<span>{{item['name']}}</span>-->
             </ion-col>
           </ion-row>

@@ -17,6 +17,7 @@ import {default as WebCallApp, type1Array, type2Array} from "../../app/global";
 export class PaySuccessPage {
 
   item = {
+    id: '',
     name: '',
     cover: '',
     author: '',
@@ -74,11 +75,12 @@ export class PaySuccessPage {
     }
   }
 
-  learn() {
+  learn(id) {
     if (this.item['textbook'] == '5' && this.item['textbookType'] == '2') {
       WebCallApp("CmdGoBack");
     } else {
-      this.navCtrl.popToRoot().catch();
+      let {id} = this.item;
+      this.navCtrl.popTo('product-info', {id,});
     }
 
   }

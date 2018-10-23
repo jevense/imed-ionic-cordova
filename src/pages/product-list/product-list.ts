@@ -27,6 +27,19 @@ export class ProductListPage {
 
   ionViewDidLoad() {
 
+    if (this.category == 'recommend') {
+      this.httpService.getRecommendList(this.page++,)
+        .subscribe(items => {
+          this.items.push(...items);
+        });
+    } else {
+      this.httpService.getProductList(this.category, this.page++,)
+        .subscribe(items => {
+          this.items.push(...items);
+        });
+    }
+
+
     this.httpService.getProductList(this.category, this.page++,)
       .subscribe(items => {
         this.items.push(...items);
@@ -45,6 +58,6 @@ export class ProductListPage {
   }
 
   goToDetail(item) {
-    this.appCtrl.getRootNavs()[0].push('product-info', {id: item['isbn']},).catch();
+    this.appCtrl.getRootNavs()[0].push('product-info', {id: item['id']},).catch();
   }
 }

@@ -1,5 +1,5 @@
 import {Subject} from "rxjs/Subject";
-import {WebPage} from "../pages/web/web";
+// import {WebPage} from "../pages/web/web";
 
 let WebCallApp = (command, args = {}, sn = serialNumber()) => {
   let params = {command, args, sn};
@@ -11,7 +11,7 @@ let WebCallApp = (command, args = {}, sn = serialNumber()) => {
     window['webkit']['messageHandlers']["WebCallApp"]['postMessage'](JSON.stringify(params));
   } else {
     if (command == 'CmdOpenUrl') {
-      args['modal'].create(WebPage, {browser: {title: "", url: args['url'],}}).present().catch();
+      // args['modal'].create(WebPage, {browser: {title: "", url: args['url'],}}).present().catch();
     }
   }
   return subject;
@@ -61,3 +61,13 @@ export default WebCallApp;
 
 export const type1Array = ['教材', 'pdf', '教程', '通关包', '执医通关包', '手术视频'];
 export const type2Array = ['普通教材', '病例分析', '手术', '杂志', '试题', '试题包', '执医通关包', '未知类型'];
+
+// url = 'http://192.168.8.144:8092/store/product';
+export const url = 'http://123.56.15.197:7152/product';
+export const recommendUrl = 'http://123.56.15.197:7152/home/recommend';
+// busUrl = 'http://192.168.9.9:8080/bus/services';
+export const busUrl = 'http://123.56.15.197:5002/services';
+
+export const onlineReadUrl = 'http://123.56.15.197:5002/services';
+export const searchUrl = 'http://123.56.15.197:7162/phone/searchhome.html';
+export const operationUrl = 'http://mvw-testing.oss-cn-beijing.aliyuncs.com/cst-phone/ui/list.html';
