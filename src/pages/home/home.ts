@@ -1,6 +1,12 @@
 import {Component} from '@angular/core';
 import {IonicPage, NavController, Refresher} from 'ionic-angular';
-import WebCallApp, {exactInfoFromRes, operationUrl, searchUrl, serialNumber} from "../../app/global";
+import WebCallApp, {
+  exactInfoFromRes,
+  operationOutInfoUrl,
+  operationOutUrl,
+  searchUrl,
+  serialNumber
+} from "../../app/global";
 import {HttpServiceProvider} from "../../providers/http-service/http-service";
 import {Product} from "../../components/Product";
 
@@ -20,7 +26,7 @@ export class HomePage {
   topMenus: Object[] = [
     [
       {
-        'icon-name': '5p3', key: '5p3-all', name: '5+3教材',
+        'icon-name': '5p3', key: '5p3-all', name: '数字教材',
         subList: [
           {
             name: '全部',
@@ -46,8 +52,14 @@ export class HomePage {
       {
         'icon-name': 'learn', key: 'exam-rst', name: '考试培训',
       },
-      {'icon-name': 'operation', key: 'operation-all', name: '手术视频'},
-      {'icon-name': 'disease', key: 'disease-all', name: '疾病教程'},
+      {
+        'icon-name': 'operation',
+        type: 'url',
+        key: 'operation-all',
+        name: '手术视频',
+        url: 'http://mvw-testing.oss-cn-beijing.aliyuncs.com/cst-phone/ui/index.html'
+      },
+      {'icon-name': 'disease', name: '疾病教程', type: 'list', key: 'disease'},
       {'icon-name': 'year', key: 'year-all', name: '会员年卡'},
     ],
     [
@@ -106,61 +118,10 @@ export class HomePage {
       {'icon-name': 'free', key: 'free-all', name: '免费专区'},
     ]
   ];
-  topBags: Product[];
-  topOperations: Object[] = [
-    {
-      name: '结膜切口的眼眶肌锥内海绵状血管瘤摘除',
-      cover: 'operation-1.png',
-      author: '孙丰源',
-      subject: '眼科',
-      price: '640',
-      originPrice: '800'
-    },
-    {
-      name: '胸腔镜下气管食管瘘结',
-      cover: 'operation-2.png',
-      author: '黄金狮',
-      subject: '小儿外科',
-      price: '640',
-      originPrice: '800'
-    },
-  ];
-  topDocs: Object[] = [
-    {
-      topTitle: 'doc-sub-title-1.png',
-      list: [
-        {
-          type: 'url',
-          name: '临床执业医师考试通关包实践技能考试',
-          url: 'https://mall.imed.org.cn/ui/phone/activities.html#/exam/40288810624e037d01624e03979d0357',
-          cover: 'bag-doc-1.png',
-        },
-        {
-          type: 'url',
-          name: '临床执业医师考试综合理论通关包',
-          url: 'https://mall.imed.org.cn/ui/phone/activities.html#/exam/40288810624e037d01624e03979d035b',
-          cover: 'bag-doc-2.png',
-        }
-      ]
-    },
-    {
-      topTitle: 'doc-sub-title-2.png',
-      list: [
-        {
-          type: 'url',
-          name: '临床执业助理医师考试通关包实践技能考试',
-          url: 'https://mall.imed.org.cn/ui/phone/activities.html#/exam/40288810624e037d01624e03979d035c',
-          cover: 'bag-doc-3.png',
-        },
-        {
-          type: 'url',
-          name: '临床执业助理医师考试综合理论通关包',
-          url: 'https://mall.imed.org.cn/ui/phone/activities.html#/exam/40288810624e037d01624e03979d035d',
-          cover: 'bag-doc-4.png',
-        }
-      ]
-    }
-  ];
+  topBags: Product[] = [];
+  topDisease: Product[] = [];
+  topWest: Product[] = [];
+  topOperation: Product[] = [];
   slideBags: Object[] = [
     {
       cover: 'slider-1.png',
@@ -173,7 +134,7 @@ export class HomePage {
     },
   ];
 
-  result;
+  result = {token: '', platform: ''};
 
   constructor(public navCtrl: NavController, public httpService: HttpServiceProvider) {
   }
@@ -189,7 +150,19 @@ export class HomePage {
 
     this.httpService.getRecommendList(0, 3).subscribe(items => {
       this.topBags.push(...items);
-    })
+    });
+
+    this.httpService.getDiseaseList(0, 3).subscribe(items => {
+      this.topDisease.push(...items);
+    });
+
+    this.httpService.getWestList(0, 3).subscribe(items => {
+      this.topWest.push(...items);
+    });
+
+    this.httpService.getOperationList(0, 2).subscribe(items => {
+      this.topOperation.push(...items);
+    });
 
     console.log('ionViewDidLoad ProductInfoPage');
   }
@@ -213,9 +186,24 @@ export class HomePage {
     this.navCtrl.push('CategoryPage', {}, {direction: 'back'}).catch();
   }
 
-  openOperation() {
+  openOperations() {
     let {token} = this.result;
-    WebCallApp("CmdOpenUrl", {url: operationUrl + `?token=${token}&type=1`});
+    WebCallApp("CmdOpenUrl", {url: operationOutUrl + `?token=${token}&type=1&productId=ce956d1f7e7a42109f53b233e7036359`});
+  }
+
+  openOperation({isbn}) {
+    let {token} = this.result;
+    WebCallApp("CmdOpenUrl", {url: operationOutInfoUrl + `?productVideoId=${isbn}&type=3&token=${token}`});
+  }
+
+  locateInfo({id}) {
+    WebCallApp("TabbarHiddent");
+    this.navCtrl.push('product-info', {id,}).catch();
+  }
+
+  locateList({name: title, key, subList,}) {
+    WebCallApp("TabbarHiddent");
+    this.navCtrl.push('product', {title, key, data: subList}).catch();
   }
 
   search() {
@@ -224,12 +212,18 @@ export class HomePage {
   }
 
 
-  locate({url, name: title, key, subList, id, type = 'list'}) {
+  locate({url, name: title, key, subList, type = 'list'}) {
+    if (key == 'year-all') return;
     // this.navCtrl.push('WebPage', {browser: {title, url: url}}).catch();
     WebCallApp("TabbarHiddent");
     switch (type) {
       case 'url': {
-        WebCallApp("CmdOpenUrl", {url: url});
+        if (key == 'operation-all') {
+          let {token} = this.result;
+          WebCallApp("CmdOpenUrl", {url: url + `?token=${token}`});
+        } else {
+          WebCallApp("CmdOpenUrl", {url: url});
+        }
         // this.modalCtrl.create(WebPage, {browser: {title, url,}}).present().catch();
         break;
       }
@@ -237,19 +231,7 @@ export class HomePage {
         this.navCtrl.push('product', {title, key, data: subList}).catch();
         break;
       }
-      case 'recommend': {
-        this.navCtrl.push('product', {title, key, data: []}).catch();
-        break;
-      }
-      case 'info': {
-        this.navCtrl.push('product-info', {id,}).catch();
-        break;
-      }
     }
 
   }
-
-  // panEvent($event) {
-  //   // $event.stopPropagation();
-  // }
 }

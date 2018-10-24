@@ -2,6 +2,7 @@ import {Component} from '@angular/core';
 import {AlertController, IonicPage, NavController, NavParams} from 'ionic-angular';
 import {HttpServiceProvider} from "../../providers/http-service/http-service";
 import WebCallApp, {exactInfoFromRes, onlineReadUrl, serialNumber, type1Array, type2Array} from "../../app/global";
+import {Product} from "../../components/Product";
 
 @IonicPage({
   name: 'product-info',
@@ -13,24 +14,11 @@ import WebCallApp, {exactInfoFromRes, onlineReadUrl, serialNumber, type1Array, t
 })
 export class ProductInfoPage {
 
-  item: ProductInfo = {
-    id: '',
-    name: '',
-    cover: '',
-    author: '',
-    textbook: '',
-    textbookType: '',
-    size: '',
-    price: '',
-    originPrice: '',
-    briefIntroduction: '',
-    catalog: '',
-    owner: true,
-    state: 'remote',
-    isbn: '',
-  };
+  item: Product = {author: ''} as Product;
 
   result = {token: '', platform: ''};
+
+  state = 'remote';
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
@@ -39,33 +27,36 @@ export class ProductInfoPage {
   }
 
   ionViewDidLoad() {
-    let serialGetAPPVersion = serialNumber();
-    WebCallApp('GetAPPVersion', {}, serialGetAPPVersion).subscribe(({sn, data: res}) => {
-      if (sn == serialGetAPPVersion) {
-        this.result = exactInfoFromRes(res);
-      }
-    });
+    WebCallApp("TabbarHiddent");
     console.log('ionViewDidLoad ProductInfoPage');
   }
 
   ionViewWillEnter() {
+    WebCallApp("TabbarHiddent");
     let {id} = this.navParams.data;
-    let {token} = this.result;
-    this.httpService.getProductById(id, token,).subscribe(item => {
-      console.log(item);
-      this.item = {...item};
-      let {isbn} = this.item;
-      let serialGetBookState = serialNumber();
-      WebCallApp('GetBookState', {isbn}, serialGetBookState).subscribe(({sn, data: bookState}) => {
-        if (sn == serialGetBookState) {
-          let result = exactInfoFromRes(bookState);
-          if (result['state'] == '8') {
-            this.item['state'] = 'local';
-          } else {
-            this.item['state'] = 'remote';
-          }
-        }
-      });
+    let serialGetAPPVersion = serialNumber();
+    WebCallApp('GetAPPVersion', {}, serialGetAPPVersion).subscribe(({sn, data: res}) => {
+      if (sn == serialGetAPPVersion) {
+        let result = exactInfoFromRes(res);
+        let {token} = result;
+        this.result = result;
+        this.httpService.getProductById(id, token,).subscribe(item => {
+          this.item = {...this.item, ...item};
+          let {isbn} = this.item;
+          let serialGetBookState = serialNumber();
+          WebCallApp('GetBookState', {isbn}, serialGetBookState).subscribe(({sn, data: bookState}) => {
+            if (sn == serialGetBookState) {
+              let result = exactInfoFromRes(bookState);
+              console.log(result);
+              if (result['state'] == '8') {
+                this.item['state'] = 'local';
+              } else {
+                this.item['state'] = 'remote';
+              }
+            }
+          });
+        });
+      }
     });
   }
 
@@ -93,6 +84,7 @@ export class ProductInfoPage {
 
   download() {
     let getNetworkState = serialNumber();
+    WebCallApp("CmdDownloadBook", {isbn: this.item.isbn, book: this.item, nonWifi: "0"});
     WebCallApp("GetNetworkState", {}, getNetworkState).subscribe(({sn, data: res}) => {
       if (sn == getNetworkState) {
         // let result = exactInfoFromRes(res);//TODO
@@ -125,7 +117,6 @@ export class ProductInfoPage {
     //     Elf.AppCallWeb("MsgUpdateBookState", JSON.stringify(bookData));
     //   }
     // });
-    WebCallApp("CmdDownloadBook", {isbn: this.item.isbn, book: this.item, nonWifi: "0"});
   }
 
   readOnline() {
@@ -166,21 +157,4 @@ export class ProductInfoPage {
     }
   }
 
-}
-
-class ProductInfo {
-  id: string;
-  name: string;
-  cover: string;
-  author: string;
-  textbook: string;
-  textbookType: string;
-  size: string;
-  price: string;
-  originPrice: string;
-  briefIntroduction: string;
-  catalog: string;
-  owner: boolean;
-  state: string;
-  isbn: string;
 }

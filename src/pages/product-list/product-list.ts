@@ -26,38 +26,40 @@ export class ProductListPage {
   }
 
   ionViewDidLoad() {
-
-    if (this.category == 'recommend') {
-      this.httpService.getRecommendList(this.page++,)
-        .subscribe(items => {
-          this.items.push(...items);
-        });
-    } else {
-      this.httpService.getProductList(this.category, this.page++,)
-        .subscribe(items => {
-          this.items.push(...items);
-        });
-    }
-
-
-    this.httpService.getProductList(this.category, this.page++,)
-      .subscribe(items => {
-        this.items.push(...items);
-      });
+    console.log(this.category);
+    this.getData();
     console.log('ionViewDidLoad ProductListPage');
   }
 
 
   doInfinite(infiniteScroll) {
     console.log('Begin async operation');
-    this.httpService.getProductList(this.category, this.page++,)
-      .subscribe(items => {
-        this.items.push(...items);
-        infiniteScroll.complete();
-      });
+    this.getData(infiniteScroll);
   }
 
   goToDetail(item) {
     this.appCtrl.getRootNavs()[0].push('product-info', {id: item['id']},).catch();
+  }
+
+  getData(callback?) {
+    if (this.category == 'recommend') {
+      this.httpService.getRecommendList(this.page++,)
+        .subscribe(items => {
+          this.items.push(...items);
+          callback && callback.complete();
+        });
+    } else if (this.category == 'disease') {
+      this.httpService.getDiseaseList(this.page++,)
+        .subscribe(items => {
+          this.items.push(...items);
+          callback && callback.complete();
+        });
+    } else {
+      this.httpService.getProductList(this.category, this.page++,)
+        .subscribe(items => {
+          this.items.push(...items);
+          callback && callback.complete();
+        });
+    }
   }
 }

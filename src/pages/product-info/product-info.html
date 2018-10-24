@@ -32,7 +32,7 @@
           <span><s>{{item['originPrice']}}</s>阅点</span>
         </div>
         <div>作者：
-          <span *ngIf="item['author'] as value; else elseAuthor">{{value}}</span>
+          <span *ngIf="item['author']; else elseAuthor">{{item['author']}}</span>
           <ng-template #elseAuthor>{{item['publisher']}}</ng-template>
         </div>
         <div class="imed-list-item-label-last">
@@ -69,7 +69,7 @@
     </div>
     <ng-template #elseBlock>
       <ng-container *ngIf="state=='remote'">
-        <div color="danger" *ngIf="isPdf()" (click)="download()">
+        <div color="danger" *ngIf="isPdf()||isTextBook()" (click)="download()">
           立即下载
         </div>
         <div color="danger" *ngIf="isTextBook()" (click)="readOnline()">

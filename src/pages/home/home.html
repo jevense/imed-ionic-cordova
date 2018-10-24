@@ -52,7 +52,7 @@
         </div>
       </ion-slide>
       <ion-slide>
-        <div (click)="locate({name:'执医通关包',type:'list'})">
+        <div (click)="locateList({name:'执医通关包',type:'list'})">
           <img src="assets/imgs/carousel.png">
         </div>
       </ion-slide>
@@ -70,17 +70,17 @@
       <ion-row>
         <ion-col col-12 class="top-menu">
           <div *ngFor="let item of topMenus[0]" class="top-menu-item" (click)="locate(item)">
-            <ion-badge *ngIf="item.key=='year-all'" class="badge">coming</ion-badge>
+            <!--<ion-badge *ngIf="item.key=='year-all'" class="badge">coming</ion-badge>-->
             <div class="top-menu-icon top-menu-icon-{{item['icon-name']}}"></div>
-            <div text-center>{{item['name']}}</div>
+            <div text-center class="top-menu-name">{{item['name']}}</div>
           </div>
         </ion-col>
       </ion-row>
-      <ion-row>
-        <ion-col col-12 class="top-menu">
+      <ion-row align-items-center>
+        <ion-col col-12 class="top-menu" text-center>
           <div *ngFor="let item of topMenus[1]" class="top-menu-item" (click)="locate(item)">
             <div class="top-menu-icon top-menu-icon-{{item['icon-name']}}"></div>
-            <div text-center>{{item['name']}}</div>
+            <div text-center class="top-menu-name">{{item['name']}}</div>
           </div>
         </ion-col>
       </ion-row>
@@ -99,7 +99,7 @@
       <div class="home-card-title">
         <span class="home-card-title-text">精品推荐</span>
         <button ion-button icon-only clear color="nav"
-                (click)="locate({name: '精品推荐',type:'recommend',key:'recommend'})">
+                (click)="locateList({name: '精品推荐',type:'list',key:'recommend'})">
           <ion-icon name="arrow-forward"></ion-icon>
         </button>
       </div>
@@ -108,7 +108,7 @@
           <ion-row>
             <ion-col col-4
                      *ngFor="let item of topBags"
-                     (click)="locate({name: item,type:'recommend',key:'recommend'})"
+                     (click)="locateInfo(item)"
                      class="home-card-row-item">
               <img [src]="item['cover']">
               <!--<span>{{item['name']}}</span>-->
@@ -125,22 +125,22 @@
     <div class="home-card">
       <div class="home-card-title">
         <span class="home-card-title-text">手术视频</span>
-        <button ion-button icon-only clear color="nav" (click)="openOperation()">
+        <button ion-button icon-only clear color="nav" (click)="openOperations()">
           <ion-icon name="arrow-forward"></ion-icon>
         </button>
       </div>
       <div class="home-card-row">
         <ion-grid>
-          <ion-row *ngFor="let item of topOperations">
+          <ion-row *ngFor="let item of topOperation" (click)="openOperation(item)">
             <ion-col col-5 text-center>
-              <img src="assets/imgs/{{item['cover']}}">
+              <img [src]="item['cover']">
             </ion-col>
             <ion-col col-7 class="operation-item">
               <div style="font-size: larger;">{{item['name']}}</div>
               <div>
                 <div>
                   <span>{{item['author']}}</span>
-                  <span>{{item['subject']}}</span>
+                  <span>{{item['subjects']}}</span>
                 </div>
                 <div>
                   <span>
@@ -157,26 +157,51 @@
   </div>
 
   <div class="separator"></div>
-  <!--执医通关包-->
+  <!--疾病教程-->
   <div>
     <div class="home-card">
       <div class="home-card-title">
-        <span class="home-card-title-text">执医通关包</span>
+        <span class="home-card-title-text">疾病教程</span>
         <button ion-button icon-only clear color="nav"
-                (click)="locate({name:'执医通关包',type:'url',url:'https://mall.imed.org.cn/ui/phone/activities.html#/exam'})"
-        >
+                (click)="locateList({name: '疾病教程',type:'list',key:'disease'})">
           <ion-icon name="arrow-forward"></ion-icon>
         </button>
       </div>
       <div class="home-card-row">
         <ion-grid>
-          <ion-row *ngFor="let item of topDocs">
-            <ion-col col-12 text-center>
-              <img src="assets/imgs/{{item['topTitle']}}">
+          <ion-row>
+            <ion-col col-4
+                     *ngFor="let item of topDisease"
+                     (click)="locateInfo(item)"
+                     class="home-card-row-item">
+              <img [src]="item['cover']">
+              <!--<span>{{item['name']}}</span>-->
             </ion-col>
-            <ion-col col-6 *ngFor="let it of item['list']" text-center
-                     (click)="locate(it)">
-              <img src="assets/imgs/{{it['cover']}}">
+          </ion-row>
+        </ion-grid>
+      </div>
+    </div>
+  </div>
+  <div class="separator"></div>
+  <!--西医图书-->
+  <div>
+    <div class="home-card">
+      <div class="home-card-title">
+        <span class="home-card-title-text">西医图书</span>
+        <button ion-button icon-only clear color="nav"
+                (click)="locateList({name: '西医图书',type:'list',key:'west-all'})">
+          <ion-icon name="arrow-forward"></ion-icon>
+        </button>
+      </div>
+      <div class="home-card-row">
+        <ion-grid>
+          <ion-row>
+            <ion-col col-4
+                     *ngFor="let item of topWest"
+                     (click)="locateInfo(item)"
+                     class="home-card-row-item">
+              <img [src]="item['cover']">
+              <!--<span>{{item['name']}}</span>-->
             </ion-col>
           </ion-row>
         </ion-grid>

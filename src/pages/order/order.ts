@@ -49,47 +49,46 @@ export class OrderPage {
   result = {token: '', platform: ''};
 
   ionViewDidLoad() {
-    let serialGetAPPVersion = serialNumber();
-    WebCallApp('GetAPPVersion', {}, serialGetAPPVersion).subscribe(({sn, data: res}) => {
-      if (sn == serialGetAPPVersion) {
-        this.result = exactInfoFromRes(res);
-      }
-    });
     console.log('ionViewDidLoad ProductInfoPage');
   }
 
   ionViewWillEnter() {
-    let {id} = this.navParams.data;
-    let {token, platform,} = this.result;
-    let type = this.navCtrl.canGoBack() ? "id" : "isbn";
+    let serialGetAPPVersion = serialNumber();
+    WebCallApp('GetAPPVersion', {}, serialGetAPPVersion).subscribe(({sn, data: res}) => {
+      if (sn == serialGetAPPVersion) {
+        this.result = exactInfoFromRes(res);
+        let {id} = this.navParams.data;
+        let {token, platform,} = this.result;
+        let type = this.navCtrl.canGoBack() ? "id" : "isbn";
 
-    let args = {
-      "serviceModule": "BS-Service",
-      "serviceNumber": "0201101",
-      "token": token,
-      "args": {
-        "bookId": id,
-        "type": type,
-        "platform": platform,
-      },
-      "TerminalType": "A"
-    };
-    this.httpService.postBus(args).subscribe(result => {
-      // let result = JSON.parse(res.replace(/\+/g, '%20'));
-      if (!result['opFlag'] || result['opFlag'] == 'false') {
-        this.alertCtrl.create({
-          title: result['errorMessage'],
-          buttons: ['OK']
-        }).present();
-      } else {
-        let serviceResult = result['serviceResult'];
-        if (serviceResult.flag === 'true') {
-          this.item = {...this.item, ...serviceResult.result};
-        } else {
-          console.log(serviceResult.error);
-        }
+        let args = {
+          "serviceModule": "BS-Service",
+          "serviceNumber": "0201101",
+          "token": token,
+          "args": {
+            "bookId": id,
+            "type": type,
+            "platform": platform,
+          },
+          "TerminalType": "A"
+        };
+        this.httpService.postBus(args).subscribe(result => {
+          // let result = JSON.parse(res.replace(/\+/g, '%20'));
+          if (!result['opFlag'] || result['opFlag'] == 'false') {
+            this.alertCtrl.create({
+              title: result['errorMessage'],
+              buttons: ['OK']
+            }).present();
+          } else {
+            let serviceResult = result['serviceResult'];
+            if (serviceResult.flag === 'true') {
+              this.item = {...this.item, ...serviceResult.result};
+            } else {
+              console.log(serviceResult.error);
+            }
+          }
+        });
       }
-
     });
     console.log('ionViewDidLoad OrderPage');
   }
@@ -181,6 +180,14 @@ export class OrderPage {
         });
       }
 
+    }
+  }
+
+  goBack() {
+    if (this.navCtrl.canGoBack()) {
+      this.navCtrl.pop().catch();
+    } else {
+      WebCallApp("CmdGoBack");
     }
   }
 }

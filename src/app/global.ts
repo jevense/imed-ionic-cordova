@@ -65,9 +65,13 @@ export const type2Array = ['普通教材', '病例分析', '手术', '杂志', '
 // url = 'http://192.168.8.144:8092/store/product';
 export const url = 'http://123.56.15.197:7152/product';
 export const recommendUrl = 'http://123.56.15.197:7152/home/recommend';
+export const diseaseUrl = 'http://123.56.15.197:7152/home/disease';
+export const westUrl = 'http://123.56.15.197:7152/home/west';
+export const operationUrl = 'http://123.56.15.197:7152/home/operation';
 // busUrl = 'http://192.168.9.9:8080/bus/services';
 export const busUrl = 'http://123.56.15.197:5002/services';
 
-export const onlineReadUrl = 'http://123.56.15.197:5002/services';
+export const onlineReadUrl = 'https://wap.imed.org.cn/phone/book.html';
 export const searchUrl = 'http://123.56.15.197:7162/phone/searchhome.html';
-export const operationUrl = 'http://mvw-testing.oss-cn-beijing.aliyuncs.com/cst-phone/ui/list.html';
+export const operationOutUrl = 'http://mvw-testing.oss-cn-beijing.aliyuncs.com/cst-phone/ui/list.html';
+export const operationOutInfoUrl = 'http://mvw-testing.oss-cn-beijing.aliyuncs.com/cst-phone/ui/commodity.html';

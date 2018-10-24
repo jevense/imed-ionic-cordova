@@ -77,10 +77,10 @@ export class PaySuccessPage {
 
   learn(id) {
     if (this.item['textbook'] == '5' && this.item['textbookType'] == '2') {
-      WebCallApp("CmdGoBack");
+      WebCallApp("CmdGoBack", {method: 'refresh'});
     } else {
-      let {id} = this.item;
-      this.navCtrl.popTo('product-info', {id,});
+      let deep = this.navCtrl.length();
+      this.navCtrl.remove(deep - 2, 2);
     }
 
   }
