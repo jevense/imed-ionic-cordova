@@ -72,7 +72,7 @@
         <div color="danger" *ngIf="isPdf()||isTextBook()" (click)="download()">
           立即下载
         </div>
-        <div color="danger" *ngIf="isTextBook()" (click)="readOnline()">
+        <div color="danger" *ngIf="isTextBook()||isDisease()" (click)="readOnline()">
           在线阅读
         </div>
       </ng-container>

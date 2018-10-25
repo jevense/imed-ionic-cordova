@@ -120,9 +120,13 @@ export class ProductInfoPage {
   }
 
   readOnline() {
-    let {isbn} = this.item;
+    let {isbn, path} = this.item;
     let {token} = this.result;
-    WebCallApp("CmdOpenUrl", {url: onlineReadUrl + `?isbn=${isbn}&token=${token}`});
+    if (this.isTextBook()) {
+      WebCallApp("CmdOpenUrl", {url: onlineReadUrl + `?isbn=${isbn}&token=${token}`});
+    } else if (this.isDisease()) {
+      WebCallApp("CmdOpenUrl", {url: path});
+    }
   }
 
   readLocal() {
@@ -148,11 +152,16 @@ export class ProductInfoPage {
     return this.item['textbook'] === '0' && this.item['textbookType'] === '0'
   }
 
+  isDisease() {
+    return this.item['textbook'] === '2'
+  }
+
 
   goBack() {
     if (this.navCtrl.canGoBack()) {
       this.navCtrl.pop().catch();
     } else {
+      WebCallApp("TabbarShow");
       WebCallApp("CmdGoBack");
     }
   }
