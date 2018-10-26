@@ -2,7 +2,7 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {Observable} from "rxjs/Observable";
 import {map} from "rxjs/operators";
-import {busUrl, diseaseUrl, operationUrl, recommendUrl, url, westUrl} from "../../app/global";
+import {busUrl, carouselUrl, diseaseUrl, operationUrl, recommendUrl, url, westUrl} from "../../app/global";
 import {Product} from "../../components/Product";
 
 /*
@@ -28,6 +28,11 @@ export class HttpServiceProvider {
     })
   }
 
+
+  getCarouselList() {
+    return this.http.get<Product[]>(carouselUrl)
+  }
+
   getRecommendList(page: number = 0, size: number = 10): Observable<Product[]> {
     return this.http.get<Product[]>(recommendUrl, {
       params: {
@@ -36,10 +41,12 @@ export class HttpServiceProvider {
     })
   }
 
-  getDiseaseList(page: number = 0, size: number = 10): Observable<Product[]> {
+  getDiseaseList(category: string = 'disease-all', page: number = 0, size: number = 10,): Observable<Product[]> {
     return this.http.get<Product[]>(diseaseUrl, {
       params: {
-        page: page.toString(), size: size.toString()
+        category,
+        page: page.toString(),
+        size: size.toString(),
       }
     })
   }
@@ -75,5 +82,4 @@ export class HttpServiceProvider {
       responseType: 'text'
     }).pipe(map(res => JSON.parse(decodeURIComponent(res))))
   }
-
 }

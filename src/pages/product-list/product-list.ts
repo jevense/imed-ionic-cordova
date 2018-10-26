@@ -48,8 +48,8 @@ export class ProductListPage {
           this.items.push(...items);
           callback && callback.complete();
         });
-    } else if (this.category == 'disease') {
-      this.httpService.getDiseaseList(this.page++,)
+    } else if (this.category.startsWith('disease')) {
+      this.httpService.getDiseaseList(this.category, this.page++,)
         .subscribe(items => {
           this.items.push(...items);
           callback && callback.complete();

@@ -9,11 +9,13 @@ import {ProductInfoPageModule} from "../pages/product-info/product-info.module";
 import {BookPage} from "../pages/epub-reader/book/book";
 import {TocPage} from "../pages/epub-reader/toc/toc";
 import {SettingsPage} from "../pages/epub-reader/settings/settings";
-import {HomePageModule} from "../pages/home/home.module";
 import {HttpServiceProvider} from '../providers/http-service/http-service';
 import './global'
 import {WebPage} from "../pages/web/web";
 import {WebPageModule} from "../pages/web/web.module";
+import {StoreModule} from "@ngrx/store";
+import {appVersionReducer} from "../components/AppVersionReducer";
+import {HomePageModule} from "../pages/home/home.module";
 
 @NgModule({
   declarations: [
@@ -28,13 +30,12 @@ import {WebPageModule} from "../pages/web/web.module";
     HttpClientModule,
     WebPageModule,
     IonicModule.forRoot(App, {
-      backButtonText: '',
       tabsHideOnSubPages: true,
-      tabsPlacement:'top',
       swipeBackEnabled: true
     }),
     HomePageModule,
     ProductInfoPageModule,
+    StoreModule.forRoot({ appVersion: appVersionReducer })
   ],
   bootstrap: [IonicApp],
   entryComponents: [

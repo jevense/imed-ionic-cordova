@@ -64,6 +64,7 @@ export const type2Array = ['普通教材', '病例分析', '手术', '杂志', '
 
 // url = 'http://192.168.8.144:8092/store/product';
 export const url = 'http://123.56.15.197:7152/product';
+export const carouselUrl = 'http://123.56.15.197:7152/home/carousel';
 export const recommendUrl = 'http://123.56.15.197:7152/home/recommend';
 export const diseaseUrl = 'http://123.56.15.197:7152/home/disease';
 export const westUrl = 'http://123.56.15.197:7152/home/west';

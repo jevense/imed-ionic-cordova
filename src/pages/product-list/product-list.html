@@ -1,8 +1,8 @@
 <ion-content no-bounce>
   <ion-list>
-    <ion-item *ngFor="let item of items" class="imed-list-item" (click)="goToDetail(item)">
-      <div item-start style="width: 25%">
-        <img [src]="item['cover']">
+    <div *ngFor="let item of items" class="imed-list-item" (click)="goToDetail(item)">
+      <div style="max-width: 30%;">
+        <img [src]="item['cover']" style="width: 100%;">
       </div>
       <div class="justify-content-around">
         <div>{{item['name']}}</div>
@@ -12,13 +12,12 @@
             <span><s>{{item['originPrice']}}</s>阅点</span>
           </div>
           <div>作者：{{item['author']}}</div>
-          <div class="imed-list-item-label-last">
-            <span>图书类型：{{item['type']}}</span>
-            <span>大小：{{item['size']}}</span>
-          </div>
+          <div>图书类型：{{item['type']}}</div>
+          <div>大小：{{item['size']}}</div>
+          <div>&nbsp;</div>
         </div>
       </div>
-    </ion-item>
+    </div>
   </ion-list>
 
   <ion-infinite-scroll (ionInfinite)="doInfinite($event)">

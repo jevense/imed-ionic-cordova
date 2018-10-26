@@ -1,6 +1,9 @@
 import {Component} from '@angular/core';
-import {IonicPage, ModalController, NavController, NavParams} from 'ionic-angular';
-import WebCallApp from "../../app/global";
+import {IonicPage, NavController, NavParams} from 'ionic-angular';
+import WebCallApp, {operationOutUrl} from "../../app/global";
+import {select, Store} from "@ngrx/store";
+import {AppVersion} from "../../components/AppVersion";
+import {Observable} from "rxjs/Observable";
 
 /**
  * Generated class for the CategoryPage page.
@@ -32,29 +35,30 @@ export class CategoryPage {
       list: [
         {
           name: '52门全套',
-          id: '5763d1a30cf2161635635e63',
+          key: '5763d1a30cf2161635635e63',
           type: 'info',
         }, {
           name: '基础课程',
-          id: '5768eade0cf216163564f440',
+          key: '5768eade0cf216163564f440',
           type: 'info',
         }, {
           name: '临床课程',
-          id: '5768e52d0cf216163564eed7',
+          key: '5768e52d0cf216163564eed7',
           type: 'info',
         }, {
           name: '公共课程',
-          id: '5768ec9f0cf216163564f5e8',
+          key: '5768ec9f0cf216163564f5e8',
           type: 'info',
-        }, {
-          name: '开学季199/年教材套餐',
-          id: 'learn-year',
-          type: 'info',
-        }, {
-          name: '入培学习包',
-          id: 'learn-entrance',
-          type: 'info',
-        },
+        }
+        // , {
+        //   name: '开学季199/年教材套餐',
+        //   key: 'learn-year',
+        //   type: 'info',
+        // }, {
+        //   name: '入培学习包',
+        //   key: 'learn-entrance',
+        //   type: 'info',
+        // },
       ]
     },
     {
@@ -103,18 +107,68 @@ export class CategoryPage {
     },
     {
       name: '疾病诊疗教程',
-      key: 'disease'
+      list: [
+        {
+          name: '儿科',
+          key: 'disease-pediatrics'
+        }, {
+          name: '眼科',
+          key: 'disease-ophthalmology'
+        }, {
+          name: '全科',
+          key: 'disease-general'
+        }, {
+          name: '口腔科',
+          key: 'disease-oral'
+        }, {
+          name: '麻醉科',
+          key: 'disease-anesthesia'
+        }, {
+          name: '儿外科',
+          key: 'disease-pediatric'
+        }, {
+          name: '精神科',
+          key: 'disease-psychiatry'
+        }, {
+          name: '妇产科',
+          key: 'disease-gynaecology'
+        }, {
+          name: '神经内科',
+          key: 'disease-neurology'
+        }, {
+          name: '耳鼻咽喉科',
+          key: 'disease-otorhinolaryngology'
+        }, {
+          name: '外科-神经外科方向',
+          key: 'disease-neurosurgery'
+        }, {
+          name: '外科-泌尿外科方向',
+          key: 'disease-urinary'
+        }, {
+          name: '外科-胸心外科方向',
+          key: 'disease-cardiothoracic'
+        }, {
+          name: '外科-整形外科方向',
+          key: 'disease-plastic'
+        }]
     },
     {
       name: '医学数据库',
       key: 'database',
+      list: [
+        {
+          name: '全部',
+          type: 'url',
+          url: 'https://mshuju.mvwchina.com'
+        }
+      ]
     },
     {
       name: '师资培训',
       key: 'none',
       list: [
         {
-          name: '2018年住陪高峰论坛',
+          name: '2018年住培高峰论坛',
           type: 'url',
           url: 'https://mall.imed.org.cn/ui/phone/activities.html#/activity/20180901'
         }
@@ -125,40 +179,137 @@ export class CategoryPage {
       type: 'multi-column',
       list: [
         {
-          title: '全部学科',
-          list: [
-            {
-              name: '普通外科',
-              key: 'operation-operation',
-            }, {
-              name: '普通外科',
-              key: 'operation-operation',
-            }, {
-              name: '普通外科',
-              key: 'operation-operation',
-            }, {
-              name: '普通外科',
-              key: 'operation-operation',
-            }, {
-              name: '普通外科',
-              key: 'operation-operation',
-            }, {
-              name: '普通外科',
-              key: 'operation-operation',
-            },
-          ]
-        },
-        {
           title: '全部类别',
           list: [
             {
               name: '当代医学名家经典手术',
-              key: 'operation-operation',
+              key: 'de02bad3d4eb4199bd61ef4026c14797',
+              type: 'productId',
             },
             {
-              name: '住陪手术与操作规范',
-              key: 'operation-operation',
+              name: '住培手术与操作规范',
+              key: '4d61f2e189f24267a203761333dd270a',
+              type: 'productId',
+            },
+            {
+              name: '专家采访',
+              key: 'ce956d1f7e7a42109f53b233e7036359',
+              type: 'productId',
             }
+          ]
+        },
+        {
+          title: '全部学科',
+          list: [
+            {
+              name: '耳鼻咽喉科',
+              key: '0db171231368477bbef74fa0f33fd613',
+            }, {
+              name: '肿瘤科',
+              key: '146f2022d7b54d6ea62da85f2a0c0873',
+            }, {
+              name: '精神科',
+              key: '20094e20aa914a02b02eeb4f50d9dc5c',
+            }, {
+              name: '肾病学科',
+              key: '202704b0c14941bdbfde3f33de7965e1',
+            }, {
+              name: '急诊医学科',
+              key: '203366cb967a47d8a7ac4f2ef445f54b',
+            }, {
+              name: '妇产科',
+              key: '203e9b280d89493cb6f7d60736292f27',
+            }, {
+              name: '核医学科',
+              key: '230dec0c96c9429c89b0dbc6c262c1ac',
+            }, {
+              name: '康复医学科',
+              key: '24a773d19f66475faf3a8642e288d1af',
+            }, {
+              name: '消化内科',
+              key: '30154434d7954246b547f21837230cbc',
+            }, {
+              name: '整形外科',
+              key: '341a17e427d54300959e00f1d07d04a9',
+            }, {
+              name: '皮肤科',
+              key: '347b41f0a7e24b86b07fe3d08e8c6ce2',
+            }, {
+              name: '骨科',
+              key: '3a20bcc70aed45269c5b523193c9d8a2',
+            }, {
+              name: '放射科',
+              key: '3c405c1aa0f94ea58745c58ed9a47d28',
+            }, {
+              name: '神经外科',
+              key: '3d77511854e742d689608dea1f876d67',
+            }, {
+              name: '眼科',
+              key: '43804a4702cd4998bc1f2c8540e3c868',
+            }, {
+              name: '麻醉科',
+              key: '4420210eb2a04d5f8c94b17caa7bcae4',
+            }, {
+              name: '预防保健科',
+              key: '4d9f020ca51747c287b63b30774bdf94',
+            }, {
+              name: '血液内科',
+              key: '56b65dab80f2484da3007e0aa5473969',
+            }, {
+              name: '内科',
+              key: '6114b6c85aea4279b13b6845a11e304b',
+            }, {
+              name: '超声医学科',
+              key: '61ad496e3bde47f196df3d97c89e2d0f',
+            }, {
+              name: '全科',
+              key: '63d6f037bb454897b3acc017cce1fd03',
+            }, {
+              name: '外科',
+              key: '6b8fb7ceacbf4dc0b1c12e3326034272',
+            }, {
+              name: '神经内科',
+              key: '6df23df2824c459cb504f491bf4768c5',
+            }, {
+              name: '老年病科',
+              key: '71095a2b48724b8589f1b06547afb997',
+            }, {
+              name: '小儿外科',
+              key: '7559c720fc254aa781c1fcd13b5eb729',
+            }, {
+              name: '泌尿外科',
+              key: '75da389f51ab418397dc92230f59149e',
+            }, {
+              name: '胸外科',
+              key: '79948e9ff098455db83214b77aece56c',
+            }, {
+              name: '感染科',
+              key: '8329203290584de2b2acf554c9123ebf',
+            }, {
+              name: '心血管内科',
+              key: '8f3303385b4143a085dc9009415273bc',
+            }, {
+              name: '心脏大血管外科',
+              key: '9df131c0bb9d4106ad8eb7f4f3e5b4bd',
+            }, {
+              name: '烧伤外科',
+              key: 'aa6e7d91fcb54af0b5308a9993eda555',
+            }, {
+              name: '普通外科',
+              key: 'be456b8beed74544a90a328bfc140ad9',
+            }, {
+              name: '儿科学',
+              key: 'c453c49d2aa7462e868b12a845c8c6fe',
+            }, {
+              name: '器官移植',
+              key: 'c889c3d6aff54727ae81439f0526b1dd',
+            }, {
+              name: '呼吸内科',
+              key: 'ea2f11ae55984cf6a19b62fb27804070',
+            }, {
+              name: '口腔科',
+              key: 'edbe4c2ae5ee4e71a761dac212d079e6',
+            },
           ]
         }
       ]
@@ -186,22 +337,17 @@ export class CategoryPage {
           key: 'free-all',
         }
       ]
-    },
-    {
-      name: '会员年卡',
-      list: [
-        {
-          name: '学科-109/209/309年卡',
-          key: 'year-subject',
-        }
-      ]
     }
   ];
+  active = 0;
+  subActiveKey;
   subMenus: Object = this.menus[0];
+  result: Observable<AppVersion>;
 
-  modal;
-
-  constructor(public navCtrl: NavController, public navParams: NavParams, public modalCtrl: ModalController) {
+  constructor(public navCtrl: NavController,
+              public navParams: NavParams,
+              private store: Store<AppVersion>) {
+    this.result = this.store.pipe(select('appVersion'));
   }
 
   ionViewDidLoad() {
@@ -213,11 +359,13 @@ export class CategoryPage {
   }
 
   selectMenu(index) {
-    this.subMenus = this.menus[index]
+    this.active = index;
+    this.subMenus = this.menus[index];
   }
 
-  goToPage({name: title, type, key, url, id, list}) {
+  goToPage({name: title, type, key, url, list}) {
 
+    this.subActiveKey = key;
     switch (type) {
       case 'url': {
         // this.modalCtrl.create(WebPage, {browser: {title, url,}}).present().catch();
@@ -225,7 +373,7 @@ export class CategoryPage {
         break;
       }
       case 'info': {
-        this.navCtrl.push('product-info', {id}).catch();
+        this.navCtrl.push('product-info', {id: key}).catch();
         break;
       }
       case 'list':
@@ -235,4 +383,12 @@ export class CategoryPage {
       }
     }
   }
+
+  goToOperation({name: title, key, type = 'subjectId'}) {
+    this.result.subscribe(appversion => {
+      WebCallApp("CmdOpenUrl", {url: operationOutUrl + `?token=${appversion.token}&type=1&${type}=${key}`});
+    });
+
+  }
 }
+

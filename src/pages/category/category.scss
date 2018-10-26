@@ -11,11 +11,17 @@ page-category {
     min-width: 6em;
     display: flex;
     flex-direction: column;
-    background-color: #F8F8F8;
+    background-color: #FAFAFA;
+    border-right: 1px solid #F2F2F2;
     height: 100%;
 
     .menu-main-item {
-      border: 1px solid #C6C5C5;
+      border-bottom: 1px solid #F2F2F2;
+      padding: .5rem;
+      &.active {
+        border-left: 2px solid #D6504F;
+        color: #D6504F;
+      }
     }
   }
 

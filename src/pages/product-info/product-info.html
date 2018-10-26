@@ -13,7 +13,7 @@
       </button>
     </ion-buttons>
 
-    <ion-title>图书详情</ion-title>
+    <ion-title>产品详情</ion-title>
 
   </ion-toolbar>
 
@@ -28,8 +28,8 @@
       <div class="imed-list-item-title">{{item['name']}}</div>
       <div class="imed-list-item-label">
         <div>
-          <span><span class="imed-red">{{item['price']}}</span>阅点</span>
-          <span><s>{{item['originPrice']}}</s>阅点</span>
+          <div><span class="imed-red">{{item['price']}}</span>阅点({{cash()}}元)</div>
+          <div><s>{{item['originPrice']}}</s>阅点</div>
         </div>
         <div>作者：
           <span *ngIf="item['author']; else elseAuthor">{{item['author']}}</span>
@@ -37,9 +37,11 @@
         </div>
         <div class="imed-list-item-label-last">
           <div>图书类型：{{bookType()}}</div>
-          <div>大小：{{item['size']}}</div>
+          <div>大小：{{item['size']}}M</div>
         </div>
+        <div>&nbsp;</div>
       </div>
+
     </div>
   </div>
 

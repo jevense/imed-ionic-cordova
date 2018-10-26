@@ -30,7 +30,7 @@ page-home {
     $top-menu-icon-width: 5.5rem;
     $top-menu-icon: (
         ("5p3", "chinese", "free", "year"),
-        ("database", "disease", "learn"),
+        ("database", "disease-all", "learn"),
         ("magazine", "operation", "west"),
     );
 
@@ -108,9 +108,14 @@ page-home {
 
   .badge {
     position: absolute;
+    right: 0;
+    top: 1rem;
     background-color: #F59D3B;
     font-size: small;
-    margin-left: 1em;
+    color: white;
+    border-radius: 1rem;
+    border: 1px solid white;
+    padding: 0 5px;
   }
 
 }

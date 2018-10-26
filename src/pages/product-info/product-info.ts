@@ -3,6 +3,8 @@ import {AlertController, IonicPage, NavController, NavParams} from 'ionic-angula
 import {HttpServiceProvider} from "../../providers/http-service/http-service";
 import WebCallApp, {exactInfoFromRes, onlineReadUrl, serialNumber, type1Array, type2Array} from "../../app/global";
 import {Product} from "../../components/Product";
+import {AppVersion} from "../../components/AppVersion";
+import {Observable} from "rxjs/Observable";
 
 @IonicPage({
   name: 'product-info',
@@ -16,7 +18,7 @@ export class ProductInfoPage {
 
   item: Product = {author: ''} as Product;
 
-  result = {token: '', platform: ''};
+  result: Observable<AppVersion>;
 
   state = 'remote';
 
@@ -28,35 +30,36 @@ export class ProductInfoPage {
 
   ionViewDidLoad() {
     WebCallApp("TabbarHiddent");
+    let serialGetAPPVersion = serialNumber();
+    WebCallApp('GetAPPVersion', {}, serialGetAPPVersion).subscribe(({sn, data: res}) => {
+      if (sn == serialGetAPPVersion) {
+        this.result = exactInfoFromRes(res);
+      }
+    });
     console.log('ionViewDidLoad ProductInfoPage');
   }
 
   ionViewWillEnter() {
     WebCallApp("TabbarHiddent");
     let {id} = this.navParams.data;
-    let serialGetAPPVersion = serialNumber();
-    WebCallApp('GetAPPVersion', {}, serialGetAPPVersion).subscribe(({sn, data: res}) => {
-      if (sn == serialGetAPPVersion) {
-        let result = exactInfoFromRes(res);
-        let {token} = result;
-        this.result = result;
-        this.httpService.getProductById(id, token,).subscribe(item => {
-          this.item = {...this.item, ...item};
-          let {isbn} = this.item;
-          let serialGetBookState = serialNumber();
-          WebCallApp('GetBookState', {isbn}, serialGetBookState).subscribe(({sn, data: bookState}) => {
-            if (sn == serialGetBookState) {
-              let result = exactInfoFromRes(bookState);
-              console.log(result);
-              if (result['state'] == '8') {
-                this.item['state'] = 'local';
-              } else {
-                this.item['state'] = 'remote';
-              }
+    //TODO 将购买和商品信息分成两个接口请求
+    this.result.subscribe(appversion => {
+      this.httpService.getProductById(id, appversion.token,).subscribe(item => {
+        this.item = {...this.item, ...item};
+        let {isbn} = this.item;
+        let serialGetBookState = serialNumber();
+        WebCallApp('GetBookState', {isbn}, serialGetBookState).subscribe(({sn, data: bookState}) => {
+          if (sn == serialGetBookState) {
+            let result = exactInfoFromRes(bookState);
+            console.log(result);
+            if (result['state'] == '8') {
+              this.item['state'] = 'local';
+            } else {
+              this.item['state'] = 'remote';
             }
-          });
+          }
         });
-      }
+      });
     });
   }
 
@@ -71,25 +74,34 @@ export class ProductInfoPage {
   }
 
   buy() {
-    if (this.result['touristsState'] == '1') {
-      this.alertCtrl.create({
-        title: '请登录',
-        buttons: ['OK']
-      }).present();
-    } else {
-      let {id} = this.item;
-      this.navCtrl.push('OrderPage', {id},).catch(e => console.log(e));
-    }
+    this.result.subscribe(appversion => {
+      if (appversion.touristsState == '1') {
+        this.alertCtrl.create({
+          message: '登录后才可购买',
+          buttons: [{
+            text: '登录',
+            handler: () => {
+              WebCallApp('UserLogout');
+            }
+          },
+            {text: '取消'}
+          ]
+        }).present();
+      } else {
+        let {id} = this.item;
+        this.navCtrl.push('OrderPage', {id},).catch(e => console.log(e));
+      }
+    });
   }
 
   download() {
-    let getNetworkState = serialNumber();
+    // let getNetworkState = serialNumber();
     WebCallApp("CmdDownloadBook", {isbn: this.item.isbn, book: this.item, nonWifi: "0"});
-    WebCallApp("GetNetworkState", {}, getNetworkState).subscribe(({sn, data: res}) => {
-      if (sn == getNetworkState) {
-        // let result = exactInfoFromRes(res);//TODO
-      }
-    });
+    // WebCallApp("GetNetworkState", {}, getNetworkState).subscribe(({sn, data: res}) => {
+    //   if (sn == getNetworkState) {
+    //     // let result = exactInfoFromRes(res);//TODO
+    //   }
+    // });
     // function (result) {
     //   if (result.result.network == "2") {
     //     Elf.components.confirm({
@@ -121,27 +133,29 @@ export class ProductInfoPage {
 
   readOnline() {
     let {isbn, path} = this.item;
-    let {token} = this.result;
-    if (this.isTextBook()) {
-      WebCallApp("CmdOpenUrl", {url: onlineReadUrl + `?isbn=${isbn}&token=${token}`});
-    } else if (this.isDisease()) {
-      WebCallApp("CmdOpenUrl", {url: path});
-    }
+    this.result.subscribe(appversion => {
+      if (this.isTextBook()) {
+        WebCallApp("CmdOpenUrl", {url: onlineReadUrl + `?isbn=${isbn}&token=${appversion.token}`});
+      } else if (this.isDisease()) {
+        WebCallApp("CmdOpenUrl", {url: path});
+      }
+    });
   }
 
   readLocal() {
     let {isbn, textbook} = this.item;
-    let {token} = this.result;
-    let args = {
-      isbn: isbn,
-      static: "1",
-      book: this.item
-    };
-    if (textbook == "1") {
-      WebCallApp("CmdOpenPDFBook", args);
-    } else {
-      WebCallApp("CmdOpenUrl", {url: onlineReadUrl + `?isbn=${isbn}&token=${token}`});
-    }
+    this.result.subscribe(appversion => {
+      let args = {
+        isbn: isbn,
+        static: "1",
+        book: this.item
+      };
+      if (textbook == "1") {
+        WebCallApp("CmdOpenPDFBook", args);
+      } else {
+        WebCallApp("CmdOpenUrl", {url: onlineReadUrl + `?isbn=${isbn}&token=${appversion.token}`});
+      }
+    });
   }
 
   isPdf() {
@@ -161,9 +175,11 @@ export class ProductInfoPage {
     if (this.navCtrl.canGoBack()) {
       this.navCtrl.pop().catch();
     } else {
-      WebCallApp("TabbarShow");
       WebCallApp("CmdGoBack");
     }
   }
 
+  cash() {
+    return parseFloat(this.item['price']) / 10
+  }
 }

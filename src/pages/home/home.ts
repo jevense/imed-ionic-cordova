@@ -1,14 +1,11 @@
 import {Component} from '@angular/core';
 import {IonicPage, NavController, Refresher} from 'ionic-angular';
-import WebCallApp, {
-  exactInfoFromRes,
-  operationOutInfoUrl,
-  operationOutUrl,
-  searchUrl,
-  serialNumber
-} from "../../app/global";
+import WebCallApp, {operationOutInfoUrl, operationOutUrl, searchUrl} from "../../app/global";
 import {HttpServiceProvider} from "../../providers/http-service/http-service";
 import {Product} from "../../components/Product";
+import {select, Store} from "@ngrx/store";
+import {AppVersion} from "../../components/AppVersion";
+import {Observable} from "rxjs/Observable";
 
 /**
  * Generated class for the HomePage page.
@@ -59,8 +56,17 @@ export class HomePage {
         name: '手术视频',
         url: 'http://mvw-testing.oss-cn-beijing.aliyuncs.com/cst-phone/ui/index.html'
       },
-      {'icon-name': 'disease', name: '疾病教程', type: 'list', key: 'disease'},
-      {'icon-name': 'year', key: 'year-all', name: '会员年卡'},
+      {
+        'icon-name': 'disease',
+        name: '疾病教程', type: 'list', key: 'disease-all'
+      },
+      {
+        'icon-name':
+          'year', key:
+          'year-all', name:
+          '会员年卡'
+      }
+      ,
     ],
     [
       {
@@ -122,6 +128,7 @@ export class HomePage {
   topDisease: Product[] = [];
   topWest: Product[] = [];
   topOperation: Product[] = [];
+  carousel = [];
   slideBags: Object[] = [
     {
       cover: 'slider-1.png',
@@ -134,25 +141,25 @@ export class HomePage {
     },
   ];
 
-  result = {token: '', platform: ''};
+  result: Observable<AppVersion>;
 
-  constructor(public navCtrl: NavController, public httpService: HttpServiceProvider) {
+  constructor(public navCtrl: NavController,
+              public httpService: HttpServiceProvider,
+              private store: Store<AppVersion>) {
+    this.result = this.store.pipe(select('appVersion'));
   }
 
   ionViewDidLoad() {
 
-    let serialGetAPPVersion = serialNumber();
-    WebCallApp('GetAPPVersion', {}, serialGetAPPVersion).subscribe(({sn, data: res}) => {
-      if (sn == serialGetAPPVersion) {
-        this.result = exactInfoFromRes(res);
-      }
+    this.httpService.getCarouselList().subscribe(items => {
+      this.carousel.push(...items);
     });
 
     this.httpService.getRecommendList(0, 3).subscribe(items => {
       this.topBags.push(...items);
     });
 
-    this.httpService.getDiseaseList(0, 3).subscribe(items => {
+    this.httpService.getDiseaseList('disease-all', 0, 3).subscribe(items => {
       this.topDisease.push(...items);
     });
 
@@ -187,13 +194,15 @@ export class HomePage {
   }
 
   openOperations() {
-    let {token} = this.result;
-    WebCallApp("CmdOpenUrl", {url: operationOutUrl + `?token=${token}&type=1&productId=ce956d1f7e7a42109f53b233e7036359`});
+    this.result.subscribe(appversion => {
+      WebCallApp("CmdOpenUrl", {url: operationOutUrl + `?token=${appversion.token}&type=1&productId=ce956d1f7e7a42109f53b233e7036359`});
+    })
   }
 
   openOperation({isbn}) {
-    let {token} = this.result;
-    WebCallApp("CmdOpenUrl", {url: operationOutInfoUrl + `?productVideoId=${isbn}&type=3&token=${token}`});
+    this.result.subscribe(appversion => {
+      WebCallApp("CmdOpenUrl", {url: operationOutInfoUrl + `?productVideoId=${isbn}&type=3&token=${appversion.token}`});
+    })
   }
 
   locateInfo({id}) {
@@ -207,20 +216,21 @@ export class HomePage {
   }
 
   search() {
-    let {token} = this.result;
-    WebCallApp("CmdOpenUrl", {url: searchUrl + `?token=${token}`});
+    this.result.subscribe(appversion => {
+      WebCallApp("CmdOpenUrl", {url: searchUrl + `?token=${appversion.token}`});
+    })
   }
 
 
   locate({url, name: title, key, subList, type = 'list'}) {
     if (key == 'year-all') return;
     // this.navCtrl.push('WebPage', {browser: {title, url: url}}).catch();
-    WebCallApp("TabbarHiddent");
     switch (type) {
       case 'url': {
         if (key == 'operation-all') {
-          let {token} = this.result;
-          WebCallApp("CmdOpenUrl", {url: url + `?token=${token}`});
+          this.result.subscribe(appversion => {
+            WebCallApp("CmdOpenUrl", {url: url + `?token=${appversion.token}`});
+          })
         } else {
           WebCallApp("CmdOpenUrl", {url: url});
         }
@@ -228,6 +238,7 @@ export class HomePage {
         break;
       }
       case 'list': {
+        WebCallApp("TabbarHiddent");
         this.navCtrl.push('product', {title, key, data: subList}).catch();
         break;
       }

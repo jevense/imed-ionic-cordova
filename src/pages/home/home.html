@@ -46,19 +46,9 @@
   <div class="imed-slide">
     <ion-slides pager>
       <ion-slide>
-        <div
-          (click)="locate({name:'执医通关包',type:'url',url:'https://mall.imed.org.cn/ui/phone/activities.html#/activity/20180901'})">
-          <img src="assets/imgs/carousel.png">
-        </div>
-      </ion-slide>
-      <ion-slide>
-        <div (click)="locateList({name:'执医通关包',type:'list'})">
-          <img src="assets/imgs/carousel.png">
-        </div>
-      </ion-slide>
-      <ion-slide>
-        <div (click)="locate({name:'执医通关包',type:'info'})">
-          <img src="assets/imgs/carousel.png">
+        <div *ngFor="let item of carousel"
+             (click)="locate({name:item['titleName'],type:'url',url:item['linkAddress']})">
+          <img [src]="item['imagePath']">
         </div>
       </ion-slide>
     </ion-slides>
@@ -70,7 +60,7 @@
       <ion-row>
         <ion-col col-12 class="top-menu">
           <div *ngFor="let item of topMenus[0]" class="top-menu-item" (click)="locate(item)">
-            <!--<ion-badge *ngIf="item.key=='year-all'" class="badge">coming</ion-badge>-->
+            <div *ngIf="item.key=='year-all'" class="badge">即将开放</div>
             <div class="top-menu-icon top-menu-icon-{{item['icon-name']}}"></div>
             <div text-center class="top-menu-name">{{item['name']}}</div>
           </div>
@@ -93,7 +83,7 @@
     <!--</div>-->
   </div>
   <div class="separator"></div>
-  <!--住陪通关包-->
+  <!--住培通关包-->
   <div>
     <div class="home-card">
       <div class="home-card-title">
@@ -174,7 +164,7 @@
                      *ngFor="let item of topDisease"
                      (click)="locateInfo(item)"
                      class="home-card-row-item">
-              <img [src]="item['cover']">
+              <img [src]="item['smallCover']">
               <!--<span>{{item['name']}}</span>-->
             </ion-col>
           </ion-row>

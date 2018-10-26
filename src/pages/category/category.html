@@ -13,8 +13,9 @@
     </ion-buttons>
     <ion-title>分类</ion-title>
     <ion-buttons end>
-      <button ion-button icon-only color="imed-red">
+      <button ion-button icon-only menuToggle color="imed-red">
         <ion-icon name="ios-search-outline"></ion-icon>
+        <ion-icon name="more"></ion-icon>
       </button>
     </ion-buttons>
   </ion-toolbar>
@@ -24,8 +25,10 @@
 <ion-content>
   <div class="category-content">
     <div class="menu-main">
-      <div *ngFor="let item of menus;let ind = index" class="menu-main-item">
-        <button ion-button clear small full color="dark" (click)="selectMenu(ind)">{{item['name']}}</button>
+      <div *ngFor="let item of menus;let ind = index" [ngClass]="{'active': ind == active,'menu-main-item':true}">
+        <button ion-button clear small full strong [color]="ind == active?'imed-red':'dark'" (click)="selectMenu(ind)">
+          {{item['name']}}
+        </button>
       </div>
     </div>
     <div class="menu-main-content">
@@ -35,8 +38,9 @@
             <div class="menu-main-sub">
               <div class="menu-main-sub-title">{{item['title']}}</div>
               <div class="menu-main-sub-item">
-                <button *ngFor="let ite of item['list']" ion-button outline small color="dark"
-                        (click)="goToPage(ite)">
+                <button *ngFor="let ite of item['list']" ion-button outline small
+                        [color]="item['key'] == subActiveKey?'imed-red':'nav'"
+                        (click)="goToOperation(ite)">
                   {{ite['name']}}
                 </button>
               </div>
@@ -48,7 +52,7 @@
             <button *ngFor="let item of subMenus['list']"
                     (click)="goToPage(item)"
                     ion-button outline small
-                    color="dark">{{item['name']}}
+                    [color]="item['key'] == subActiveKey?'imed-red':'nav'">{{item['name']}}
             </button>
           </div>
         </ng-container>
