@@ -55,7 +55,10 @@ export class PaySuccessPage {
     };
 
     this.httpService.postBus(args).subscribe(result => {
-      let serviceResult = result["serviceResult"];
+      let serviceResult = result['serviceResult'];
+      if(typeof serviceResult == 'string'){
+        serviceResult = JSON.parse(serviceResult);
+      }
       if (serviceResult['flag'] == "true") {
         this.item = {...this.item, ...serviceResult['result']};
         console.log(this.item);

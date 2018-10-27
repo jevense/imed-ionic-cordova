@@ -131,13 +131,15 @@ export class HomePage {
   carousel = [];
   slideBags: Object[] = [
     {
-      cover: 'slider-1.png',
+      cover: 'activity-1.png',
+      key: 'exam-rst',
+      type: 'list',
+      name: '考试培训',
     },
     {
-      cover: 'slider-2.png',
-    },
-    {
-      cover: 'slider-1.png',
+      cover: 'activity-3.png',
+      type: 'url',
+      url: 'https://mall.imed.org.cn/ui/phone/activities.html#/video/50288810624e037d01624e03979d0357'
     },
   ];
 

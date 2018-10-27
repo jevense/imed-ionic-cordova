@@ -23,7 +23,7 @@ export class HttpServiceProvider {
   getProductList(category: string, page: number = 0): Observable<Product[]> {
     return this.http.get<Product[]>(url, {
       params: {
-        page: page.toString(), category: category.toString()
+        page: page.toString(), category,
       }
     })
   }

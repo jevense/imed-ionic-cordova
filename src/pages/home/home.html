@@ -76,11 +76,11 @@
       </ion-row>
     </ion-grid>
     <!--轮播菜单-->
-    <!--<div class="slide-bag" (pan)="panEvent($event)">-->
-    <!--<div *ngFor="let item of slideBags" (click)="locate('info',item)">-->
-    <!--<img src="assets/imgs/{{item['cover']}}">-->
-    <!--</div>-->
-    <!--</div>-->
+    <div class="slide-bag">
+      <div *ngFor="let item of slideBags" (click)="locate(item)">
+        <img src="assets/imgs/{{item['cover']}}">
+      </div>
+    </div>
   </div>
   <div class="separator"></div>
   <!--住培通关包-->

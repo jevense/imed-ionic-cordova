@@ -40,8 +40,7 @@ export class OrderPage {
     actualPaymentAmount: '',
   };
 
-  // status: boolean = true;
-  platform;
+  type;
 
   constructor(public navCtrl: NavController,
               public httpService: HttpServiceProvider,
@@ -49,6 +48,7 @@ export class OrderPage {
               public alertCtrl: AlertController,
               private store: Store<AppVersion>) {
     this.result = this.store.pipe(select('appVersion'));
+    this.type = this.navCtrl.canGoBack() ? "id" : "isbn";
   }
 
   result: Observable<AppVersion>;
@@ -61,14 +61,13 @@ export class OrderPage {
     WebCallApp("TabbarHiddent");
     let {id} = this.navParams.data;
     this.result.subscribe(appversion => {
-      let type = this.navCtrl.canGoBack() ? "id" : "isbn";
       let args = {
         "serviceModule": "BS-Service",
         "serviceNumber": "0201101",
         "token": appversion.token,
         "args": {
           "bookId": id,
-          "type": type,
+          "type": this.type,
           "platform": appversion.platform,
         },
         "TerminalType": "A"
@@ -82,10 +81,13 @@ export class OrderPage {
           }).present();
         } else {
           let serviceResult = result['serviceResult'];
-          if (serviceResult.flag === 'true') {
-            this.item = {...this.item, ...serviceResult.result};
+          if (typeof serviceResult == 'string') {
+            serviceResult = JSON.parse(serviceResult);
+          }
+          if (serviceResult['flag'] && serviceResult['flag'] == 'true') {
+            this.item = {...this.item, ...serviceResult['result']};
           } else {
-            console.log(serviceResult.error);
+            console.log(serviceResult['error']);
           }
         }
       });
@@ -111,7 +113,6 @@ export class OrderPage {
     // if (!this.status) return false;
     let {id} = this.navParams.data;
     this.result.subscribe(appversion => {
-      let type = this.navCtrl.canGoBack() ? "id" : "isbn";
       let {token, platform} = appversion;
       if (this.item.isAppPay == '0') {
         // this.status = false;
@@ -122,7 +123,7 @@ export class OrderPage {
           "args": {
             "token": token,
             "bookId": id,
-            "type": type,
+            "type": this.type,
             "platform": platform,
             "discountId": ""
           },
@@ -131,9 +132,6 @@ export class OrderPage {
 
         this.httpService.postBus(args).subscribe(result => {
           if (!result['opFlag'] || result['opFlag'] === 'false') {
-            // if (result['errorMessage'].indexOf('E012-') >= 0) {
-            //   WebCallApp('UserLogout', {logoutType: 'E012'});
-            // }
             this.alertCtrl.create({
               title: result['errorMessage'],
               buttons: ['OK']
@@ -143,12 +141,12 @@ export class OrderPage {
             if (typeof serviceResult == 'string') {
               serviceResult = JSON.parse(serviceResult);
             }
-            if (serviceResult['flag'] === 'true') {
+            if (serviceResult['flag'] && serviceResult['flag'] == 'true') {
               this.navCtrl.push('PaySuccessPage', {
                 token, platform, data: serviceResult['result']
               },).catch();
             } else {
-              console.log('')
+              console.log(serviceResult['error']);
             }
           }
         }, e => {
