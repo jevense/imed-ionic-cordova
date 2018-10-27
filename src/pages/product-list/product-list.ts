@@ -26,7 +26,6 @@ export class ProductListPage {
   }
 
   ionViewDidLoad() {
-    console.log(this.category);
     this.getData();
     console.log('ionViewDidLoad ProductListPage');
   }

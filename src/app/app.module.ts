@@ -29,12 +29,12 @@ import {HomePageModule} from "../pages/home/home.module";
     BrowserModule,
     HttpClientModule,
     WebPageModule,
+    HomePageModule,
+    ProductInfoPageModule,
     IonicModule.forRoot(App, {
       tabsHideOnSubPages: true,
       swipeBackEnabled: true
     }),
-    HomePageModule,
-    ProductInfoPageModule,
     StoreModule.forRoot({ appVersion: appVersionReducer })
   ],
   bootstrap: [IonicApp],

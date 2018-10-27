@@ -5,6 +5,7 @@ import WebCallApp, {exactInfoFromRes, onlineReadUrl, serialNumber, type1Array, t
 import {Product} from "../../components/Product";
 import {AppVersion} from "../../components/AppVersion";
 import {Observable} from "rxjs/Observable";
+import {select, Store} from "@ngrx/store";
 
 @IonicPage({
   name: 'product-info',
@@ -25,27 +26,23 @@ export class ProductInfoPage {
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
               public httpService: HttpServiceProvider,
-              public alertCtrl: AlertController) {
+              public alertCtrl: AlertController,
+              private store: Store<AppVersion>) {
+    this.result = this.store.pipe(select('appVersion'));
   }
 
   ionViewDidLoad() {
     WebCallApp("TabbarHiddent");
-    let serialGetAPPVersion = serialNumber();
-    WebCallApp('GetAPPVersion', {}, serialGetAPPVersion).subscribe(({sn, data: res}) => {
-      if (sn == serialGetAPPVersion) {
-        this.result = exactInfoFromRes(res);
-      }
-    });
     console.log('ionViewDidLoad ProductInfoPage');
   }
 
   ionViewWillEnter() {
     WebCallApp("TabbarHiddent");
-    let {id} = this.navParams.data;
     //TODO 将购买和商品信息分成两个接口请求
     this.result.subscribe(appversion => {
+      let {id} = this.navParams.data;
       this.httpService.getProductById(id, appversion.token,).subscribe(item => {
-        this.item = {...this.item, ...item};
+        this.item = {...this.item, ...item,};
         let {isbn} = this.item;
         let serialGetBookState = serialNumber();
         WebCallApp('GetBookState', {isbn}, serialGetBookState).subscribe(({sn, data: bookState}) => {

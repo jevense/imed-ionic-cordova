@@ -54,7 +54,7 @@ export class HomePage {
         type: 'url',
         key: 'operation-all',
         name: '手术视频',
-        url: 'http://mvw-testing.oss-cn-beijing.aliyuncs.com/cst-phone/ui/index.html'
+        url: 'https://thesurgery.imed.org.cn/cst-phone/ui/index.html'
       },
       {
         'icon-name': 'disease',
@@ -119,7 +119,7 @@ export class HomePage {
         key: 'database-all',
         name: '数据库',
         type: 'url',
-        url: 'http://mshuju.mvwchina.com',
+        url: 'https://mshuju.mvwchina.com',
       },
       {'icon-name': 'free', key: 'free-all', name: '免费专区'},
     ]
@@ -176,7 +176,6 @@ export class HomePage {
 
   ionViewWillEnter() {
     WebCallApp("TabbarShow");
-    console.log('TabbarShow');
   }
 
   doRefresh(refresher: Refresher) {
@@ -220,7 +219,6 @@ export class HomePage {
       WebCallApp("CmdOpenUrl", {url: searchUrl + `?token=${appversion.token}`});
     })
   }
-
 
   locate({url, name: title, key, subList, type = 'list'}) {
     if (key == 'year-all') return;

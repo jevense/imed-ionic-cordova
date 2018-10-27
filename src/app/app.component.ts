@@ -3,7 +3,6 @@ import {HomePage} from "../pages/home/home";
 import WebCallApp, {exactInfoFromRes, serialNumber} from "./global";
 import {AppVersion} from "../components/AppVersion";
 import {Store} from "@ngrx/store";
-import {Platform} from "ionic-angular";
 import {AppVersionAction} from "../components/AppVersionAction";
 
 @Component({
@@ -22,9 +21,7 @@ export class App {
   //   });
   // }
 
-  constructor(platform: Platform, private store: Store<AppVersion>) {
-    platform.ready().then(() => {
-    });
+  constructor(private store: Store<AppVersion>) {
   }
 
   ngAfterViewInit() {

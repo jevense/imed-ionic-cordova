@@ -70,7 +70,7 @@
       立即购买
     </div>
     <ng-template #elseBlock>
-      <ng-container *ngIf="state=='remote'">
+      <ng-container *ngIf="item['state']=='remote'">
         <div color="danger" *ngIf="isPdf()||isTextBook()" (click)="download()">
           立即下载
         </div>
@@ -78,7 +78,7 @@
           在线阅读
         </div>
       </ng-container>
-      <div color="danger" *ngIf="state=='local'" (click)="readLocal()">
+      <div color="danger" *ngIf="item['state']=='local'" (click)="readLocal()">
         打开图书
       </div>
     </ng-template>

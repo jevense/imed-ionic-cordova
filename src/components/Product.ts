@@ -16,7 +16,6 @@ export class Product {
   subjects: string;
   buyDate: Date;
   owner: boolean = false;
-  state: string;
   type: string;
   path: string;
 }

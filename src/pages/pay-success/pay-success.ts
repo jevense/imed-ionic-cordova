@@ -36,7 +36,7 @@ export class PaySuccessPage {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad PaySuccessPage2');
+    console.log('ionViewDidLoad PaySuccessPage');
   }
 
   ionViewWillEnter() {
