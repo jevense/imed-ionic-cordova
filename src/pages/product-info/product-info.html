@@ -71,15 +71,18 @@
     </div>
     <ng-template #elseBlock>
       <ng-container *ngIf="item.state=='remote'">
-        <div color="danger" *ngIf="isPdf()||isTextBook()" (click)="download()">
-          立即下载
-        </div>
+
+        <!--<div color="danger" *ngIf="isPdf()||isTextBook()" (click)="download()">-->
+        <!--立即下载-->
+        <!--</div>-->
         <div color="danger" *ngIf="isTextBook()||isDisease()" (click)="readOnline()">
           在线阅读
         </div>
-        <div color="danger" *ngIf="isExamRst()">
-          请到我的通关包学习
-        </div>
+        <!--<div color="danger" *ngIf="isExamRst()">-->
+        <!--请到我的通关包学习-->
+        <!--</div>-->
+        <!--<progress-bar total="100" amount="10"></progress-bar>-->
+        <div color="danger" *ngIf="!isTextBook()&&!isDisease()">请到书架-已获得图书中下载</div>
       </ng-container>
       <div color="danger" *ngIf="item.state=='local'" (click)="readLocal()">
         打开图书

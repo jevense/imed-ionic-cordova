@@ -1,7 +1,7 @@
 import {AppVersion} from "./AppVersion";
 import {AppVersionAction} from "./AppVersionAction";
 
-const initialState: AppVersion = {token: '', platform: '', touristsState: ''};
+const initialState: AppVersion = {token: '', platform: '0', touristsState: ''};
 
 export function appVersionReducer(state: AppVersion = initialState, action: AppVersionAction): AppVersion {
   switch (action.type) {

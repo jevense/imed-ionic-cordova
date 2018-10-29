@@ -15,6 +15,7 @@ import {WebPageModule} from "../pages/web/web.module";
 import {StoreModule} from "@ngrx/store";
 import {appVersionReducer} from "../components/AppVersionReducer";
 import {HomePageModule} from "../pages/home/home.module";
+import {ComponentsModule} from "../components/components.module";
 
 @NgModule({
   declarations: [
@@ -29,6 +30,7 @@ import {HomePageModule} from "../pages/home/home.module";
     HttpClientModule,
     WebPageModule,
     HomePageModule,
+    ComponentsModule,
     ProductInfoPageModule,
     IonicModule.forRoot(App, {
       tabsHideOnSubPages: true,

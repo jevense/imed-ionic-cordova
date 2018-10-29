@@ -91,39 +91,17 @@ export class ProductInfoPage {
 
   download() {
     // let getNetworkState = serialNumber();
-    WebCallApp("CmdDownloadBook", {isbn: this.item.isbn, book: this.item, nonWifi: "0"});
-    // WebCallApp("GetNetworkState", {}, getNetworkState).subscribe(({sn, data: res}) => {
-    //   if (sn == getNetworkState) {
-    //     // let result = exactInfoFromRes(res);//TODO
-    //   }
-    // });
-    // function (result) {
-    //   if (result.result.network == "2") {
-    //     Elf.components.confirm({
-    //       title: "正在使用非Wi-Fi网络下载",
-    //       text: "非Wi-Fi下载将产生流量费用",
-    //       minWidth: "240px",
-    //       buttons: {
-    //         "确定": function () {
-    //           args.nonWifi = "1";
-    //           WebCallApp("CmdDownloadBook", args);
-    //           bookData.downloadState = 1;
-    //           Elf.AppCallWeb("MsgUpdateBookState", JSON.stringify(bookData));
-    //         },
-    //         "取消": function () {
-    //         }
-    //       }
-    //     });
-    //   } else if (result.result.network == "0" || result.result.network == "1") {
-    //     //无网络
-    //     Elf.components.toast({text: "当前无网络"});
-    //   } else {
-    //     //wifi
-    //     WebCallApp("CmdDownloadBook", args);
-    //     bookData.downloadState = 1;
-    //     Elf.AppCallWeb("MsgUpdateBookState", JSON.stringify(bookData));
-    //   }
-    // });
+    console.log('CmdDownloadBook');
+    WebCallApp("CmdDownloadBook",
+      {isbn: this.item.isbn, book: this.item, nonWifi: "0"},
+      "MsgUpdateBookState").subscribe(({sn, data: res}) => {
+        console.log(sn);
+        console.log(res);
+      if (sn == "MsgUpdateBookState") {
+        let result = JSON.parse(decodeURIComponent(res));
+        console.log(result);
+      }
+    });
   }
 
   readOnline() {

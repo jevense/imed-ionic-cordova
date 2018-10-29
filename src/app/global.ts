@@ -19,11 +19,15 @@ let subject = new Subject();
 
 if (!window['Elf']) window['Elf'] = {}; //如果对象没有ELF对象，则初始化
 window['Elf'].AppCallWeb = (sn, data) => {
+  console.log('sn');
+  console.log(sn);
+  console.log('data');
+  console.log(data);
   subject.next({sn, data});
 };
 
 export const serialNumber = () => {
-  return Math.random();
+  return Math.random().toString();
 };
 
 export const exactInfoFromRes = (res: string) => {
