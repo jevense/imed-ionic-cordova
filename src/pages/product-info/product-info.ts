@@ -1,11 +1,12 @@
 import {Component} from '@angular/core';
-import {AlertController, IonicPage, NavController, NavParams} from 'ionic-angular';
+import {AlertController, IonicPage, ModalController, NavController, NavParams} from 'ionic-angular';
 import {HttpServiceProvider} from "../../providers/http-service/http-service";
-import WebCallApp, {exactInfoFromRes, onlineReadUrl, serialNumber, type1Array, type2Array} from "../../app/global";
+import WebCallApp, {onlineReadUrl, serialNumber, type1Array, type2Array} from "../../app/global";
 import {Product} from "../../components/Product";
 import {AppVersion} from "../../components/AppVersion";
 import {Observable} from "rxjs/Observable";
 import {select, Store} from "@ngrx/store";
+import {WebPage} from "../web/web";
 
 @IonicPage({
   name: 'product-info',
@@ -17,16 +18,15 @@ import {select, Store} from "@ngrx/store";
 })
 export class ProductInfoPage {
 
-  item: Product = {author: ''} as Product;
+  item: Product = {author: '', state: 'remote'} as Product;
 
   result: Observable<AppVersion>;
-
-  state = 'remote';
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
               public httpService: HttpServiceProvider,
               public alertCtrl: AlertController,
+              public modalCtrl: ModalController,
               private store: Store<AppVersion>) {
     this.result = this.store.pipe(select('appVersion'));
   }
@@ -47,12 +47,10 @@ export class ProductInfoPage {
         let serialGetBookState = serialNumber();
         WebCallApp('GetBookState', {isbn}, serialGetBookState).subscribe(({sn, data: bookState}) => {
           if (sn == serialGetBookState) {
-            let result = exactInfoFromRes(bookState);
-            console.log(result);
-            if (result['state'] == '8') {
-              this.item['state'] = 'local';
-            } else {
-              this.item['state'] = 'remote';
+            let {downloadState,} = JSON.parse(decodeURIComponent(bookState));
+            console.log(downloadState);
+            if (downloadState && downloadState == '8') {
+              this.item.state = 'local';
             }
           }
         });
@@ -134,7 +132,8 @@ export class ProductInfoPage {
       if (this.isTextBook()) {
         WebCallApp("CmdOpenUrl", {url: onlineReadUrl + `?isbn=${isbn}&token=${appversion.token}`});
       } else if (this.isDisease()) {
-        WebCallApp("CmdOpenUrl", {url: path});
+        console.log(path);
+        this.modalCtrl.create(WebPage, {url: path}).present();
       }
     });
   }
@@ -156,15 +155,19 @@ export class ProductInfoPage {
   }
 
   isPdf() {
-    return this.item['textbook'] === '1'
+    return this.item['textbook'] === '1'//PDF
   }
 
   isTextBook() {
-    return this.item['textbook'] === '0' && this.item['textbookType'] === '0'
+    return this.item['textbook'] === '0' && this.item['textbookType'] === '0'//教材
   }
 
   isDisease() {
-    return this.item['textbook'] === '2'
+    return this.item['textbook'] === '2'//疾病教程
+  }
+
+  isExamRst() {
+    return this.item['textbook'] === '3'//通关包
   }
 
 

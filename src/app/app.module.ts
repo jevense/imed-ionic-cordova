@@ -11,7 +11,6 @@ import {TocPage} from "../pages/epub-reader/toc/toc";
 import {SettingsPage} from "../pages/epub-reader/settings/settings";
 import {HttpServiceProvider} from '../providers/http-service/http-service';
 import './global'
-import {WebPage} from "../pages/web/web";
 import {WebPageModule} from "../pages/web/web.module";
 import {StoreModule} from "@ngrx/store";
 import {appVersionReducer} from "../components/AppVersionReducer";
@@ -40,7 +39,6 @@ import {HomePageModule} from "../pages/home/home.module";
   bootstrap: [IonicApp],
   entryComponents: [
     App,
-    WebPage,
     ProductListPage,
     BookPage,
     TocPage,

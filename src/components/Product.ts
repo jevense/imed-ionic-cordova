@@ -18,4 +18,5 @@ export class Product {
   owner: boolean = false;
   type: string;
   path: string;
+  state:string;
 }

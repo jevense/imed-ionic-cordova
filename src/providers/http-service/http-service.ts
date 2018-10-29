@@ -2,7 +2,7 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {Observable} from "rxjs/Observable";
 import {map} from "rxjs/operators";
-import {busUrl, carouselUrl, diseaseUrl, operationUrl, recommendUrl, url, westUrl} from "../../app/global";
+import {busUrl, carouselUrl, diseaseUrl, operationUrl, recommendUrl, swiperUrl, url, westUrl} from "../../app/global";
 import {Product} from "../../components/Product";
 
 /*
@@ -81,5 +81,9 @@ export class HttpServiceProvider {
       }),
       responseType: 'text'
     }).pipe(map(res => JSON.parse(decodeURIComponent(res))))
+  }
+
+  getSwiper() {
+    return this.http.get<any>(swiperUrl)
   }
 }

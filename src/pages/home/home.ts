@@ -6,6 +6,7 @@ import {Product} from "../../components/Product";
 import {select, Store} from "@ngrx/store";
 import {AppVersion} from "../../components/AppVersion";
 import {Observable} from "rxjs/Observable";
+import {ForkJoinObservable} from "rxjs/observable/ForkJoinObservable";
 
 /**
  * Generated class for the HomePage page.
@@ -129,19 +130,7 @@ export class HomePage {
   topWest: Product[] = [];
   topOperation: Product[] = [];
   carousel = [];
-  slideBags: Object[] = [
-    {
-      cover: 'activity-1.png',
-      key: 'exam-rst',
-      type: 'list',
-      name: '考试培训',
-    },
-    {
-      cover: 'activity-3.png',
-      type: 'url',
-      url: 'https://mall.imed.org.cn/ui/phone/activities.html#/video/50288810624e037d01624e03979d0357'
-    },
-  ];
+  slideBags: Object[] = [];
 
   result: Observable<AppVersion>;
 
@@ -152,27 +141,7 @@ export class HomePage {
   }
 
   ionViewDidLoad() {
-
-    this.httpService.getCarouselList().subscribe(items => {
-      this.carousel.push(...items);
-    });
-
-    this.httpService.getRecommendList(0, 3).subscribe(items => {
-      this.topBags.push(...items);
-    });
-
-    this.httpService.getDiseaseList('disease-all', 0, 3).subscribe(items => {
-      this.topDisease.push(...items);
-    });
-
-    this.httpService.getWestList(0, 3).subscribe(items => {
-      this.topWest.push(...items);
-    });
-
-    this.httpService.getOperationList(0, 2).subscribe(items => {
-      this.topOperation.push(...items);
-    });
-
+    this.getData();
     console.log('ionViewDidLoad ProductInfoPage');
   }
 
@@ -182,11 +151,7 @@ export class HomePage {
 
   doRefresh(refresher: Refresher) {
     console.log('Begin async operation', refresher);
-
-    setTimeout(() => {
-      console.log('Async operation has ended');
-      refresher.complete();
-    }, 1000);
+    this.getData(refresher);
   }
 
   goToCategoryPage() {
@@ -224,7 +189,6 @@ export class HomePage {
 
   locate({url, name: title, key, subList, type = 'list'}) {
     if (key == 'year-all') return;
-    // this.navCtrl.push('WebPage', {browser: {title, url: url}}).catch();
     switch (type) {
       case 'url': {
         if (key == 'operation-all') {
@@ -234,7 +198,6 @@ export class HomePage {
         } else {
           WebCallApp("CmdOpenUrl", {url: url});
         }
-        // this.modalCtrl.create(WebPage, {browser: {title, url,}}).present().catch();
         break;
       }
       case 'list': {
@@ -243,6 +206,24 @@ export class HomePage {
         break;
       }
     }
+  }
 
+  getData(refresher?) {
+    ForkJoinObservable.create(
+      this.httpService.getSwiper(),
+      this.httpService.getCarouselList(),
+      this.httpService.getRecommendList(0, 3),
+      this.httpService.getDiseaseList('disease-all', 0, 3),
+      this.httpService.getWestList(0, 3),
+      this.httpService.getOperationList(0, 2),
+    ).subscribe(res => {
+      this.slideBags = res[0];
+      this.carousel = res[1];
+      this.topBags = res[2];
+      this.topDisease = res[3];
+      this.topWest = res[4];
+      this.topOperation = res[5];
+      refresher && refresher.complete();
+    });
   }
 }

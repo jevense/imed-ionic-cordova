@@ -27,7 +27,11 @@ export class WebPage {
               private sanitizer: DomSanitizer) {
 
 
-    this.config = {...this.config, ...this.params.get('browser')};
+    this.config = {
+      ...this.config,
+      url: this.params.get('url'),
+      title: this.params.get('title'),
+    };
     this.secUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.config.url);
 
     // let backAction = this.platform.registerBackButtonAction(() => {

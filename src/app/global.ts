@@ -9,7 +9,6 @@ let WebCallApp = (command, args = {}, sn = serialNumber()) => {
     window['webkit']['messageHandlers']["WebCallApp"]['postMessage'](JSON.stringify(params));
   } else {
     if (command == 'CmdOpenUrl') {
-      // args['modal'].create(WebPage, {browser: {title: "", url: args['url'],}}).present().catch();
       console.log(command)
     }
   }
@@ -52,6 +51,7 @@ export const recommendUrl = 'https://api.imed.org.cn/home/recommend';
 export const diseaseUrl = 'https://api.imed.org.cn/home/disease';
 export const westUrl = 'https://api.imed.org.cn/home/west';
 export const operationUrl = 'https://api.imed.org.cn/home/operation';
+export const swiperUrl = 'https://mall.imed.org.cn/ui/v3.4/swiper.json';
 export const busUrl = 'https://services2t.mvwchina.com/services';
 
 export const onlineReadUrl = 'https://wap.imed.org.cn/phone/book.html';

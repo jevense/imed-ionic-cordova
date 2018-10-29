@@ -368,7 +368,6 @@ export class CategoryPage {
     this.subActiveKey = key;
     switch (type) {
       case 'url': {
-        // this.modalCtrl.create(WebPage, {browser: {title, url,}}).present().catch();
         WebCallApp("CmdOpenUrl", {url: url});
         break;
       }
