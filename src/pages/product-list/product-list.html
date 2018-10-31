@@ -11,9 +11,12 @@
             <span><span class="imed-red">{{item['price']}}</span>阅点</span>
             <span><s>{{item['originPrice']}}</s>阅点</span>
           </div>
-          <div>作者：{{item['author']}}</div>
-          <div>图书类型：{{item['type']}}</div>
-          <div>大小：{{item['size']}}</div>
+          <div>
+            <span *ngIf="item['author']; else elseAuthor">作者：{{item['author']}}</span>
+            <ng-template #elseAuthor>出版机构：{{item['publisher']}}</ng-template>
+          </div>
+          <div>图书类型：{{bookType(item['textbook'],item['textbookType'])}}</div>
+          <div>大小：{{item['size']}}M</div>
           <div>&nbsp;</div>
         </div>
       </div>

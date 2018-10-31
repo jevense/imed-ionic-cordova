@@ -1,6 +1,7 @@
 import {Component} from '@angular/core';
 import {App, NavParams} from 'ionic-angular';
 import {HttpServiceProvider} from "../../providers/http-service/http-service";
+import {type1Array, type2Array} from "../../app/global";
 
 /**
  * Generated class for the ProductListPage page.
@@ -38,6 +39,14 @@ export class ProductListPage {
 
   goToDetail(item) {
     this.appCtrl.getRootNavs()[0].push('product-info', {id: item['id']},).catch();
+  }
+
+  bookType(textbook, textbookType) {
+    if (textbook != '0') {
+      return type1Array[textbook]
+    } else {
+      return type2Array[textbookType]
+    }
   }
 
   getData(callback?) {

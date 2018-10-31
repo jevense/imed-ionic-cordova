@@ -34,9 +34,11 @@ import {ComponentsModule} from "../components/components.module";
     ProductInfoPageModule,
     IonicModule.forRoot(App, {
       tabsHideOnSubPages: true,
-      swipeBackEnabled: true
+      swipeBackEnabled: true,
+      iconMode: 'ios',
+      mode: 'ios',
     }),
-    StoreModule.forRoot({ appVersion: appVersionReducer })
+    StoreModule.forRoot({appVersion: appVersionReducer})
   ],
   bootstrap: [IonicApp],
   entryComponents: [

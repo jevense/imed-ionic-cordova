@@ -16,6 +16,9 @@ page-product-list {
     .imed-list-item-label {
       color: $imed-nav-color;
       font-size: small;
+      div{
+        margin: .2rem 0;
+      }
     }
   }
 
