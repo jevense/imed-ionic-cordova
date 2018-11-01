@@ -137,13 +137,17 @@ export class HomePage {
 
   constructor(public navCtrl: NavController,
               public httpService: HttpServiceProvider,
-              public webCallAppProvider: WebCallAppProvider,
               public events: Events,
+              public webCallAppProvider: WebCallAppProvider,
               private store: Store<AppVersion>) {
     this.result = this.store.pipe(select('appVersion'));
-
     events.subscribe('MsgGoBack', () => {
-      this.webCallAppProvider.WebCallApp("CmdGoBack");
+      if (this.navCtrl.canGoBack()) {
+        this.navCtrl.pop().catch(e => console.log(e));
+      } else {
+        this.webCallAppProvider.WebCallApp("CmdGoBack");
+      }
+
     });
   }
 
