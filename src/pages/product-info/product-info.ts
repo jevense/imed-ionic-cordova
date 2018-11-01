@@ -1,12 +1,13 @@
 import {Component} from '@angular/core';
 import {AlertController, IonicPage, ModalController, NavController, NavParams} from 'ionic-angular';
 import {HttpServiceProvider} from "../../providers/http-service/http-service";
-import WebCallApp, {onlineReadUrl, serialNumber, type1Array, type2Array} from "../../app/global";
+import {onlineReadUrl, serialNumber, type1Array, type2Array} from "../../app/global";
 import {Product} from "../../components/Product";
 import {AppVersion} from "../../components/AppVersion";
 import {Observable} from "rxjs/Observable";
 import {select, Store} from "@ngrx/store";
 import {WebPage} from "../web/web";
+import {WebCallAppProvider} from "../../providers/web-call-app/web-call-app";
 
 @IonicPage({
   name: 'product-info',
@@ -25,6 +26,7 @@ export class ProductInfoPage {
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
               public httpService: HttpServiceProvider,
+              public webCallAppProvider: WebCallAppProvider,
               public alertCtrl: AlertController,
               public modalCtrl: ModalController,
               private store: Store<AppVersion>) {
@@ -32,12 +34,12 @@ export class ProductInfoPage {
   }
 
   ionViewDidLoad() {
-    WebCallApp("TabbarHiddent");
+    this.webCallAppProvider.WebCallApp("TabbarHiddent");
     console.log('ionViewDidLoad ProductInfoPage');
   }
 
   ionViewWillEnter() {
-    WebCallApp("TabbarHiddent");
+    this.webCallAppProvider.WebCallApp("TabbarHiddent");
     //TODO 将购买和商品信息分成两个接口请求
     this.result.subscribe(appversion => {
       let {id} = this.navParams.data;
@@ -45,7 +47,7 @@ export class ProductInfoPage {
         this.item = {...this.item, ...item,};
         let {isbn} = this.item;
         let serialGetBookState = serialNumber();
-        WebCallApp('GetBookState', {isbn}, serialGetBookState).subscribe(({sn, data: bookState}) => {
+        this.webCallAppProvider.WebCallApp('GetBookState', {isbn}, serialGetBookState).subscribe(({sn, data: bookState}) => {
           if (sn == serialGetBookState) {
             let {downloadState,} = JSON.parse(decodeURIComponent(bookState));
             console.log(downloadState);
@@ -76,7 +78,7 @@ export class ProductInfoPage {
           buttons: [{
             text: '登录',
             handler: () => {
-              WebCallApp('UserLogout');
+              this.webCallAppProvider.WebCallApp('UserLogout');
             }
           },
             {text: '取消'}
@@ -92,7 +94,7 @@ export class ProductInfoPage {
   download() {
     // let getNetworkState = serialNumber();
     console.log('CmdDownloadBook');
-    WebCallApp("CmdDownloadBook",
+    this.webCallAppProvider.WebCallApp("CmdDownloadBook",
       {isbn: this.item.isbn, book: this.item, nonWifi: "0"},
       "MsgUpdateBookState").subscribe(({sn, data: res}) => {
         console.log(sn);
@@ -108,7 +110,7 @@ export class ProductInfoPage {
     let {isbn, path} = this.item;
     this.result.subscribe(appversion => {
       if (this.isTextBook()) {
-        WebCallApp("CmdOpenUrl", {url: onlineReadUrl + `?isbn=${isbn}&token=${appversion.token}`});
+        this.webCallAppProvider.WebCallApp("CmdOpenUrl", {url: onlineReadUrl + `?isbn=${isbn}&token=${appversion.token}`});
       } else if (this.isDisease()) {
         console.log(path);
         this.modalCtrl.create(WebPage, {url: path}).present();
@@ -125,9 +127,9 @@ export class ProductInfoPage {
         book: this.item
       };
       if (textbook == "1") {
-        WebCallApp("CmdOpenPDFBook", args);
+        this.webCallAppProvider.WebCallApp("CmdOpenPDFBook", args);
       } else {
-        WebCallApp("CmdOpenUrl", {url: onlineReadUrl + `?isbn=${isbn}&token=${appversion.token}`});
+        this.webCallAppProvider.WebCallApp("CmdOpenUrl", {url: onlineReadUrl + `?isbn=${isbn}&token=${appversion.token}`});
       }
     });
   }
@@ -153,7 +155,7 @@ export class ProductInfoPage {
     if (this.navCtrl.canGoBack()) {
       this.navCtrl.pop().catch();
     } else {
-      WebCallApp("CmdGoBack");
+      this.webCallAppProvider.WebCallApp("CmdGoBack");
     }
   }
 

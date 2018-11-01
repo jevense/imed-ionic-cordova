@@ -16,6 +16,7 @@ import {StoreModule} from "@ngrx/store";
 import {appVersionReducer} from "../components/AppVersionReducer";
 import {HomePageModule} from "../pages/home/home.module";
 import {ComponentsModule} from "../components/components.module";
+import { WebCallAppProvider } from '../providers/web-call-app/web-call-app';
 
 @NgModule({
   declarations: [
@@ -50,7 +51,8 @@ import {ComponentsModule} from "../components/components.module";
   ],
   providers: [
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    HttpServiceProvider
+    HttpServiceProvider,
+    WebCallAppProvider
   ]
 })
 export class AppModule {

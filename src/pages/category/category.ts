@@ -1,9 +1,10 @@
 import {Component} from '@angular/core';
 import {IonicPage, NavController, NavParams} from 'ionic-angular';
-import WebCallApp, {operationOutUrl} from "../../app/global";
+import {operationOutUrl} from "../../app/global";
 import {select, Store} from "@ngrx/store";
 import {AppVersion} from "../../components/AppVersion";
 import {Observable} from "rxjs/Observable";
+import {WebCallAppProvider} from "../../providers/web-call-app/web-call-app";
 
 /**
  * Generated class for the CategoryPage page.
@@ -346,6 +347,7 @@ export class CategoryPage {
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
+              public  webCallAppProvider: WebCallAppProvider,
               private store: Store<AppVersion>) {
     this.result = this.store.pipe(select('appVersion'));
   }
@@ -368,7 +370,7 @@ export class CategoryPage {
     this.subActiveKey = key;
     switch (type) {
       case 'url': {
-        WebCallApp("CmdOpenUrl", {url: url});
+        this.webCallAppProvider.WebCallApp("CmdOpenUrl", {url: url});
         break;
       }
       case 'info': {
@@ -385,9 +387,8 @@ export class CategoryPage {
 
   goToOperation({name: title, key, type = 'subjectId'}) {
     this.result.subscribe(appversion => {
-      WebCallApp("CmdOpenUrl", {url: operationOutUrl + `?token=${appversion.token}&type=1&${type}=${key}`});
+      this.webCallAppProvider.WebCallApp("CmdOpenUrl", {url: operationOutUrl + `?token=${appversion.token}&type=1&${type}=${key}`});
     });
-
   }
 }
 

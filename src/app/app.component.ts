@@ -1,10 +1,11 @@
 import {Component} from '@angular/core';
 import {HomePage} from "../pages/home/home";
-import WebCallApp, {exactInfoFromRes, serialNumber} from "./global";
+import {exactInfoFromRes, serialNumber} from "./global";
 import {AppVersion} from "../components/AppVersion";
 import {Store} from "@ngrx/store";
 import {AppVersionAction} from "../components/AppVersionAction";
 import {LoadingController} from "ionic-angular";
+import {WebCallAppProvider} from "../providers/web-call-app/web-call-app";
 
 @Component({
   templateUrl: 'app.html'
@@ -24,7 +25,9 @@ export class App {
   //   });
   // }
 
-  constructor(private store: Store<AppVersion>, public loadingCtrl: LoadingController) {
+  constructor(private store: Store<AppVersion>,
+              public loadingCtrl: LoadingController,
+              public  webCallAppProvider: WebCallAppProvider) {
     this.loading = this.loadingCtrl.create({duration: 5000});
     this.loading.present();
   }
@@ -33,7 +36,7 @@ export class App {
     // Let's navigate from TabsPage to Page1
     // this.nav.push('');
     let serialGetAPPVersion = serialNumber();
-    WebCallApp('GetAPPVersion', {}, serialGetAPPVersion).subscribe(({sn, data: res}) => {
+    this.webCallAppProvider.WebCallApp('GetAPPVersion', {}, serialGetAPPVersion).subscribe(({sn, data: res}) => {
       if (sn == serialGetAPPVersion) {
         this.store.dispatch(new AppVersionAction(exactInfoFromRes(res)));
         this.loading.dismiss();

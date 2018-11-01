@@ -1,12 +1,13 @@
 import {Component} from '@angular/core';
-import {IonicPage, NavController, Refresher} from 'ionic-angular';
-import WebCallApp, {operationOutInfoUrl, operationOutUrl, searchUrl} from "../../app/global";
+import {Events, IonicPage, NavController, Refresher} from 'ionic-angular';
+import {operationOutInfoUrl, operationOutUrl, searchUrl} from "../../app/global";
 import {HttpServiceProvider} from "../../providers/http-service/http-service";
 import {Product} from "../../components/Product";
 import {select, Store} from "@ngrx/store";
 import {AppVersion} from "../../components/AppVersion";
 import {Observable} from "rxjs/Observable";
 import {ForkJoinObservable} from "rxjs/observable/ForkJoinObservable";
+import {WebCallAppProvider} from "../../providers/web-call-app/web-call-app";
 
 /**
  * Generated class for the HomePage page.
@@ -136,8 +137,14 @@ export class HomePage {
 
   constructor(public navCtrl: NavController,
               public httpService: HttpServiceProvider,
+              public webCallAppProvider: WebCallAppProvider,
+              public events: Events,
               private store: Store<AppVersion>) {
     this.result = this.store.pipe(select('appVersion'));
+
+    events.subscribe('MsgGoBack', () => {
+      this.webCallAppProvider.WebCallApp("CmdGoBack");
+    });
   }
 
   ionViewDidLoad() {
@@ -146,7 +153,7 @@ export class HomePage {
   }
 
   ionViewWillEnter() {
-    WebCallApp("TabbarShow");
+    this.webCallAppProvider.WebCallApp("TabbarShow");
   }
 
   doRefresh(refresher: Refresher) {
@@ -155,35 +162,35 @@ export class HomePage {
   }
 
   goToCategoryPage() {
-    WebCallApp("TabbarHiddent");
+    this.webCallAppProvider.WebCallApp("TabbarHiddent");
     this.navCtrl.push('CategoryPage', {}, {direction: 'back'}).catch();
   }
 
   openOperations() {
     this.result.subscribe(appversion => {
-      WebCallApp("CmdOpenUrl", {url: operationOutUrl + `?token=${appversion.token}&type=1&productId=ce956d1f7e7a42109f53b233e7036359`});
+      this.webCallAppProvider.WebCallApp("CmdOpenUrl", {url: operationOutUrl + `?token=${appversion.token}&type=1&productId=ce956d1f7e7a42109f53b233e7036359`});
     })
   }
 
   openOperation({isbn}) {
     this.result.subscribe(appversion => {
-      WebCallApp("CmdOpenUrl", {url: operationOutInfoUrl + `?productVideoId=${isbn}&type=3&token=${appversion.token}`});
+      this.webCallAppProvider.WebCallApp("CmdOpenUrl", {url: operationOutInfoUrl + `?productVideoId=${isbn}&type=3&token=${appversion.token}`});
     })
   }
 
   locateInfo({id}) {
-    WebCallApp("TabbarHiddent");
+    this.webCallAppProvider.WebCallApp("TabbarHiddent");
     this.navCtrl.push('product-info', {id,}).catch();
   }
 
   locateList({name: title, key, subList,}) {
-    WebCallApp("TabbarHiddent");
+    this.webCallAppProvider.WebCallApp("TabbarHiddent");
     this.navCtrl.push('product', {title, key, data: subList}).catch();
   }
 
   search() {
     this.result.subscribe(appversion => {
-      WebCallApp("CmdOpenUrl", {url: searchUrl + `?token=${appversion.token}`});
+      this.webCallAppProvider.WebCallApp("CmdOpenUrl", {url: searchUrl + `?token=${appversion.token}`});
     })
   }
 
@@ -193,15 +200,15 @@ export class HomePage {
       case 'url': {
         if (key == 'operation-all') {
           this.result.subscribe(appversion => {
-            WebCallApp("CmdOpenUrl", {url: url + `?token=${appversion.token}`});
+            this.webCallAppProvider.WebCallApp("CmdOpenUrl", {url: url + `?token=${appversion.token}`});
           })
         } else {
-          WebCallApp("CmdOpenUrl", {url: url});
+          this.webCallAppProvider.WebCallApp("CmdOpenUrl", {url: url});
         }
         break;
       }
       case 'list': {
-        WebCallApp("TabbarHiddent");
+        this.webCallAppProvider.WebCallApp("TabbarHiddent");
         this.navCtrl.push('product', {title, key, data: subList}).catch();
         break;
       }

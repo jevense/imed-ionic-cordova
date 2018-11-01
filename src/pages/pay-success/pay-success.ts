@@ -1,7 +1,8 @@
 import {Component} from '@angular/core';
 import {IonicPage, NavController, NavParams} from 'ionic-angular';
 import {HttpServiceProvider} from "../../providers/http-service/http-service";
-import {default as WebCallApp, type1Array, type2Array} from "../../app/global";
+import {type1Array, type2Array} from "../../app/global";
+import {WebCallAppProvider} from "../../providers/web-call-app/web-call-app";
 
 /**
  * Generated class for the PaySuccessPage page.
@@ -32,6 +33,7 @@ export class PaySuccessPage {
 
   constructor(public navCtrl: NavController,
               public httpService: HttpServiceProvider,
+              public webCallAppProvider: WebCallAppProvider,
               public navParams: NavParams) {
   }
 
@@ -56,7 +58,7 @@ export class PaySuccessPage {
 
     this.httpService.postBus(args).subscribe(result => {
       let serviceResult = result['serviceResult'];
-      if(typeof serviceResult == 'string'){
+      if (typeof serviceResult == 'string') {
         serviceResult = JSON.parse(serviceResult);
       }
       if (serviceResult['flag'] == "true") {
@@ -80,7 +82,7 @@ export class PaySuccessPage {
 
   learn(id) {
     if (this.item['textbook'] == '5' && this.item['textbookType'] == '2') {
-      WebCallApp("CmdGoBack", {method: 'refresh'});
+      this.webCallAppProvider.WebCallApp("CmdGoBack", {method: 'refresh'});
     } else {
       let deep = this.navCtrl.length();
       this.navCtrl.remove(deep - 2, 2);

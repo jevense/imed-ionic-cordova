@@ -1,10 +1,11 @@
 import {Component} from '@angular/core';
 import {AlertController, IonicPage, NavController, NavParams} from 'ionic-angular';
 import {HttpServiceProvider} from "../../providers/http-service/http-service";
-import WebCallApp, {exactInfoFromRes, serialNumber, type1Array, type2Array} from "../../app/global";
+import {exactInfoFromRes, serialNumber, type1Array, type2Array} from "../../app/global";
 import {AppVersion} from "../../components/AppVersion";
 import {Observable} from "rxjs/Observable";
 import {select, Store} from "@ngrx/store";
+import {WebCallAppProvider} from "../../providers/web-call-app/web-call-app";
 
 /**
  * Generated class for the OrderPage page.
@@ -44,6 +45,7 @@ export class OrderPage {
 
   constructor(public navCtrl: NavController,
               public httpService: HttpServiceProvider,
+              public webCallAppProvider: WebCallAppProvider,
               public navParams: NavParams,
               public alertCtrl: AlertController,
               private store: Store<AppVersion>) {
@@ -58,7 +60,7 @@ export class OrderPage {
   }
 
   ionViewWillEnter() {
-    WebCallApp("TabbarHiddent");
+    this.webCallAppProvider.WebCallApp("TabbarHiddent");
     let {id} = this.navParams.data;
     this.result.subscribe(appversion => {
       let args = {
@@ -155,12 +157,12 @@ export class OrderPage {
 
       } else {
         if (platform === "0") {
-          WebCallApp("openRechargeView");
+          this.webCallAppProvider.WebCallApp("openRechargeView");
         } else if (platform === "2") {
           alert("对不起，暂不支持PC支付购买，请到手机端支付购买");
         } else {
           let serialpayment = serialNumber();
-          WebCallApp("payment", {
+          this.webCallAppProvider.WebCallApp("payment", {
             payType: this.item.payType,
             bookid: id,
             amount: `${this.item.actualPaymentAmount}`,
@@ -186,7 +188,7 @@ export class OrderPage {
     if (this.navCtrl.canGoBack()) {
       this.navCtrl.pop().catch();
     } else {
-      WebCallApp("CmdGoBack");
+      this.webCallAppProvider.WebCallApp("CmdGoBack");
     }
   }
 
