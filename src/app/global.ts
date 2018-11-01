@@ -1,4 +1,7 @@
 import {Subject} from "rxjs/Subject";
+// import {App} from "ionic-angular";
+// import {NavController} from "ionic-angular";
+
 // import {WebPage} from "../pages/web/web";
 
 let WebCallApp = (command, args = {}, sn = serialNumber()) => {
@@ -19,11 +22,13 @@ let subject = new Subject();
 
 if (!window['Elf']) window['Elf'] = {}; //如果对象没有ELF对象，则初始化
 window['Elf'].AppCallWeb = (sn, data) => {
-  console.log('sn');
-  console.log(sn);
-  console.log('data');
   console.log(data);
-  subject.next({sn, data});
+  if (sn == "MsgGoBack") {
+    WebCallApp("WebCallApp")
+  } else {
+    subject.next({sn, data});
+  }
+
 };
 
 export const serialNumber = () => {
