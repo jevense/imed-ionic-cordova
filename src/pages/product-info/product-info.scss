@@ -41,15 +41,15 @@ page-product-info {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    align-items: center;
+    font-size: 1.6rem;
+    padding: 0 1em;
+    height: 2.8em;
+    background-color: $imed-red;
 
     div {
       flex-grow: 1;
       color: white;
-      background-color: $imed-red;
-      border-radius: .2rem;
-      height: 100%;
-      padding: 1rem;
-      margin: .1rem;
       text-align: center;
     }
   }

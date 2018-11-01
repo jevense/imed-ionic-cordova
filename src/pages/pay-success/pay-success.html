@@ -26,10 +26,10 @@
         </div>
         <div>
           <span *ngIf="item['author']; else elseAuthor">作者：{{item['author']}}</span>
-          <ng-template #elseAuthor>出版机构：{{item['publisher']}}</ng-template>
+          <ng-template #elseAuthor>出版机构：{{item['publishingAgency']}}</ng-template>
         </div>
         <div class="imed-list-item-label-last">
-          <span>图书类型：{{bookType()}}</span>
+          <span *ngIf="bookType()">图书类型：{{bookType()}}</span>
           <span>大小：{{item['size']}}M</span>
         </div>
         <div>&nbsp;</div>
