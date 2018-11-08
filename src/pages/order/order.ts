@@ -42,6 +42,7 @@ export class OrderPage {
   };
 
   type;
+  platform = '0';
 
   constructor(public navCtrl: NavController,
               public httpService: HttpServiceProvider,
@@ -56,13 +57,14 @@ export class OrderPage {
   result: Observable<AppVersion>;
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad ProductInfoPage');
+    console.log('ionViewDidLoad OrderPage');
   }
 
   ionViewWillEnter() {
     this.webCallAppProvider.WebCallApp("TabbarHiddent");
     let {id} = this.navParams.data;
     this.result.subscribe(appversion => {
+      this.platform = appversion.platform;
       let args = {
         "serviceModule": "BS-Service",
         "serviceNumber": "0201101",
@@ -75,6 +77,7 @@ export class OrderPage {
         "TerminalType": "A"
       };
       this.httpService.postBus(args).subscribe(result => {
+        console.log(`result=${JSON.stringify(result)}`);
         // let result = JSON.parse(res.replace(/\+/g, '%20'));
         if (!result['opFlag'] || result['opFlag'] == 'false') {
           this.alertCtrl.create({
@@ -94,7 +97,6 @@ export class OrderPage {
         }
       });
     });
-    console.log('ionViewDidLoad OrderPage');
   }
 
   bookType() {

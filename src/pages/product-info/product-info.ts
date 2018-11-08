@@ -74,15 +74,20 @@ export class ProductInfoPage {
     this.result.subscribe(appversion => {
       if (appversion.touristsState == '1') {
         this.alertCtrl.create({
-          message: '登录后才可购买',
+          title: '温馨提示',
+          message: '尊敬的书包用户，您即将以游客模式进行购买，清除缓存或卸载重装等将导致无法再查看所购产品。为保障您的虚拟财产，请您及时登录电子书包账号。',
           buttons: [{
             text: '登录',
             handler: () => {
               this.webCallAppProvider.WebCallApp('UserLogout');
             }
-          },
-            {text: '取消'}
-          ]
+          }, {
+            text: '继续购买',
+            handler: () => {
+              let {id} = this.item;
+              this.navCtrl.push('OrderPage', {id},).catch(e => console.log(e));
+            }
+          }]
         }).present();
       } else {
         let {id} = this.item;
@@ -97,8 +102,8 @@ export class ProductInfoPage {
     this.webCallAppProvider.WebCallApp("CmdDownloadBook",
       {isbn: this.item.isbn, book: this.item, nonWifi: "0"},
       "MsgUpdateBookState").subscribe(({sn, data: res}) => {
-        console.log(sn);
-        console.log(res);
+      console.log(sn);
+      console.log(res);
       if (sn == "MsgUpdateBookState") {
         let result = JSON.parse(decodeURIComponent(res));
         console.log(result);

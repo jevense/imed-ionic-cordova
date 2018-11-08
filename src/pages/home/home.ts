@@ -40,7 +40,7 @@ export class HomePage {
             name: '公共',
             key: '5p3-common',
           }, {
-            name: '病例',
+            name: '培训',
             key: '5p3-case',
           }, {
             name: '套餐',
@@ -115,7 +115,7 @@ export class HomePage {
             key: 'chinese-science'
           }]
       },
-      {'icon-name': 'magazine', key: 'magazine-all', name: '毕教杂志'},
+      {'icon-name': 'magazine', key: 'magazine', name: '毕教杂志'},
       {
         'icon-name': 'database',
         key: 'database-all',
@@ -147,7 +147,6 @@ export class HomePage {
       } else {
         this.webCallAppProvider.WebCallApp("CmdGoBack");
       }
-
     });
   }
 
@@ -223,9 +222,9 @@ export class HomePage {
     ForkJoinObservable.create(
       this.httpService.getSwiper(),
       this.httpService.getCarouselList(),
-      this.httpService.getRecommendList(0, 3),
-      this.httpService.getDiseaseList('disease-all', 0, 3),
-      this.httpService.getWestList(0, 3),
+      this.httpService.getRecommendList("", 0, 3),
+      this.httpService.getDiseaseList('disease-all', "", 0, 3),
+      this.httpService.getWestList("", 0, 3),
       this.httpService.getOperationList(0, 2),
     ).subscribe(res => {
       this.slideBags = res[0];

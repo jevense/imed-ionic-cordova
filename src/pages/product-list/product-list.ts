@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {App, NavParams} from 'ionic-angular';
+import {App, Events, NavParams} from 'ionic-angular';
 import {HttpServiceProvider} from "../../providers/http-service/http-service";
 import {type1Array, type2Array} from "../../app/global";
 
@@ -19,11 +19,28 @@ export class ProductListPage {
   items = [];
   page: number = 0;
   category: string;
+  searchText: string = "";
 
   constructor(public appCtrl: App,
               public navParams: NavParams,
-              public httpService: HttpServiceProvider) {
+              public httpService: HttpServiceProvider,
+              public events: Events,) {
     this.category = this.navParams.get("key");
+
+    events.subscribe('search', ({searchText}) => {
+      // this.navCtrl.pop().catch(e => console.log(e));
+      this.searchText = searchText;
+      this.items.splice(0, this.items.length);
+      this.page = 0;
+      this.getData();
+    });
+    events.subscribe('searchReset', () => {
+      // this.navCtrl.pop().catch(e => console.log(e));
+      this.searchText = "";
+      this.items.splice(0, this.items.length);
+      this.page = 0;
+      this.getData();
+    });
   }
 
   ionViewDidLoad() {
@@ -51,19 +68,19 @@ export class ProductListPage {
 
   getData(callback?) {
     if (this.category == 'recommend') {
-      this.httpService.getRecommendList(this.page++,)
+      this.httpService.getRecommendList(this.searchText, this.page++,)
         .subscribe(items => {
           this.items.push(...items);
           callback && callback.complete();
         });
     } else if (this.category.startsWith('disease')) {
-      this.httpService.getDiseaseList(this.category, this.page++,)
+      this.httpService.getDiseaseList(this.category, this.searchText, this.page++,)
         .subscribe(items => {
           this.items.push(...items);
           callback && callback.complete();
         });
     } else {
-      this.httpService.getProductList(this.category, this.page++,)
+      this.httpService.getProductList(this.category, this.searchText, this.page++,)
         .subscribe(items => {
           this.items.push(...items);
           callback && callback.complete();

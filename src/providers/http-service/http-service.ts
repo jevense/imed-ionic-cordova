@@ -20,10 +20,16 @@ export class HttpServiceProvider {
     console.log('Hello HttpServiceProvider Provider');
   }
 
-  getProductList(category: string, page: number = 0): Observable<Product[]> {
+  getProductList(category: string,
+                 searchText: string = "",
+                 page: number = 0,
+                 size: number = 10): Observable<Product[]> {
     return this.http.get<Product[]>(url, {
       params: {
-        page: page.toString(), category,
+        category,
+        searchText,
+        page: page.toString(),
+        size: size.toString(),
       }
     })
   }
@@ -33,28 +39,33 @@ export class HttpServiceProvider {
     return this.http.get<Product[]>(carouselUrl)
   }
 
-  getRecommendList(page: number = 0, size: number = 10): Observable<Product[]> {
+  getRecommendList(searchText: string = "", page: number = 0, size: number = 10): Observable<Product[]> {
     return this.http.get<Product[]>(recommendUrl, {
       params: {
-        page: page.toString(), size: size.toString()
+        searchText,
+        page: page.toString(),
+        size: size.toString()
       }
     })
   }
 
-  getDiseaseList(category: string = 'disease-all', page: number = 0, size: number = 10,): Observable<Product[]> {
+  getDiseaseList(category: string = 'disease-all', searchText: string = "", page: number = 0, size: number = 10,): Observable<Product[]> {
     return this.http.get<Product[]>(diseaseUrl, {
       params: {
         category,
+        searchText,
         page: page.toString(),
         size: size.toString(),
       }
     })
   }
 
-  getWestList(page: number = 0, size: number = 10): Observable<Product[]> {
+  getWestList(searchText: string = "", page: number = 0, size: number = 10): Observable<Product[]> {
     return this.http.get<Product[]>(westUrl, {
       params: {
-        page: page.toString(), size: size.toString()
+        searchText,
+        page: page.toString(),
+        size: size.toString(),
       }
     })
   }
