@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {Events, IonicPage, NavController, Refresher} from 'ionic-angular';
+import {AlertController, Events, IonicPage, ModalController, NavController, Refresher} from 'ionic-angular';
 import {operationOutInfoUrl, operationOutUrl, searchUrl} from "../../app/global";
 import {HttpServiceProvider} from "../../providers/http-service/http-service";
 import {Product} from "../../components/Product";
@@ -8,6 +8,8 @@ import {AppVersion} from "../../components/AppVersion";
 import {Observable} from "rxjs/Observable";
 import {ForkJoinObservable} from "rxjs/observable/ForkJoinObservable";
 import {WebCallAppProvider} from "../../providers/web-call-app/web-call-app";
+
+// import {WebPage} from "../web/web";
 
 /**
  * Generated class for the HomePage page.
@@ -138,6 +140,8 @@ export class HomePage {
   constructor(public navCtrl: NavController,
               public httpService: HttpServiceProvider,
               public events: Events,
+              public modalCtrl: ModalController,
+              public alertCtrl: AlertController,
               public webCallAppProvider: WebCallAppProvider,
               private store: Store<AppVersion>) {
     this.result = this.store.pipe(select('appVersion'));
@@ -203,10 +207,21 @@ export class HomePage {
       case 'url': {
         if (key == 'operation-all') {
           this.result.subscribe(appversion => {
-            this.webCallAppProvider.WebCallApp("CmdOpenUrl", {url: url + `?token=${appversion.token}`});
+            this.webCallAppProvider.WebCallApp("CmdOpenUrl", {url: `${url}?token=${appversion.token}`});
           })
+        } else if (/mvwchina/i.test(url)) {
+          // this.webCallAppProvider.WebCallApp("CmdOpenUrl", {url: `${url}`});
+          this.alertCtrl.create({
+            subTitle: '请从APP底部菜单“考试”进入，进入后点击考试上方图片，登录年度业务水平测试系统进行相关操作。',
+            buttons: ['确定']
+          }).present();
         } else {
-          this.webCallAppProvider.WebCallApp("CmdOpenUrl", {url: url});
+          // this.result.subscribe(appversion => {
+          //   this.modalCtrl.create(WebPage, {url: `${url}?token=${appversion.token}`}).present();
+          // });
+          this.result.subscribe(appversion => {
+            this.webCallAppProvider.WebCallApp("CmdOpenUrl", {url: `${url}`});
+          })
         }
         break;
       }

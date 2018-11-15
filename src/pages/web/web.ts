@@ -24,7 +24,8 @@ export class WebPage {
 
   constructor(public viewCtrl: ViewController,
               private params: NavParams,
-              private sanitizer: DomSanitizer) {
+              private sanitizer: DomSanitizer
+  ) {
 
 
     this.config = {
@@ -33,6 +34,7 @@ export class WebPage {
       title: this.params.get('title'),
     };
     this.secUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.config.url);
+    // this.secUrl = this.config.url;
 
     // let backAction = this.platform.registerBackButtonAction(() => {
     //   backAction();
@@ -82,7 +84,6 @@ export class WebPage {
     } else {
       this.close();
     }
-
   }
 
   close() {

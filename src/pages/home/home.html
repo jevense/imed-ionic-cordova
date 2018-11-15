@@ -45,9 +45,9 @@
   <!--轮播图-->
   <div class="imed-slide">
     <ion-slides pager>
-      <ion-slide>
-        <div *ngFor="let item of carousel"
-             (click)="locate({name:item['titleName'],type:'url',url:item['linkAddress']})">
+      <ion-slide *ngFor="let item of carousel">
+        <div
+          (click)="locate({name:item['titleName'],type:'url',url:item['linkAddress']})">
           <img [src]="item['imagePath']">
         </div>
       </ion-slide>
