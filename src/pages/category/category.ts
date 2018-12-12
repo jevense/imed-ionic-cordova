@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {IonicPage, NavController, NavParams} from 'ionic-angular';
-import {operationOutUrl} from "../../app/global";
+import {operationOutUrl, shizi} from "../../app/global";
 import {select, Store} from "@ngrx/store";
 import {AppVersion} from "../../components/AppVersion";
 import {Observable} from "rxjs/Observable";
@@ -172,6 +172,12 @@ export class CategoryPage {
           name: '2018年住培高峰论坛',
           type: 'url',
           url: 'https://mall.imed.org.cn/ui/phone/activities.html#/activity/20180901'
+        },
+        {
+          name: '师资培训',
+          type: 'url',
+          token: true,
+          url: shizi
         }
       ]
     },
@@ -365,12 +371,15 @@ export class CategoryPage {
     this.subMenus = this.menus[index];
   }
 
-  goToPage({name: title, type, key, url, list}) {
+  goToPage({name: title, type, key, token, url, list}) {
 
     this.subActiveKey = key;
     switch (type) {
       case 'url': {
-        this.webCallAppProvider.WebCallApp("CmdOpenUrl", {url: url});
+        this.result.subscribe(appversion => {
+          if (token) url += `?token=${appversion.token}`;
+          this.webCallAppProvider.WebCallApp("CmdOpenUrl", {url,});
+        });
         break;
       }
       case 'info': {

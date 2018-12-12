@@ -19,9 +19,13 @@ export const type2Array = ['普通教材', '病例分析', '手术', '杂志', '
 
 const host = 'https://api.imed.org.cn';
 export const busUrl = 'https://services2t.mvwchina.com/services';
+export const thesurgery = 'https://thesurgery.imed.org.cn/cst-phone/ui/index.html';
+export const shizi = 'https://thesurgery.imed.org.cn/cst-phone/ui/shizi/shiziList.html';
 
 // const host = 'http://123.56.15.197:7152';
 // export const busUrl = 'http://123.56.15.197:5002/services';
+// export const thesurgery = 'http://testing.imed.org.cn/cst-phone/ui/index.html';
+// export const shizi = 'http://testing.imed.org.cn/cst-phone/ui/shizi/shiziList.html';
 
 // const host = 'http://192.168.8.144:8092/store';
 

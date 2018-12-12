@@ -21,6 +21,8 @@ export class WebCallAppProvider {
       console.log(data);
       if (sn == "MsgGoBack") {
         this.events.publish('MsgGoBack');
+      } else if (sn == "MsgOpenSuccess") {
+        this.events.publish('MsgOpenSuccess', data);
       } else {
         this.subject.next({sn, data});
       }

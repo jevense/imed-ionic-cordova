@@ -43,6 +43,8 @@ export class PaySuccessPage {
 
   ionViewWillEnter() {
 
+    console.log(this.navParams.data);
+
     let {token, platform, data} = this.navParams.data;
 
     let args = {
@@ -55,6 +57,8 @@ export class PaySuccessPage {
       },
       "TerminalType": "A"
     };
+
+    console.log(args);
 
     this.httpService.postBus(args).subscribe(result => {
       let serviceResult = result['serviceResult'];

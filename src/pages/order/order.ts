@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
-import {AlertController, IonicPage, NavController, NavParams} from 'ionic-angular';
+import {AlertController, Events, IonicPage, NavController, NavParams} from 'ionic-angular';
 import {HttpServiceProvider} from "../../providers/http-service/http-service";
-import {exactInfoFromRes, serialNumber, type1Array, type2Array} from "../../app/global";
+import {type1Array, type2Array} from "../../app/global";
 import {AppVersion} from "../../components/AppVersion";
 import {Observable} from "rxjs/Observable";
 import {select, Store} from "@ngrx/store";
@@ -47,11 +47,21 @@ export class OrderPage {
   constructor(public navCtrl: NavController,
               public httpService: HttpServiceProvider,
               public webCallAppProvider: WebCallAppProvider,
+              public events: Events,
               public navParams: NavParams,
               public alertCtrl: AlertController,
               private store: Store<AppVersion>) {
     this.result = this.store.pipe(select('appVersion'));
     this.type = this.navCtrl.canGoBack() ? "id" : "isbn";
+    events.subscribe('MsgOpenSuccess', (result) => {
+      console.log(result);
+      this.result.subscribe(appversion => {
+        let {token, platform} = appversion;
+        this.navCtrl.push('PaySuccessPage', {
+          token, platform, data: result['tradeNo']
+        }).catch();
+      });
+    });
   }
 
   result: Observable<AppVersion>;
@@ -163,23 +173,12 @@ export class OrderPage {
         } else if (platform === "2") {
           alert("对不起，暂不支持PC支付购买，请到手机端支付购买");
         } else {
-          let serialpayment = serialNumber();
           this.webCallAppProvider.WebCallApp("payment", {
             payType: this.item.payType,
             bookid: id,
             amount: `${this.item.actualPaymentAmount}`,
             uuid: '',
             discountId: ''
-          }, serialpayment).subscribe(({sn, data: res}) => {
-            if (sn == serialpayment) {
-              let result = exactInfoFromRes(res);
-              console.log(result);
-              if (result['opFlag'] == 'true') {
-                this.navCtrl.push('PaySuccessPage', {
-                  token, platform, data: result['serviceResult']['result']['tradeNo']
-                }).catch();
-              }
-            }
           });
         }
       }

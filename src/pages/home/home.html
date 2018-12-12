@@ -47,7 +47,12 @@
     <ion-slides pager>
       <ion-slide *ngFor="let item of carousel">
         <div
-          (click)="locate({name:item['titleName'],type:'url',url:item['linkAddress']})">
+          (click)="locate({
+            name:item['titleName'],
+            type:item['type'],
+            url:item['linkAddress'],
+            key:item['linkAddress']
+          })">
           <img [src]="item['imagePath']">
         </div>
       </ion-slide>

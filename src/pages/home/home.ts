@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {AlertController, Events, IonicPage, ModalController, NavController, Refresher} from 'ionic-angular';
-import {operationOutInfoUrl, operationOutUrl, searchUrl} from "../../app/global";
+import {operationOutInfoUrl, operationOutUrl, searchUrl, thesurgery} from "../../app/global";
 import {HttpServiceProvider} from "../../providers/http-service/http-service";
 import {Product} from "../../components/Product";
 import {select, Store} from "@ngrx/store";
@@ -58,7 +58,7 @@ export class HomePage {
         type: 'url',
         key: 'operation-all',
         name: '手术视频',
-        url: 'https://thesurgery.imed.org.cn/cst-phone/ui/index.html'
+        url: thesurgery
       },
       {
         'icon-name': 'disease',
@@ -205,29 +205,32 @@ export class HomePage {
     if (key == 'year-all') return;
     switch (type) {
       case 'url': {
-        if (key == 'operation-all') {
-          this.result.subscribe(appversion => {
-            this.webCallAppProvider.WebCallApp("CmdOpenUrl", {url: `${url}?token=${appversion.token}`});
-          })
-        } else if (/mvwchina/i.test(url)) {
-          // this.webCallAppProvider.WebCallApp("CmdOpenUrl", {url: `${url}`});
-          this.alertCtrl.create({
-            subTitle: '请从APP底部菜单“考试”进入，进入后点击考试上方图片，登录年度业务水平测试系统进行相关操作。',
-            buttons: ['确定']
-          }).present();
-        } else {
-          // this.result.subscribe(appversion => {
-          //   this.modalCtrl.create(WebPage, {url: `${url}?token=${appversion.token}`}).present();
-          // });
-          this.result.subscribe(appversion => {
-            this.webCallAppProvider.WebCallApp("CmdOpenUrl", {url: `${url}`});
-          })
-        }
+        this.webCallAppProvider.WebCallApp("CmdOpenUrl", {
+          url,
+          name: title,
+          navigation: true,
+          static: '1'
+        });
+        // this.result.subscribe(appversion => {
+        //   this.webCallAppProvider.WebCallApp("CmdOpenUrl", {
+        //     url: `${url}?token=${appversion.token}`,
+        //     name,
+        //     navigation: '1',
+        //   });
+        // });
+        // this.result.subscribe(appversion => {
+        //   this.modalCtrl.create(WebPage, {url: `${url}?token=${appversion.token}`}).present();
+        // });
         break;
       }
       case 'list': {
         this.webCallAppProvider.WebCallApp("TabbarHiddent");
         this.navCtrl.push('product', {title, key, data: subList}).catch();
+        break;
+      }
+      case 'info': {
+        this.webCallAppProvider.WebCallApp("TabbarHiddent");
+        this.navCtrl.push('product-info', {id: key}).catch();
         break;
       }
     }
