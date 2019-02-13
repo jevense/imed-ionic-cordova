@@ -8,8 +8,10 @@
 importScripts('./build/sw-toolbox.js');
 
 self.toolbox.options.cache = {
-  name: 'ionic-cache'
+  name: 'ionic-cache-a'
 };
+
+self.toolbox.options.debug = true;
 
 // pre-cache our key assets
 self.toolbox.precache(
@@ -25,6 +27,8 @@ self.toolbox.precache(
 
 // dynamically cache any other local assets
 self.toolbox.router.any('/*', self.toolbox.fastest);
+
+self.toolbox.router.get('/build/main.js', self.toolbox.networkFirst);
 
 // for any other requests go to the network, cache,
 // and then only use that cached resource if your user goes offline

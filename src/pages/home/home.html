@@ -51,7 +51,8 @@
             name:item['titleName'],
             type:item['type'],
             url:item['linkAddress'],
-            key:item['linkAddress']
+            key:item['linkAddress'],
+            isBack:item['linkAddress']
           })">
           <img [src]="item['imagePath']">
         </div>
@@ -197,6 +198,42 @@
                      class="home-card-row-item">
               <img [src]="item['cover']">
               <!--<span>{{item['name']}}</span>-->
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </div>
+    </div>
+  </div>
+  <div class="separator"></div>
+  <!--师资培训-->
+  <div>
+    <div class="home-card">
+      <div class="home-card-title">
+        <span class="home-card-title-text">师资培训</span>
+        <button ion-button icon-only clear color="nav">
+          &nbsp;
+        </button>
+      </div>
+      <div class="home-card-row">
+        <ion-grid>
+          <ion-row *ngFor="let item of tranning" (click)="openOperation(item)">
+            <ion-col col-5 text-center>
+              <img [src]="item['cover']">
+            </ion-col>
+            <ion-col col-7 class="operation-item">
+              <div style="font-size: larger;">{{item['name']}}</div>
+              <div>
+                <div>
+                  <span>{{item['author']}}</span>
+                  <span>{{item['subjects']}}</span>
+                </div>
+                <div>
+                  <span>
+                    <span class="imed-red">{{item['price']}}</span>阅点
+                  </span>
+                  <span><s>{{item['originPrice']}}</s>阅点</span>
+                </div>
+              </div>
             </ion-col>
           </ion-row>
         </ion-grid>

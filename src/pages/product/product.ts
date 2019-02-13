@@ -1,6 +1,6 @@
 import {Component, ViewChild} from '@angular/core';
 import {Events, IonicPage, Navbar, NavController, NavParams} from 'ionic-angular';
-import {ProductListPage} from "../product-list/product-list";
+import {ProductListPage} from "./product-list";
 import {SuperTabs} from "ionic2-super-tabs";
 
 /**

@@ -1,29 +1,20 @@
-import {Component} from '@angular/core';
-import {HomePage} from "../pages/home/home";
+import {AfterViewInit, Component} from '@angular/core';
 import {exactInfoFromRes, serialNumber} from "./global";
 import {AppVersion} from "../components/AppVersion";
 import {Store} from "@ngrx/store";
 import {AppVersionAction} from "../components/AppVersionAction";
 import {LoadingController} from "ionic-angular";
 import {WebCallAppProvider} from "../providers/web-call-app/web-call-app";
+import {HomePage} from "../pages/home/home";
 
 @Component({
   templateUrl: 'app.html'
 })
-export class App {
+export class App implements AfterViewInit {
 
   rootPage: any = HomePage;
 
   loading;
-
-  // constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen) {
-  //   platform.ready().then(() => {
-  //     // Okay, so the platform is ready and our plugins are available.
-  //     // Here you can do any higher level native things you might need.
-  //     // statusBar.styleDefault();
-  //     // splashScreen.hide();
-  //   });
-  // }
 
   constructor(private store: Store<AppVersion>,
               public loadingCtrl: LoadingController,
@@ -34,7 +25,6 @@ export class App {
 
   ngAfterViewInit() {
     // Let's navigate from TabsPage to Page1
-    // this.nav.push('');
     let serialGetAPPVersion = serialNumber();
     this.webCallAppProvider.WebCallApp('GetAPPVersion', {}, serialGetAPPVersion).subscribe(({sn, data: res}) => {
       if (sn == serialGetAPPVersion) {

@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Ionic App</title>
+
   <meta name="viewport"
         content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta name="format-detection" content="telephone=no">
@@ -25,15 +26,15 @@
   <!--<script src="cordova.js"></script>-->
 
   <!-- un-comment this code to enable service worker-->
-  <!--<script>-->
-  <!--if ('serviceWorker' in navigator) {-->
-  <!--navigator.serviceWorker.register('service-worker.js')-->
-  <!--.then(() => console.log('service worker installed'))-->
-  <!--.catch(err => console.error('Error', err));-->
-  <!--}-->
-  <!--</script>-->
+  <script>
+    // if ('serviceWorker' in navigator) {
+    //   navigator.serviceWorker.register('service-worker.js')
+    //     .then(() => console.log('service worker installed'))
+    //     .catch(err => console.error('Error', err));
+    // }
+  </script>
 
-  <link href="build/main.css" rel="stylesheet">
+  <link href="build/main.css?v=1" rel="stylesheet">
 
 </head>
 <body>
@@ -42,16 +43,16 @@
 <ion-app></ion-app>
 
 <!-- The polyfills js is generated during the build process -->
-<script src="build/polyfills.js"></script>
+<script src="build/polyfills.js?v=1"></script>
 
 <!-- The vendor js is generated during the build process
      It contains all of the dependencies in node_modules -->
-<script src="build/vendor.js"></script>
+<script src="build/vendor.js?v=1"></script>
 
 <!-- The main bundle js is generated during the build process -->
-<script src="build/main.js"></script>
+<script src="build/main.js?v=1"></script>
 <!--<script>-->
-  <!--new VConsole()-->
+<!--new VConsole()-->
 <!--</script>-->
 
 </body>

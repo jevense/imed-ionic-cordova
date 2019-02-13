@@ -135,6 +135,18 @@ export class HomePage {
   carousel = [];
   slideBags: Object[] = [];
 
+  tranning: Object[] = [{
+    "id": "3802c560e39d49c1af07a54d4f798886",
+    "name": "住院医师规范化培训考核研究与题库建设课题",
+    "price": "99990",
+    "originPrice": "99990",
+    "cover": "https://mall.imed.org.cn/upload/coverImages/zptk01B.jpg",
+    "author": "李海潮",
+    "size": "50M",
+    "isbn": "3802c560e39d49c1af07a54d4f798886",
+    "subjects": "其它"
+  }];
+
   result: Observable<AppVersion>;
 
   constructor(public navCtrl: NavController,
@@ -205,12 +217,22 @@ export class HomePage {
     if (key == 'year-all') return;
     switch (type) {
       case 'url': {
-        this.webCallAppProvider.WebCallApp("CmdOpenUrl", {
-          url,
-          name: title,
-          navigation: true,
-          static: '1'
-        });
+        let args: any = {url,};
+
+        if (key == 'https://thesurgery.imed.org.cn/cst-phone/ui/shizi/shiziList.html?productId=d6ef9865357e4760b6c20e867b1b76b2') {
+          this.result.subscribe(appversion => {
+            this.webCallAppProvider.WebCallApp("CmdOpenUrl", {
+              url: `${url}&token=${appversion.token}`,
+            });
+          });
+          return;
+        } else if (key != "operation-all") {
+          args.name = title;
+          args.navigation = true;
+          args.static = '1'
+        }
+
+        this.webCallAppProvider.WebCallApp("CmdOpenUrl", args);
         // this.result.subscribe(appversion => {
         //   this.webCallAppProvider.WebCallApp("CmdOpenUrl", {
         //     url: `${url}?token=${appversion.token}`,
