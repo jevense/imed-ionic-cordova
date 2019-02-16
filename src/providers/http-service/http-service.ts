@@ -14,8 +14,6 @@ import {Product} from "../../components/Product";
 @Injectable()
 export class HttpServiceProvider {
 
-  // busUrl = 'http://192.168.8.144:5005/bus/services';
-
   constructor(public http: HttpClient) {
     console.log('Hello HttpServiceProvider Provider');
   }

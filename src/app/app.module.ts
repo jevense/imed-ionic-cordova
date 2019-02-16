@@ -18,6 +18,7 @@ import {HomePageModule} from "../pages/home/home.module";
 import {ComponentsModule} from "../components/components.module";
 import {WebCallAppProvider} from '../providers/web-call-app/web-call-app';
 import {ProductPageModule} from "../pages/product/product.module";
+import {ProductPanelPageModule} from "../pages/product-panel/product-panel.module";
 
 @NgModule({
   declarations: [
@@ -34,6 +35,7 @@ import {ProductPageModule} from "../pages/product/product.module";
     ComponentsModule,
     ProductPageModule,
     ProductInfoPageModule,
+    ProductPanelPageModule,
     IonicModule.forRoot(App, {
       tabsHideOnSubPages: true,
       swipeBackEnabled: true,

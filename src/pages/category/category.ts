@@ -171,11 +171,13 @@ export class CategoryPage {
         {
           name: '2018年住培高峰论坛',
           type: 'url',
+          key: '20180901',
           url: 'https://mall.imed.org.cn/ui/phone/activities.html#/activity/20180901'
         },
         {
           name: '师资培训',
           type: 'url',
+          key: '20180902',
           token: true,
           url: shizi
         }
@@ -395,6 +397,7 @@ export class CategoryPage {
   }
 
   goToOperation({name: title, key, type = 'subjectId'}) {
+    this.subActiveKey = key;
     this.result.subscribe(appversion => {
       this.webCallAppProvider.WebCallApp("CmdOpenUrl", {url: operationOutUrl + `?token=${appversion.token}&type=1&${type}=${key}`});
     });

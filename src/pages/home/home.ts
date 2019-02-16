@@ -51,7 +51,10 @@ export class HomePage {
         ]
       },
       {
-        'icon-name': 'learn', key: 'exam-rst', name: '考试培训',
+        'icon-name': 'learn',
+        key: 'exam-rst',
+        name: '考试培训',
+        type: 'panel',
       },
       {
         'icon-name': 'operation',
@@ -65,12 +68,10 @@ export class HomePage {
         name: '疾病教程', type: 'list', key: 'disease-all'
       },
       {
-        'icon-name':
-          'year', key:
-          'year-all', name:
-          '会员年卡'
-      }
-      ,
+        'icon-name': 'year',
+        key: 'year-all',
+        name: '会员年卡'
+      },
     ],
     [
       {
@@ -233,16 +234,11 @@ export class HomePage {
         }
 
         this.webCallAppProvider.WebCallApp("CmdOpenUrl", args);
-        // this.result.subscribe(appversion => {
-        //   this.webCallAppProvider.WebCallApp("CmdOpenUrl", {
-        //     url: `${url}?token=${appversion.token}`,
-        //     name,
-        //     navigation: '1',
-        //   });
-        // });
-        // this.result.subscribe(appversion => {
-        //   this.modalCtrl.create(WebPage, {url: `${url}?token=${appversion.token}`}).present();
-        // });
+        break;
+      }
+      case 'panel': {
+        this.webCallAppProvider.WebCallApp("TabbarHiddent");
+        this.navCtrl.push('product-panel').catch();
         break;
       }
       case 'list': {

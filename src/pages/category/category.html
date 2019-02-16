@@ -39,7 +39,7 @@
               <div class="menu-main-sub-title">{{item['title']}}</div>
               <div class="menu-main-sub-item">
                 <button *ngFor="let ite of item['list']" ion-button outline small
-                        [color]="item['key'] == subActiveKey?'imed-red':'nav'"
+                        [color]="ite['key'] == subActiveKey?'imed-red':'nav'"
                         (click)="goToOperation(ite)">
                   {{ite['name']}}
                 </button>

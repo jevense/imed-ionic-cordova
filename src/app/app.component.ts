@@ -20,7 +20,7 @@ export class App implements AfterViewInit {
               public loadingCtrl: LoadingController,
               public  webCallAppProvider: WebCallAppProvider) {
     this.loading = this.loadingCtrl.create({duration: 5000});
-    this.loading.present();
+    // this.loading.present();//TODO show
   }
 
   ngAfterViewInit() {
