@@ -1,5 +1,10 @@
 import {Component} from '@angular/core';
 import {IonicPage, NavController, NavParams} from 'ionic-angular';
+import {operationOutUrl} from "../../app/global";
+import {AppVersion} from "../../components/AppVersion";
+import {Observable} from "rxjs/Observable";
+import {select, Store} from "@ngrx/store";
+import {WebCallAppProvider} from "../../providers/web-call-app/web-call-app";
 
 /**
  * Generated class for the ProductPanelPage page.
@@ -17,7 +22,7 @@ import {IonicPage, NavController, NavParams} from 'ionic-angular';
 })
 export class ProductPanelPage {
 
-  list = [
+  subject = [
     {
       name: '耳鼻咽喉科',
       key: '0db171231368477bbef74fa0f33fd613',
@@ -134,40 +139,46 @@ export class ProductPanelPage {
   contents = [
     {
       name: '基础版通关包介绍',
-      introduce: '权威专家参与设计，五大备考学习模块，360度全方位特训，顺利通关结业考',
+      introduce: '权威名师参与设计，五大备考学习模块，360度全方位特训，顺利通关结业考',
       items: [
         {
-          cover: 'assets/imgs/cover.png',
+          id: '038aa1521a22483d99c9d2e974e05a0f',
+          cover: 'assets/imgs/cover1.png',
           name: '名师精讲课',
           introduce: '高清视频讲解，经典考点点播，帮助学员，拨开迷雾，的见真解',
           originalPrice: '1000',
+          status: true,
           price: '800',
         },
         {
-          cover: 'assets/imgs/cover.png',
+          id: '038aa1521a22483d99c9d2e974e05a0f',
+          cover: 'assets/imgs/cover2.png',
           name: '精品试卷',
-          introduce: '高清视频讲解，经典考点点播，帮助学员，拨开迷雾，的见真解',
+          introduce: '专家甄选试题，大数据分析组卷，有效查漏补缺，检阅知识点盲区',
           originalPrice: '1000',
           price: '800',
         },
         {
-          cover: 'assets/imgs/cover.png',
+          id: '038aa1521a22483d99c9d2e974e05a0f',
+          cover: 'assets/imgs/cover3.png',
           name: '精品题库',
-          introduce: '高清视频讲解，经典考点点播，帮助学员，拨开迷雾，的见真解',
+          introduce: '覆盖住培各个专业，紧扣考试大纲，百万练习题，自由随练',
           originalPrice: '1000',
           price: '800',
         },
         {
-          cover: 'assets/imgs/cover.png',
+          id: '038aa1521a22483d99c9d2e974e05a0f',
+          cover: 'assets/imgs/cover4.png',
           name: '住陪技能考核视频',
-          introduce: '高清视频讲解，经典考点点播，帮助学员，拨开迷雾，的见真解',
+          introduce: '权威专家把关，专业团队录制，精准复习技能操作，无忧通关技能考',
           originalPrice: '1000',
           price: '800',
         },
         {
-          cover: 'assets/imgs/cover.png',
+          id: '038aa1521a22483d99c9d2e974e05a0f',
+          cover: 'assets/imgs/cover5.png',
           name: '住陪通用教材',
-          introduce: '高清视频讲解，经典考点点播，帮助学员，拨开迷雾，的见真解',
+          introduce: '全媒体数字教材，动画、图表、视频多种形式，易学、易记、易用',
           originalPrice: '1000',
           price: '800',
         }
@@ -175,26 +186,29 @@ export class ProductPanelPage {
     },
     {
       name: '拓展版通关包介绍',
-      introduce: '权威专家参与设计，五大备考学习模块，360度全方位特训，顺利通关结业考',
+      introduce: '培养临床思维能力、提升疾病诊治水平，适配住培各专业全阶段的拓展学习',
       items: [
         {
-          cover: 'assets/imgs/cover.png',
+          id: '038aa1521a22483d99c9d2e974e05a0f',
+          cover: 'assets/imgs/cover1.png',
           name: '疾病诊疗教程',
-          introduce: '高清视频讲解，经典考点点播，帮助学员，拨开迷雾，的见真解',
+          introduce: '遵循临床路径，以诊治过程为主线，全方位讲解，精准指导诊疗每一环节',
           originalPrice: '1000',
           price: '800',
         },
         {
-          cover: 'assets/imgs/cover.png',
+          id: '038aa1521a22483d99c9d2e974e05a0f',
+          cover: 'assets/imgs/cover2.png',
           name: '三基随手查数据库',
-          introduce: '高清视频讲解，经典考点点播，帮助学员，拨开迷雾，的见真解',
+          introduce: '5500万字海量内容、随时随地、随手查询，住培备考必备神器',
           originalPrice: '1000',
           price: '800',
         },
         {
-          cover: 'assets/imgs/cover.png',
+          id: '038aa1521a22483d99c9d2e974e05a0f',
+          cover: 'assets/imgs/cover3.png',
           name: '临床思维训练',
-          introduce: '高清视频讲解，经典考点点播，帮助学员，拨开迷雾，的见真解',
+          introduce: '整合诊疗思维与临床实践，教学练考评五位一体，显著提升胜任能力',
           originalPrice: '1000',
           price: '800',
         }
@@ -206,13 +220,18 @@ export class ProductPanelPage {
 
   expend = false;
 
-  subject;
+  own = ['038aa1521a22483d99c9d2e974e05a0f'];
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  result: Observable<AppVersion>;
+
+  constructor(private navCtrl: NavController,
+              private navParams: NavParams,
+              public webCallAppProvider: WebCallAppProvider,
+              private store: Store<AppVersion>) {
+    this.result = this.store.pipe(select('appVersion'));
   }
 
   ngOnInit() {
-    this.subject = this.list.slice(0, 8);
     console.log('ionViewDidLoad ProductPanelPage');
   }
 
@@ -230,15 +249,20 @@ export class ProductPanelPage {
 
   change() {
     this.expend = !this.expend;
-    if (this.expend) {
-      this.subject = this.list;
-    } else {
-      this.subject = this.list.slice(0, 8);
-    }
+  }
+
+  buy(id) {
+    this.navCtrl.push('product-info', {id}).catch();
+  }
+
+  learn(id) {
+    this.result.subscribe(appversion => {
+      this.webCallAppProvider.WebCallApp("CmdOpenUrl", {url: operationOutUrl + `?token=${appversion.token}&type=1&productId=ce956d1f7e7a42109f53b233e7036359`});
+    })
   }
 
   locate() {
-    this.navCtrl.push('product', {title: '考试培训', key: 'exam-rst', data: null}).catch();
+    this.navCtrl.push('product-list', {title: '考试培训', key: 'exam-rst'}).catch();
   }
 
 }

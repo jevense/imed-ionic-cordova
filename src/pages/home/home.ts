@@ -153,8 +153,6 @@ export class HomePage {
   constructor(public navCtrl: NavController,
               public httpService: HttpServiceProvider,
               public events: Events,
-              public modalCtrl: ModalController,
-              public alertCtrl: AlertController,
               public webCallAppProvider: WebCallAppProvider,
               private store: Store<AppVersion>) {
     this.result = this.store.pipe(select('appVersion'));

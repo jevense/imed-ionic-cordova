@@ -1,7 +1,7 @@
 page-product-panel {
 
   .content {
-    background-color: #970B14;
+    background-image: linear-gradient(#970B14, #970B14, yellow);
   }
 
   .imed-content {
@@ -55,7 +55,7 @@ page-product-panel {
   }
 
   .imed-menu {
-    padding: 1rem;
+    padding: 1rem .5rem;
     display: flex;
     flex-wrap: wrap;
     width: 100%;
@@ -64,9 +64,23 @@ page-product-panel {
     border-bottom-left-radius: 1rem;
     border-bottom-right-radius: 1rem;
 
-    button {
+    button.subject {
       width: 5.5em;
     }
+
+    button {
+      width: 7em;
+    }
+
+    button.share-button {
+      width: 9em;
+    }
+  }
+
+  .less {
+    height: 7.5rem;
+    padding-bottom: 1rem;
+    overflow: hidden;
   }
 
   .imed-menu-tab {
@@ -109,6 +123,10 @@ page-product-panel {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+  }
+
+  .gray {
+    color: gray;
   }
 
 }

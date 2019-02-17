@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {App, Events, NavParams} from 'ionic-angular';
+import {Events, NavController, NavParams} from 'ionic-angular';
 import {HttpServiceProvider} from "../../providers/http-service/http-service";
 import {type1Array, type2Array} from "../../app/global";
 
@@ -9,7 +9,6 @@ import {type1Array, type2Array} from "../../app/global";
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
  */
-
 @Component({
   selector: 'page-product-list',
   templateUrl: 'product-list.html',
@@ -21,7 +20,7 @@ export class ProductListPage {
   category: string;
   searchText: string = "";
 
-  constructor(public appCtrl: App,
+  constructor(public appCtrl: NavController,
               public navParams: NavParams,
               public httpService: HttpServiceProvider,
               public events: Events,) {
@@ -55,7 +54,7 @@ export class ProductListPage {
   }
 
   goToDetail(item) {
-    this.appCtrl.getRootNavs()[0].push('product-info', {id: item['id']},).catch();
+    this.appCtrl.push('product-info', {id: item['id']},).catch();
   }
 
   bookType(textbook, textbookType) {
