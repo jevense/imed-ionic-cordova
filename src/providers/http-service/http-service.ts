@@ -2,7 +2,17 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {Observable} from "rxjs/Observable";
 import {map} from "rxjs/operators";
-import {busUrl, carouselUrl, diseaseUrl, operationUrl, recommendUrl, swiperUrl, url, westUrl} from "../../app/global";
+import {
+  busUrl,
+  carouselUrl,
+  diseaseUrl,
+  operationUrl,
+  recommendUrl,
+  rstExamApiUrl, subjectsUrl,
+  swiperUrl,
+  url,
+  westUrl
+} from "../../app/global";
 import {Product} from "../../components/Product";
 
 /*
@@ -94,5 +104,18 @@ export class HttpServiceProvider {
 
   getSwiper() {
     return this.http.get<any>(swiperUrl)
+  }
+
+  getExamRstList(token: string = "", year: string = ""): Observable<string[]> {
+    return this.http.get<any>(rstExamApiUrl, {
+      params: {
+        token,
+        year,
+      }
+    })
+  }
+
+  getSubject() {
+    return this.http.get<Object[]>(subjectsUrl)
   }
 }

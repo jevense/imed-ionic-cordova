@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {AlertController, Events, IonicPage, ModalController, NavController, Refresher} from 'ionic-angular';
+import {Events, IonicPage, NavController, Refresher} from 'ionic-angular';
 import {operationOutInfoUrl, operationOutUrl, searchUrl, thesurgery} from "../../app/global";
 import {HttpServiceProvider} from "../../providers/http-service/http-service";
 import {Product} from "../../components/Product";
