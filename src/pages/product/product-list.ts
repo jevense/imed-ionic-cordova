@@ -19,12 +19,13 @@ export class ProductListPage {
   page: number = 0;
   category: string;
   searchText: string = "";
+  appCtrl: NavController;
 
-  constructor(public appCtrl: NavController,
-              public navParams: NavParams,
+  constructor(public navParams: NavParams,
               public httpService: HttpServiceProvider,
               public events: Events,) {
     this.category = this.navParams.get("key");
+    this.appCtrl = this.navParams.get("nav");
 
     events.subscribe('search', ({searchText}) => {
       // this.navCtrl.pop().catch(e => console.log(e));

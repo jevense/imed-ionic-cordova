@@ -1,8 +1,8 @@
 import {AfterViewInit, Component} from '@angular/core';
 import {exactInfoFromRes, serialNumber} from "./global";
-import {AppVersion} from "../components/AppVersion";
+import {AppVersion} from "../components/store/app-version/AppVersion";
 import {Store} from "@ngrx/store";
-import {AppVersionAction} from "../components/AppVersionAction";
+import {AppVersionAction} from "../components/store/app-version/AppVersionAction";
 import {LoadingController} from "ionic-angular";
 import {WebCallAppProvider} from "../providers/web-call-app/web-call-app";
 import {HomePage} from "../pages/home/home";
@@ -20,7 +20,7 @@ export class App implements AfterViewInit {
               public loadingCtrl: LoadingController,
               public  webCallAppProvider: WebCallAppProvider) {
     this.loading = this.loadingCtrl.create({duration: 5000});
-    this.loading.present();//TODO show
+    this.loading.present();
   }
 
   ngAfterViewInit() {

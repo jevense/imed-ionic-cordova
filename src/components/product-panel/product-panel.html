@@ -1,0 +1,77 @@
+<!-- Generated template for the ProductPanelComponent component -->
+<div class="imed-content">
+  <div class="imed-card">
+    <div class="imed-title imed-title-type">
+      <span>请选择类型</span>
+    </div>
+    <div class="imed-menu">
+      <div class="imed-menu-tab">
+        <div class="skew" [ngClass]="{active:y==0}" (click)="switch(0)">
+          <div class="fix">基础版</div>
+        </div>
+        <div class="skew-reverse" [ngClass]="{active:y==1}" (click)="switch(1)">
+          <div class="fix">拓展版</div>
+        </div>
+      </div>
+      <div>
+        <ion-grid>
+          <ion-row justify-content-center>
+            <ion-col col-3><img src="assets/imgs/left-rainbow.png"></ion-col>
+            <ion-col col-5 text-center class="imed-red">{{contents[y].name}}</ion-col>
+            <ion-col col-3><img src="assets/imgs/right-rainbow.png"></ion-col>
+          </ion-row>
+          <ion-row style="margin-bottom: 1rem;">
+            <ion-col class="gray">{{contents[y].introduce}}</ion-col>
+          </ion-row>
+          <ion-row justify-content-center style="margin-bottom: -1rem;">
+            <ion-col col-3><img src="assets/imgs/left-rainbow.png"></ion-col>
+            <ion-col col-4 text-center class="imed-red">学习内容</ion-col>
+            <ion-col col-3><img src="assets/imgs/right-rainbow.png"></ion-col>
+          </ion-row>
+        </ion-grid>
+        <ion-grid>
+          <ion-row *ngFor="let sub of contents[y].items" (click)="detail(sub)">
+            <ion-col col-4 text-center>
+              <img [src]="sub['cover']">
+            </ion-col>
+            <ion-col class="imed-content-item">
+              <div style="font-size: larger;">{{sub['name']}}</div>
+              <div>
+                <span class="gray">{{sub['introduce']}}
+                  <span *ngIf="sub['key']=='video'"
+                        style="color: blue;">(点击查看详情)</span>
+                </span>
+              </div>
+              <div style="display: flex; justify-content: space-between;">
+                <div style="display: inline-block">
+                  <div><span class="imed-red">{{entity(sub).price}}</span>阅点</div>
+                </div>
+                <div *ngIf="own.includes(entity(sub).id);then learnBlock else buyBlock"></div>
+                <ng-template #learnBlock>
+                  <button ion-button
+                          outline
+                          round small
+                          color="danger"
+                          (click)="learn(entity(sub).id, sub.key, entity(sub).extendId, $event)">
+                    马上学习
+                  </button>
+                </ng-template>
+                <ng-template #buyBlock>
+                  <button
+                    [disabled]="buyDisable(sub)"
+                    ion-button
+                    outline
+                    round
+                    small
+                    color="danger"
+                    (click)="buy(entity(sub).id, $event)">立即购买
+                  </button>
+                </ng-template>
+              </div>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </div>
+    </div>
+  </div>
+</div>

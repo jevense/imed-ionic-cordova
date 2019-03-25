@@ -2,7 +2,7 @@ import {Component} from '@angular/core';
 import {AlertController, Events, IonicPage, NavController, NavParams} from 'ionic-angular';
 import {HttpServiceProvider} from "../../providers/http-service/http-service";
 import {type1Array, type2Array} from "../../app/global";
-import {AppVersion} from "../../components/AppVersion";
+import {AppVersion} from "../../components/store/app-version/AppVersion";
 import {Observable} from "rxjs/Observable";
 import {select, Store} from "@ngrx/store";
 import {WebCallAppProvider} from "../../providers/web-call-app/web-call-app";

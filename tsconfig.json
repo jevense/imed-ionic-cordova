@@ -6,12 +6,14 @@
     "experimentalDecorators": true,
     "lib": [
       "dom",
-      "es7"
+      "es7",
+      "esnext"
     ],
     "module": "es2015",
     "moduleResolution": "node",
     "sourceMap": true,
-    "target": "es5"
+    "target": "es5",
+    "downlevelIteration": true
   },
   "include": [
     "src/**/*.ts"

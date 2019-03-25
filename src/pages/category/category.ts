@@ -2,7 +2,7 @@ import {Component} from '@angular/core';
 import {IonicPage, NavController, NavParams} from 'ionic-angular';
 import {operationOutUrl, shizi} from "../../app/global";
 import {select, Store} from "@ngrx/store";
-import {AppVersion} from "../../components/AppVersion";
+import {AppVersion} from "../../components/store/app-version/AppVersion";
 import {Observable} from "rxjs/Observable";
 import {WebCallAppProvider} from "../../providers/web-call-app/web-call-app";
 

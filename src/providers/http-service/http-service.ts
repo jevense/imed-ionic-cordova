@@ -6,14 +6,18 @@ import {
   busUrl,
   carouselUrl,
   diseaseUrl,
+  host,
   operationUrl,
   recommendUrl,
-  rstExamApiUrl, subjectsUrl,
+  rstExamApiUrl,
+  subjectsUrl,
   swiperUrl,
   url,
   westUrl
 } from "../../app/global";
 import {Product} from "../../components/Product";
+import {Carousel} from "../../components/Carousel";
+import {Status} from "../../components/Status";
 
 /*
   Generated class for the HttpServiceProvider provider.
@@ -43,8 +47,8 @@ export class HttpServiceProvider {
   }
 
 
-  getCarouselList() {
-    return this.http.get<Product[]>(carouselUrl)
+  getCarouselList(): Observable<Array<Carousel>> {
+    return this.http.get<Array<Carousel>>(carouselUrl)
   }
 
   getRecommendList(searchText: string = "", page: number = 0, size: number = 10): Observable<Product[]> {
@@ -117,5 +121,9 @@ export class HttpServiceProvider {
 
   getSubject() {
     return this.http.get<Object[]>(subjectsUrl)
+  }
+
+  validateActivity(path, token): Observable<Status> {
+    return this.http.get<Status>(host + `/activity/${path}/status/person?token=${token}`)
   }
 }

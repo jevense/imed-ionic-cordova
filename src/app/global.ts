@@ -17,17 +17,16 @@ export const exactInfoFromRes = (res: string) => {
 export const type1Array = ['教材', 'pdf', '教程', '通关包', '执医通关包', '手术视频'];
 export const type2Array = ['普通教材', '病例分析', '手术', '杂志', '试题', '试题包', '执医通关包', '未知类型'];
 
-const host = 'https://api.imed.org.cn';
+export const host = 'https://api.imed.org.cn';
 export const busUrl = 'https://services2t.mvwchina.com/services';
 export const operationHost = 'https://thesurgery.imed.org.cn';
 export const rstExamUrl = 'https://exam.mvwchina.com/pc/student/student.html';
 
-// const host = 'http://123.56.15.197:7152';
-// export const busUrl = 'http://123.56.15.197:5002/services';
-// export const rstExamUrl = 'https://testing.imed.org.cn//mvw-exam-temp/pc/student/student.html';
+// export const host = 'http://192.168.8.116:7152';
+// export const busUrl = 'http://192.168.8.209:5002/services';
+// export const rstExamUrl = 'https://testing.imed.org.cn/mvw-exam-temp/pc/student/student.html';
 // export const operationHost = 'http://testing.imed.org.cn';
 
-// const host = 'http://192.168.8.144:8092';
 
 export const url = `${host}/product`;
 export const carouselUrl = `${host}/home/carousel`;
@@ -48,5 +47,4 @@ export const shizi = `${operationHost}/cst-phone/ui/shizi/shiziList.html`;
 export const operationOutUrl = `${operationHost}/cst-phone/ui/list.html`;
 export const operationOutInfoUrl = `${operationHost}/cst-phone/ui/commodity.html`;
 export const subjectsUrl = `https://mall.imed.org.cn/ui/v3.4/subjects.json`;
-
-
+export const operation2019Url = `${operationHost}/cst-phone/ui/zhupei.html`;

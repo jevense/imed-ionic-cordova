@@ -1,34 +1,6 @@
-page-product-panel {
-
-  .content {
-    background-image: linear-gradient(#970B14, #970B14, yellow);
-  }
-
+share {
   .imed-content {
     padding: 1rem;
-  }
-
-  .imed-tab {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    color: white;
-    font-size: larger;
-    font-weight: bolder;
-
-    .new {
-      width: 50%;
-      border-top-left-radius: 1rem;
-      border-top-right-radius: 1rem;
-      background-color: #CD1020;
-      padding: 1rem;
-    }
-
-    .old {
-      width: 50%;
-      background-color: #970B14;
-      padding: 1rem;
-    }
   }
 
   .imed-card {
@@ -59,13 +31,13 @@ page-product-panel {
     display: flex;
     flex-wrap: wrap;
     width: 100%;
+    justify-content: space-between;
     background-color: white;
     border-bottom-left-radius: 1rem;
     border-bottom-right-radius: 1rem;
 
     button.subject {
-      width: auto;
-      flex-grow: 1
+      width: 5.5em;
     }
 
     button {
@@ -77,10 +49,49 @@ page-product-panel {
     }
   }
 
-  .less {
-    height: 15rem;
-    padding-bottom: 1rem;
-    overflow: hidden;
+  .imed-menu-tab {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    color: #CE1020;
+
+    .active {
+      color: white;
+      background-color: #CE1020;
+    }
+
+    & > div {
+      border: 1px solid #CE1020;
+      padding: .5rem 3rem;
+
+      &.skew {
+        transform: skewX(45deg);
+        div.fix {
+          transform: skewX(-45deg);
+        }
+      }
+      &.skew-reverse {
+        transform: skewX(-45deg);
+        div.fix {
+          transform: skewX(45deg);
+        }
+      }
+    }
+
   }
 
+  .imed-rainbow {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .imed-content-item {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .gray {
+    color: gray;
+  }
 }

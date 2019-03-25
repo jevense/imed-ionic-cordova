@@ -8,7 +8,8 @@
 
   <ion-navbar>
     <ion-title *ngIf="!showBar">{{title}}</ion-title>
-    <ion-searchbar *ngIf="showBar" placeholder="请输入关键词" [(ngModel)]="searchText" (keyup.enter)="getItems()"></ion-searchbar>
+    <ion-searchbar *ngIf="showBar" placeholder="请输入关键词" [(ngModel)]="searchText"
+                   (keyup.enter)="getItems()"></ion-searchbar>
     <ion-buttons end>
       <button ion-button icon-only (click)="search()">
         <ion-icon [name]="searchIcon()"></ion-icon>
@@ -23,7 +24,7 @@
   <super-tabs indicatorColor="imed-red">
     <super-tab *ngFor="let item of data"
                [root]="productList"
-               [rootParams]="{key:item['key']}"
+               [rootParams]="{key:item['key'],nav:navCtrl}"
                [title]="item.name">
 
     </super-tab>

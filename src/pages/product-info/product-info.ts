@@ -1,9 +1,9 @@
-import {Component} from '@angular/core';
-import {AlertController, IonicPage, ModalController, NavController, NavParams} from 'ionic-angular';
+import {Component, ViewChild} from '@angular/core';
+import {AlertController, IonicPage, ModalController, Navbar, NavController, NavParams} from 'ionic-angular';
 import {HttpServiceProvider} from "../../providers/http-service/http-service";
 import {onlineReadUrl, serialNumber, type1Array, type2Array} from "../../app/global";
 import {Product} from "../../components/Product";
-import {AppVersion} from "../../components/AppVersion";
+import {AppVersion} from "../../components/store/app-version/AppVersion";
 import {Observable} from "rxjs/Observable";
 import {select, Store} from "@ngrx/store";
 import {WebPage} from "../web/web";
@@ -23,6 +23,8 @@ export class ProductInfoPage {
 
   result: Observable<AppVersion>;
 
+  @ViewChild(Navbar) navBar: Navbar;
+
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
               public httpService: HttpServiceProvider,
@@ -34,6 +36,7 @@ export class ProductInfoPage {
   }
 
   ionViewDidLoad() {
+    this.navBar.setBackButtonText("");
     this.webCallAppProvider.WebCallApp("TabbarHiddent");
     console.log('ionViewDidLoad ProductInfoPage');
   }

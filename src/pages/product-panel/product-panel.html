@@ -19,7 +19,6 @@
 
 </ion-header>
 
-
 <ion-content>
   <div><img src="assets/imgs/banner2019.png"></div>
   <div class="imed-content">
@@ -33,128 +32,21 @@
         <span class="imed-title-text">请选择专业</span>
         <button ion-button clear color="light" [small]="true" icon-end
                 (click)="change()">
-          更多专业
+          <span style="font-size: larger">更多专业</span>
           <ion-icon [name]="expend?'arrow-dropdown-circle':'arrow-dropright-circle'"></ion-icon>
         </button>
       </div>
       <div class="imed-menu less" [ngClass]="{less:!expend}">
-        <button *ngFor="let item of subject;index as i;"
+        <button *ngFor="let item of subjects;"
                 class="subject"
-                [disabled]="!item['status']"
-                (click)="goToPage(i)"
+                (click)="setSubject(item.key)"
                 ion-button outline small
-                [color]="i == x?'imed-red':'nav'">{{item['name']}}
+                [color]="item.key == x?'imed-red':'nav'">{{item.name}}
         </button>
       </div>
     </div>
   </div>
 
-  <div class="imed-content">
-    <div class="imed-card">
-      <div class="imed-title imed-title-type">
-        <span>请选择类型</span>
-      </div>
-      <div class="imed-menu">
-        <div class="imed-menu-tab">
-          <div class="skew" [ngClass]="{active:y==0}" (click)="switch(0)">
-            <div class="fix">基础版</div>
-          </div>
-          <div class="skew-reverse" [ngClass]="{active:y==1}" (click)="switch(1)">
-            <div class="fix">拓展版</div>
-          </div>
-        </div>
-        <div>
-          <ion-grid>
-            <ion-row justify-content-center>
-              <ion-col col-3><img src="assets/imgs/left-rainbow.png"></ion-col>
-              <ion-col col-5 text-center class="imed-red">{{contents[y].name}}</ion-col>
-              <ion-col col-3><img src="assets/imgs/right-rainbow.png"></ion-col>
-            </ion-row>
-            <ion-row style="margin-bottom: 1rem;">
-              <ion-col class="gray">{{contents[y].introduce}}</ion-col>
-            </ion-row>
-            <ion-row justify-content-center style="margin-bottom: -1rem;">
-              <ion-col col-3><img src="assets/imgs/left-rainbow.png"></ion-col>
-              <ion-col col-4 text-center class="imed-red">学习内容</ion-col>
-              <ion-col col-3><img src="assets/imgs/right-rainbow.png"></ion-col>
-            </ion-row>
-          </ion-grid>
-          <ion-grid>
-            <ion-row *ngFor="let content of contents[y].items;index as z">
-              <ion-col col-4 text-center>
-                <img [src]="content['cover']">
-              </ion-col>
-              <ion-col class="imed-content-item">
-                <div style="font-size: larger;">{{content['name']}}</div>
-                <div>
-                  <span class="gray">{{content['introduce']}}</span>
-                </div>
-                <div style="display: flex; justify-content: space-between;">
-                  <div style="display: inline-block">
-                    <div><s class="gray">{{currentSubject()[z]['originalPrice']}}阅点</s></div>
-                    <div><span class="imed-red">{{currentSubject()[z]['price']}}</span>阅点</div>
-                  </div>
-                  <div [ngSwitch]="own.includes(currentSubject()[z]['id'])">
-                    <button *ngSwitchCase="true" [disabled]="!currentSubject()[z]['status']" ion-button outline
-                            round small
-                            color="danger"
-                            (click)="learn(currentSubject()[z]['id'], z, currentSubject()[z]['extendId'])">马上学习
-                    </button>
-                    <button *ngSwitchDefault [disabled]="!currentSubject()[z]['status']" ion-button outline
-                            round
-                            small
-                            color="danger"
-                            (click)="buy(currentSubject()[z]['id'])">立即购买
-                    </button>
-                  </div>
-                </div>
-              </ion-col>
-            </ion-row>
-          </ion-grid>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!--<div class="imed-content">-->
-  <!--<div class="imed-card">-->
-  <!--<div class="imed-title imed-title-type">-->
-  <!--<span>分享有礼</span>-->
-  <!--</div>-->
-  <!--<div class="imed-menu">-->
-  <!--<div>-->
-  <!--<ion-grid>-->
-  <!--<ion-row>-->
-  <!--<ion-col class="gray">分享本页面至朋友圈，可领取价值69元的《人体解刨学彩色图谱》一本，名额有限，送完为止！</ion-col>-->
-  <!--</ion-row>-->
-  <!--</ion-grid>-->
-  <!--<div>-->
-  <!--<ion-grid>-->
-  <!--<ion-row>-->
-  <!--<ion-col col-4 text-center>-->
-  <!--<img src="assets/imgs/cover6.png">-->
-  <!--</ion-col>-->
-  <!--<ion-col>-->
-  <!--<div style="font-size: larger;">人体解刨学彩色图谱</div>-->
-  <!--<div><s class="gray">600阅点</s></div>-->
-  <!--<div><span class="imed-red">0</span>阅点</div>-->
-  <!--<div style="display: flex; justify-content: space-between; align-items: baseline">-->
-  <!--<div>-->
-  <!--<span class="imed-red">累计销量1万+</span>-->
-  <!--</div>-->
-  <!--<button [disabled]="false" class="share-button" ion-button outline round small icon-start-->
-  <!--color="danger">-->
-  <!--<ion-icon name="md-share"></ion-icon>-->
-  <!--立即分享领取-->
-  <!--</button>-->
-  <!--</div>-->
-  <!--</ion-col>-->
-  <!--</ion-row>-->
-  <!--</ion-grid>-->
-  <!--</div>-->
-  <!--</div>-->
-  <!--</div>-->
-  <!--</div>-->
-  <!--</div>-->
+  <product-panel-component [subjectCode]="x"></product-panel-component>
 
 </ion-content>

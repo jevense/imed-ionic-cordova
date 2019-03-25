@@ -4,8 +4,7 @@ import {operationOutInfoUrl, operationOutUrl, searchUrl, thesurgery} from "../..
 import {HttpServiceProvider} from "../../providers/http-service/http-service";
 import {Product} from "../../components/Product";
 import {select, Store} from "@ngrx/store";
-import {AppVersion} from "../../components/AppVersion";
-import {Observable} from "rxjs/Observable";
+import {AppVersion} from "../../components/store/app-version/AppVersion";
 import {ForkJoinObservable} from "rxjs/observable/ForkJoinObservable";
 import {WebCallAppProvider} from "../../providers/web-call-app/web-call-app";
 
@@ -28,6 +27,7 @@ export class HomePage {
     [
       {
         'icon-name': '5p3', key: '5p3-all', name: '数字教材',
+        type: 'multi-list',
         subList: [
           {
             name: '全部',
@@ -76,6 +76,7 @@ export class HomePage {
     [
       {
         'icon-name': 'west', key: 'west-all', name: '西医图书',
+        type: 'multi-list',
         subList: [
           {
             name: '全部',
@@ -103,6 +104,7 @@ export class HomePage {
       },
       {
         'icon-name': 'chinese', key: 'chinese-all', name: '中医图书',
+        type: 'multi-list',
         subList: [
           {
             name: '全部',
@@ -148,14 +150,16 @@ export class HomePage {
     "subjects": "其它"
   }];
 
-  result: Observable<AppVersion>;
+  token: string;
 
   constructor(public navCtrl: NavController,
               public httpService: HttpServiceProvider,
               public events: Events,
               public webCallAppProvider: WebCallAppProvider,
               private store: Store<AppVersion>) {
-    this.result = this.store.pipe(select('appVersion'));
+    this.store.pipe<AppVersion>(select('appVersion')).subscribe(appversion => {
+      this.token = appversion.token;
+    });
     events.subscribe('MsgGoBack', () => {
       if (this.navCtrl.canGoBack()) {
         this.navCtrl.pop().catch(e => console.log(e));
@@ -185,15 +189,11 @@ export class HomePage {
   }
 
   openOperations() {
-    this.result.subscribe(appversion => {
-      this.webCallAppProvider.WebCallApp("CmdOpenUrl", {url: operationOutUrl + `?token=${appversion.token}&type=1&productId=ce956d1f7e7a42109f53b233e7036359`});
-    })
+    this.webCallAppProvider.WebCallApp("CmdOpenUrl", {url: operationOutUrl + `?token=${this.token}&type=1&productId=ce956d1f7e7a42109f53b233e7036359`});
   }
 
   openOperation({isbn}) {
-    this.result.subscribe(appversion => {
-      this.webCallAppProvider.WebCallApp("CmdOpenUrl", {url: operationOutInfoUrl + `?productVideoId=${isbn}&type=3&token=${appversion.token}`});
-    })
+    this.webCallAppProvider.WebCallApp("CmdOpenUrl", {url: operationOutInfoUrl + `?productVideoId=${isbn}&type=3&token=${this.token}`});
   }
 
   locateInfo({id}) {
@@ -207,9 +207,7 @@ export class HomePage {
   }
 
   search() {
-    this.result.subscribe(appversion => {
-      this.webCallAppProvider.WebCallApp("CmdOpenUrl", {url: searchUrl + `?token=${appversion.token}`});
-    })
+    this.webCallAppProvider.WebCallApp("CmdOpenUrl", {url: searchUrl + `?token=${this.token}`});
   }
 
   locate({url, name: title, key, subList, type = 'list'}) {
@@ -218,18 +216,17 @@ export class HomePage {
       case 'url': {
         let args: any = {url,};
 
-        if (key == 'https://thesurgery.imed.org.cn/cst-phone/ui/shizi/shiziList.html?productId=d6ef9865357e4760b6c20e867b1b76b2') {
-          this.result.subscribe(appversion => {
-            this.webCallAppProvider.WebCallApp("CmdOpenUrl", {
-              url: `${url}&token=${appversion.token}`,
-            });
+        if (url == 'https://thesurgery.imed.org.cn/cst-phone/ui/shizi/shiziList.html?productId=d6ef9865357e4760b6c20e867b1b76b2') {
+          this.webCallAppProvider.WebCallApp("CmdOpenUrl", {
+            url: `${url}&token=${this.token}`,
           });
           return;
-        } else if (key != "operation-all") {
-          args.name = title;
-          args.navigation = true;
-          args.static = '1'
+        } else if (url != "operation-all") {
+          // args.name = title;
+          // args.navigation = true;
+          // args.static = '1'
         }
+        args.name = title;
 
         this.webCallAppProvider.WebCallApp("CmdOpenUrl", args);
         break;
@@ -239,9 +236,14 @@ export class HomePage {
         this.navCtrl.push('product-panel').catch();
         break;
       }
-      case 'list': {
+      case 'multi-list': {
         this.webCallAppProvider.WebCallApp("TabbarHiddent");
         this.navCtrl.push('product', {title, key, data: subList}).catch();
+        break;
+      }
+      case 'list': {
+        this.webCallAppProvider.WebCallApp("TabbarHiddent");
+        this.navCtrl.push('product-list', {title, key,}).catch();
         break;
       }
       case 'info': {
@@ -262,7 +264,18 @@ export class HomePage {
       this.httpService.getOperationList(0, 2),
     ).subscribe(res => {
       this.slideBags = res[0];
-      this.carousel = res[1];
+      for (let [index, carousel] of res[1].entries()) {
+        console.log(index);
+        if (!carousel.grade) {
+          this.carousel[index] = carousel;
+        } else {
+          this.httpService.validateActivity(carousel.grade, this.token).subscribe(status => {
+            if (status.status) {
+              this.carousel[index] = carousel;
+            }
+          });
+        }
+      }
       this.topBags = res[2];
       this.topDisease = res[3];
       this.topWest = res[4];

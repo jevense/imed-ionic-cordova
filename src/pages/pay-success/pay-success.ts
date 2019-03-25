@@ -85,8 +85,10 @@ export class PaySuccessPage {
   }
 
   learn(id) {
-    if (this.item['textbook'] == '5' && this.item['textbookType'] == '2') {
-      this.webCallAppProvider.WebCallApp("CmdGoBack", {method: 'refresh'});
+    if (!this.navCtrl.canGoBack()) {
+      this.webCallAppProvider.WebCallApp("CmdGoBack");
+    } else if (this.item['textbook'] == '4') {
+      this.navCtrl.push('product-panel').catch();
     } else {
       let deep = this.navCtrl.length();
       this.navCtrl.remove(deep - 2, 2);

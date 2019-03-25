@@ -13,13 +13,15 @@ import {HttpServiceProvider} from '../providers/http-service/http-service';
 import './global'
 import {WebPageModule} from "../pages/web/web.module";
 import {StoreModule} from "@ngrx/store";
-import {appVersionReducer} from "../components/AppVersionReducer";
+import {appVersionReducer} from "../components/store/app-version/AppVersionReducer";
 import {HomePageModule} from "../pages/home/home.module";
 import {ComponentsModule} from "../components/components.module";
 import {WebCallAppProvider} from '../providers/web-call-app/web-call-app';
 import {ProductPageModule} from "../pages/product/product.module";
 import {ProductPanelPageModule} from "../pages/product-panel/product-panel.module";
 import {ProductListPageModule} from "../pages/product-list/product-list.module";
+import {ProductPanelInfoPageModule} from "../pages/product-panel-info/product-panel-info.module";
+import {subjectReducer} from "../components/store/subject/SubjectReducer";
 
 @NgModule({
   declarations: [
@@ -38,13 +40,17 @@ import {ProductListPageModule} from "../pages/product-list/product-list.module";
     ProductInfoPageModule,
     ProductListPageModule,
     ProductPanelPageModule,
+    ProductPanelInfoPageModule,
     IonicModule.forRoot(App, {
       tabsHideOnSubPages: true,
       swipeBackEnabled: true,
       iconMode: 'ios',
       mode: 'ios',
     }),
-    StoreModule.forRoot({appVersion: appVersionReducer})
+    StoreModule.forRoot({
+      appVersion: appVersionReducer,
+      subject: subjectReducer,
+    })
   ],
   bootstrap: [IonicApp],
   entryComponents: [
